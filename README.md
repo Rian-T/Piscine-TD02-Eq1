@@ -1,2 +1,2 @@
-# Piscine-TD02-Eq1
+# Piscine - Théorie des graphes
 ECE - Projet Piscine 2019 - TD02 Équipe 1
