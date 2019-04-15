@@ -13,6 +13,7 @@ class Sommet
         ///constructeur qui reçoit en params les données du sommet
         Sommet(std::string,double,double);
         void ajouterVoisin(const Sommet*, std::vector<float> w);
+         std::string getId() const { return m_id; }
         ~Sommet();
 
     protected:
