@@ -41,6 +41,8 @@
 		<Unit filename="graph/sommet.cpp" />
 		<Unit filename="graph/sommet.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="plot/ploting.cpp" />
+		<Unit filename="plot/ploting.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
