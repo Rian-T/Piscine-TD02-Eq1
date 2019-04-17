@@ -1,6 +1,7 @@
 #include <iostream>
 #include "graphe.h"
 #include "plot/ploting.h"
+#include <vector>
 
 int main()
 {
@@ -9,6 +10,7 @@ int main()
     std::vector<bool> djik(5,1);
     float som1;
     graphe g("files/broadway.txt","files/broadway_weights_0.txt");
+    g.search_sol();
     std::cout << "Graphe charge !" << std::endl;
     std::cout << "Affichage de la frontiere de pareto : " << std::endl;
     //g.afficher();
@@ -29,5 +31,10 @@ int main()
 
     som1=g.faireDjikstra(djik,1);
     std::cout<<som1;
+    std::vector<bool> o = {1,1,1,1,1};
+    std::unordered_map<const Sommet*,const Sommet* > c;
+    int pos = 1;
+    std::cout << g.max_flot(o,pos) << std::endl;
+    plotPareto3D(g.fairePareto({0,1,2}));
     return 0;
 }

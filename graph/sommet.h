@@ -15,15 +15,18 @@ class Sommet
         std::string getId() const { return m_id; }
         void ajouterVoisin(const Sommet*, std::vector<float> w);
         void afficher() const;
-        std::list<std::pair<const Sommet*,std::vector<float>>> getVoisins(){return m_voisins;}
+        std::list<std::pair<const Sommet*,std::vector<float>>> getVoisinsList(){return m_voisins;}
         void afficherVoisins() const;
+
+        std::vector<const Sommet *> getVoisins() const;
+
         ~Sommet();
 
     protected:
 
     private:
         /// Voisinage : liste d'adjacence
-        std::list<std::pair<const Sommet*,std::vector<float>>> m_voisins;
+        std::list< std::pair<const Sommet*,std::vector<float>> > m_voisins;
 
         /// Données spécifiques du sommet
         std::string m_id; // Identifiant

@@ -21,8 +21,8 @@
 extern "C" FILE *popen(const char *command, const char *mode);
 extern "C" void *pclose(FILE*);
 
-void plotPareto3D();
-void plotPareto2D();
+void plotPareto3D(std::vector<std::vector<float>> frontier);
+void plotPareto2D(std::vector<std::vector<float>> frontier);
 void plotPareto3Dtest();
 void plotPareto2Dtest();
 

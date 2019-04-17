@@ -13,6 +13,9 @@ class Edge
         const Sommet* getSecond() { return m_end; }
         std::vector<float> getWeight() { return m_weight;}
         void afficher() const;
+        ///pour BFS
+        float getWeight(int &pos) { return m_weight[pos];}
+        void  setNewFlot(int &pos, float val) {m_weight[pos] = val;}
 
     protected:
 

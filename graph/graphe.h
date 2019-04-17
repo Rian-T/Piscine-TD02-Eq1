@@ -11,6 +11,12 @@ class graphe
         ///constructeur qui charge le graphe en mémoire
         //format du fichier ordre/liste des sommets/taille/liste des arêtes
         graphe(std::string, std::string weightFile);
+
+        void search_sol();
+        void DFS(std::vector<bool> &arete_local);
+
+        float max_flot(std::vector<bool> &aretes_local, int posP);
+        bool BFS(std::vector<bool> &arete_local, std::unordered_map<const Sommet* ,const Sommet*> & chemin, int &posP);
         ~graphe();
         void afficher() const;
         float faireDjikstra(std::vector<bool>,int poids);

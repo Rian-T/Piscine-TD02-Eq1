@@ -13,10 +13,15 @@ void plotPareto3D(std::vector<std::vector<float>> frontier){
         {
             fprintf(pipe, "set term wx\n");         // set the terminal
             fprintf(pipe, "set hidden3d\n");
+            fprintf(pipe, "unset key\n");
             fprintf(pipe, "set dgrid3d 50,50 qnorm 2\n");
+            fprintf(pipe, "set title \"3D Plot of Pareto frontier\"\n");
+            fprintf(pipe, "set xlabel \"Economic cost\"\n");
+            fprintf(pipe, "set ylabel \"Shortest Path\"\n");
+            fprintf(pipe, "set zlabel \"Max Flow\" offset 1,5\n");
             fprintf(pipe, "splot '-' with lines\n"); // plot type
             for(size_t i = 0; i < frontier.size(); i++){
-                fprintf(pipe, "%f %f %f\n", frontier[i][0],frontier[i][1], frontier[i][2]);           // data terminated with \n
+                fprintf(pipe, "%3.2f %3.2f %3.2f\n", frontier[i][0],frontier[i][1], frontier[i][2]);           // data terminated with \n
             }
             fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
