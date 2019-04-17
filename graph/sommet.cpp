@@ -15,6 +15,18 @@ void Sommet::ajouterVoisin(const Sommet* a,std::vector<float> w){
     m_voisins.push_back({a,w});
 }
 
+std::vector<const Sommet *> Sommet::getVoisins() const
+{
+    std::vector<const Sommet *> voisins;
+    for (auto &elem : m_voisins)
+    {
+        voisins.push_back(elem.first);
+    }
+    return voisins;
+}
+
+
+
 Sommet::~Sommet()
 {
     //dtor
