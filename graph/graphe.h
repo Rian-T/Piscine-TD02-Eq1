@@ -12,6 +12,11 @@ class graphe
         //format du fichier ordre/liste des sommets/taille/liste des arêtes
         graphe(std::string, std::string weightFile);
         ~graphe();
+        void afficher() const;
+        float faireDjikstra(std::vector<bool>,int poids);
+        std::vector<bool> fairePrim(int) const;
+        float faireSomme(std::vector<bool>,int);
+        std::vector<std::vector<float>> fairePareto(std::vector<int> choix_pond);
 
     private:
         /// Le réseau est constitué d'une collection de sommets

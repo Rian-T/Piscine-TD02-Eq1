@@ -12,6 +12,7 @@ class Edge
         const Sommet* getStart() { return m_start; }
         const Sommet* getSecond() { return m_end; }
         std::vector<float> getWeight() { return m_weight;}
+        void afficher() const;
 
     protected:
 
