@@ -7,6 +7,5 @@ int main()
     graphe g("files/broadway.txt","files/broadway_weights_0.txt");
     std::cout << "Graphe charge !" << std::endl;
     std::cout << "Affichage de la frontiere de pareto : " << std::endl;
-    //plotPareto2D();
     return 0;
 }
