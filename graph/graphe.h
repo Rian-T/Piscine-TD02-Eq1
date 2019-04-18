@@ -20,6 +20,7 @@ class graphe
         ~graphe();
         void afficher() const;
         float faireDjikstra(std::vector<bool>,int poids);
+        float faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv);
         std::vector<bool> fairePrim(int) const;
         float faireSomme(std::vector<bool>,int);
         std::vector<std::vector<float>> fairePareto(std::vector<int> choix_pond);

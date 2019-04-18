@@ -35,7 +35,7 @@ void Sommet::afficherVoisins() const
     }
 }
 
-
+/*
 std::vector<const Sommet *> Sommet::getVoisins() const
 {
     std::vector<const Sommet *> voisins;
@@ -46,7 +46,30 @@ std::vector<const Sommet *> Sommet::getVoisins() const
     return voisins;
 }
 
-
+int Sommet::connexe(int nb,)
+{
+    int nb_sommet=1;
+    std::stack<const Sommet*>pile;
+    std::vector<const Sommet*>marque(nb,0);
+    const Sommet* top;
+    pile.emplace(this);
+    marque[m_id]=1;
+    while(pile.size()!=0)
+    {
+        top=pile.top();
+        pile.pop();
+        for(auto v:top->m_voisins)
+        {
+            if(marque[v->first->getId()]==0)
+            {
+                marque[v->first->getId()]==0
+                pile.emplace(v);
+                nb_sommet++;
+            }
+        }
+    }
+    return nb_sommet;
+}*/
 
 Sommet::~Sommet()
 {

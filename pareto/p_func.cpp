@@ -15,6 +15,8 @@ bool greaterPair(std::pair<float,Sommet*>& a,std::pair<float,Sommet*>& b){
         return false;
 }
 
+
+
 /*std::vector<const Sommet*> Sommet::getVoisins
 {
 

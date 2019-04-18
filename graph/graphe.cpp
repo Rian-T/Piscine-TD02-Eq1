@@ -264,7 +264,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
     {
         int minPoids=INT_MAX;
         Edge* best;
-        for(size_t i=0;i<m_edges;i++)
+        for(size_t i=0;i<m_edges.size();i++)
         {
             const Sommet* st=m_edges[i]->getStart();
             const Sommet* se=m_edges[i]->getSecond();
@@ -345,6 +345,40 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
         }
         tot=tot+sous_tot;
     }
+    return tot;
+}
+
+float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv)
+{
+    float tot=0;
+    std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
+    int temp;
+    std::priority_queue<std::pair<float,int>,std::vector<std::pair<float,int>>> pq;//poids et sommet
+    pq.push(std::make_pair(0,dep->getId()));
+    dist[dep->getId()]=0;
+    while(pq.size())
+    {
+        temp=pq.top().second;
+        pq.pop();
+        for(auto v:m_sommets[temp]->getVoisinsList())
+        {
+            for(size_t j=0;j<m_edges.size();j++)
+            {
+                if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
+                {
+                    if(sol_admi[j]==1)
+                    {
+                        if(dist[v.first->getId()]>dist[temp]+v.second[poids])
+                        {
+                            dist[v.first->getId()]=dist[temp]+v.second[poids];
+                            pq.push(std::make_pair(dist[v.first->getId()],v.first->getId()));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    tot=dist[arriv->getId()];
     return tot;
 }
 
