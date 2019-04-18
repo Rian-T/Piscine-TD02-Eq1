@@ -2,9 +2,11 @@
 #include "graphe.h"
 #include "plot/ploting.h"
 #include <vector>
+#include "plot/svgfile.h"
 
 int main()
 {
+    Svgfile svgout;
     std::vector<bool> prim;
     std::vector<bool> prim2;
     std::vector<bool> djik(5,1);
@@ -28,13 +30,12 @@ int main()
     som1=g.faireSomme(prim,0);
     som2=g.faireSomme(prim2,1);
     std::cout<<std::endl<<som1<<std::endl<<som2;*/
-
     som1=g.faireDjikstra(djik,1);
     std::cout<<som1;
     std::vector<bool> o = {1,1,1,1,1};
     std::unordered_map<const Sommet*,const Sommet* > c;
     int pos = 1;
     std::cout << g.max_flot(o,pos) << std::endl;
-    plotPareto3D(g.fairePareto({0,1,2}));
+    auto pareto = g.fairePareto({0,1,2});
     return 0;
 }

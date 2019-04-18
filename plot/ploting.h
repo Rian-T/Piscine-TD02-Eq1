@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<vector>
+#include "svgfile.h"
 
 // Tested on:
 // 1. Visual Studio 2012 on Windows
@@ -21,7 +22,8 @@
 extern "C" FILE *popen(const char *command, const char *mode);
 extern "C" void *pclose(FILE*);
 
-void plotPareto3D(std::vector<std::vector<float>> frontier);
+void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest);
+void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout);
 void plotPareto2D(std::vector<std::vector<float>> frontier);
 void plotPareto3Dtest();
 void plotPareto2Dtest();
