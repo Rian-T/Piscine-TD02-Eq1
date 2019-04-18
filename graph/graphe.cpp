@@ -239,18 +239,18 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
 void graphe::afficher() const{
     std::cout<<"graphe : "<<std::endl;
     std::cout<<"ordre : "<<m_sommets.size()<<std::endl;
-    for(const auto& elem : m_sommets)
+    for(size_t i=0;i<m_sommets.size();i++)
     {
         std::cout<<"sommet : ";
-        elem.second->afficher();
-        elem.second->afficherVoisins();
+        m_sommets[i]->afficher();
+        m_sommets[i]->afficherVoisins();
     }
     std::cout<<std::endl<<std::endl;
     std::cout<<"taille : "<<m_edges.size()<<std::endl;
-    for(const auto& ed : m_edges)
+    for(size_t i=0;i<m_edges.size();i++)
     {
         std::cout<<"arretes : ";
-        ed.second->afficher();
+        m_edges[i]->afficher();
     }
 }
 
@@ -264,29 +264,29 @@ std::vector<bool> graphe::fairePrim(int poids) const
     {
         int minPoids=INT_MAX;
         Edge* best;
-        for(auto e:m_edges)
+        for(size_t i=0;i<m_edges;i++)
         {
-            const Sommet* st=e.second->getStart();
-            const Sommet* se=e.second->getSecond();
-            if(((marque[stoi(st->getId())]==1)&&(marque[stoi(se->getId())]==0))||((marque[stoi(st->getId())]==0)&&(marque[stoi(se->getId())]==1)))
+            const Sommet* st=m_edges[i]->getStart();
+            const Sommet* se=m_edges[i]->getSecond();
+            if(((marque[st->getId()]==1)&&(marque[se->getId()]==0))||((marque[st->getId()]==0)&&(marque[se->getId()]==1)))
             {
-                if(minPoids>e.second->getWeight()[poids])
+                if(minPoids>m_edges[i]->getWeight()[poids])
                 {
-                    minPoids=e.second->getWeight()[poids];
-                    best=e.second;
+                    minPoids=m_edges[i]->getWeight()[poids];
+                    best=m_edges[i];
                 }
             }
         }
-        if(marque[stoi(best->getStart()->getId())]==0)
+        if(marque[best->getStart()->getId()]==0)
         {
-            marque[stoi(best->getStart()->getId())]=1;
+            marque[best->getStart()->getId()]=1;
         }
-        if(marque[stoi(best->getSecond()->getId())]==0)
+        if(marque[best->getSecond()->getId()]==0)
         {
-            marque[stoi(best->getSecond()->getId())]=1;
+            marque[best->getSecond()->getId()]=1;
         }
         nbAjout++;
-        prim[m_edges.size()-1-stoi(best->getId())]=1;
+        prim[best->getId()]=1;
     }
     while (nbAjout<m_sommets.size()-1);
     return prim;
@@ -295,11 +295,11 @@ std::vector<bool> graphe::fairePrim(int poids) const
 float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
 {
     float somme=0;
-    for(auto edg:m_edges)
+    for(size_t i=0;i<m_edges.size();i++)
     {
-        if(sol_admi[m_edges.size()-1-stoi(edg.first)]==1)
+        if(sol_admi[i]==1)
         {
-            somme=somme+edg.second->getWeight()[poids];
+            somme=somme+m_edges[i]->getWeight()[poids];
         }
     }
     return somme;
@@ -308,40 +308,40 @@ float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
 float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
 {
     float tot=0;
-    for(auto s0: m_sommets)
+    for(size_t i=0;i<m_sommets.size();i++)
     {
         float sous_tot=0;
         std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
         int temp;
-        std::priority_queue<std::pair<float,int>,std::vector<std::pair<float,int>>/*,std::greater<std::pair<float,int>*/> pq;//poids et sommet
-        pq.push(std::make_pair(0,stoi(s0.second->getId())));
-        dist[stoi(s0.second->getId())]=0;
+        std::priority_queue<std::pair<float,int>,std::vector<std::pair<float,int>>> pq;//poids et sommet
+        pq.push(std::make_pair(0,i));
+        dist[i]=0;
         while(pq.size())
         {
             temp=pq.top().second;
             pq.pop();
-            for(auto v:m_sommets.find(std::to_string(temp))->second->getVoisinsList())
+            for(auto v:m_sommets[temp]->getVoisinsList())
             {
-                for(auto edg:m_edges)
+                for(size_t j=0;j<m_edges.size();j++)
                 {
-                    if(((std::stoi(edg.second->getStart()->getId())==temp)&&(std::stoi(edg.second->getSecond()->getId())==std::stoi(v.first->getId())))||((std::stoi(edg.second->getSecond()->getId())==temp)&&(std::stoi(edg.second->getStart()->getId())==std::stoi(v.first->getId()))))
+                    if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                     {
-                        if(sol_admi[stoi(edg.first)]==1)
+                        if(sol_admi[j]==1)
                         {
-                            if(dist[stoi(v.first->getId())]>dist[temp]+v.second[poids])
+                            if(dist[v.first->getId()]>dist[temp]+v.second[poids])
                             {
-                                dist[stoi(v.first->getId())]=dist[temp]+v.second[poids];
-                                pq.push(std::make_pair(dist[stoi(v.first->getId())],stoi(v.first->getId())));
+                                dist[v.first->getId()]=dist[temp]+v.second[poids];
+                                pq.push(std::make_pair(dist[v.first->getId()],v.first->getId()));
                             }
                         }
                     }
                 }
             }
         }
-        for(size_t i=0;i<dist.size();i++)
+        for(size_t j=0;j<dist.size();j++)
         {
-            if(dist[i]<INT_MAX)
-                sous_tot=sous_tot+dist[i];
+            if(dist[j]<INT_MAX)
+                sous_tot=sous_tot+dist[j];
         }
         tot=tot+sous_tot;
     }
@@ -418,6 +418,8 @@ std::vector<std::vector<float>> graphe::fairePareto(std::vector<int> choix_pond)
     }
     return tot_object_pareto;
 }
+
+
 
 
 graphe::~graphe()

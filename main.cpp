@@ -9,7 +9,7 @@ int main()
     std::vector<bool> prim2;
     std::vector<bool> djik(5,1);
     float som1;
-    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
+    graphe g("files/manhattan.txt","files/manhattan_weights_0.txt");
     g.search_sol();
     std::cout << "Graphe charge !" << std::endl;
     std::cout << "Affichage de la frontiere de pareto : " << std::endl;
