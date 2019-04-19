@@ -36,6 +36,8 @@ int main()
     std::unordered_map<const Sommet*,const Sommet* > c;
     int pos = 1;
     std::cout << g.max_flot(o,pos) << std::endl;
-    auto pareto = g.fairePareto({0,1,2});
+    auto pareto = g.fairePareto({0,1,1});
+    plotPareto3D(pareto.first, pareto.second);
+    printPareto3D(pareto.first,pareto.second,svgout);
     return 0;
 }

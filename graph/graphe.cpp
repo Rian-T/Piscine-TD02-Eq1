@@ -68,7 +68,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
         m_edges.insert({id_edge,new Edge(id_edge,m_sommets.find(id)->second,m_sommets.find(id_voisin)->second,tmp_weight)});
         //ajouter chaque extrémité à la liste des voisins de l'autre (graphe non orienté)
         (m_sommets.find(id))->second->ajouterVoisin((m_sommets.find(id_voisin))->second,tmp_weight);
-        //(m_sommets.find(id_voisin))->second->ajouterVoisin((m_sommets.find(id))->second,tmp_weight);//remove si graphe orienté
+        (m_sommets.find(id_voisin))->second->ajouterVoisin((m_sommets.find(id))->second,tmp_weight);//remove si graphe orienté
     }
 }
 
@@ -348,10 +348,11 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
     return tot;
 }
 
-std::vector<std::vector<float>> graphe::fairePareto(std::vector<int> choix_pond)
+std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int> choix_pond)
 {
     std::vector<std::vector<float>> tot_object;
     std::vector<std::vector<float>> tot_object_pareto;
+    std::vector<std::vector<float>> tot_object_rest;
     for(size_t i=0;i<m_sol_admissible.size();i++)
     {
         std::vector<float> objectif;
@@ -366,7 +367,7 @@ std::vector<std::vector<float>> graphe::fairePareto(std::vector<int> choix_pond)
                 objectif.push_back(faireDjikstra(m_sol_admissible[i],j));
                 break;
             case 2:
-                objectif.push_back(max_flot(m_sol_admissible[i],0));
+                objectif.push_back(max_flot(m_sol_admissible[i],j));
                 break;
             }
         }
@@ -415,8 +416,13 @@ std::vector<std::vector<float>> graphe::fairePareto(std::vector<int> choix_pond)
             m_pareto_frontier.push_back(m_sol_admissible[i]);
             tot_object_pareto.push_back(tot_object[i]);
         }
+        else
+        {
+            tot_object_rest.push_back(tot_object[i]);
+            std::cout << " TOT REST : " << tot_object[i][0] << " " <<tot_object[i][1]<< " " <<tot_object[i][2] << std::endl;
+        }
     }
-    return tot_object_pareto;
+    return std::make_pair(tot_object_pareto,tot_object_rest);
 }
 
 

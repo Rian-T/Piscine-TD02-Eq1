@@ -16,7 +16,7 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
             }
             FILE* rstTxt = fopen("rst.txt","w");
             for(size_t i = 0; i < rest.size(); i++){
-                fprintf(frtTxt, "%3.2f %3.2f %3.2f\n", rest[i][0],rest[i][1], rest[i][2]);           // data terminated with \n
+                fprintf(rstTxt, "%3.2f %3.2f %3.2f\n", rest[i][0],rest[i][1], rest[i][2]);           // data terminated with \n
             }
             fclose(rstTxt);
             fclose(frtTxt);
@@ -31,7 +31,7 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
             fprintf(pipe, "set zlabel \"Max Flow\" offset 0,5\n");
             fprintf(pipe, "set palette defined ( 0 \"green\" ,1 \"red\" )\n");
-            fprintf(pipe, "splot \"frt.txt\" with lines lc palette, \"rst.txt\" with dots lc rgb 'red'\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" with lines lc palette\n"); // plot type
                      // termination character
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
@@ -78,11 +78,11 @@ void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vec
             fprintf(pipe, "set xlabel \"Economic cost\"\n");
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
             fprintf(pipe, "set zlabel \"Max Flow\" offset 0,5\n");
-            fprintf(pipe, "splot \"frt.txt\" with lines lc palette, \"rst.txt\" with dots lc rgb 'red'\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" with lines lc palette\n"); // plot type
             fprintf(pipe, "n = 100\n");
             fprintf(pipe, "do for [i=1:n] {\n"); // plot type
             fprintf(pipe, " set view 60, i*360/n\n"); // plot type
-            fprintf(pipe, "splot \"frt.txt\" with lines lc palette , \"rst.txt\" with dots lc rgb 'red'\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" with lines lc palette\n"); // plot type
             fprintf(pipe, "}\n");             // termination character
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe

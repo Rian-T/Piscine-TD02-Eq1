@@ -45,6 +45,8 @@
 		<Unit filename="pareto/p_func.h" />
 		<Unit filename="plot/ploting.cpp" />
 		<Unit filename="plot/ploting.h" />
+		<Unit filename="plot/svgfile.cpp" />
+		<Unit filename="plot/svgfile.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
