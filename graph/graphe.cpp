@@ -77,7 +77,179 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
         (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
     }
 }
+/*void graphe::search_sol()
+{
+    std::vector<bool > aretes; ///aretes affichés et non affichés
+    for (size_t i = 0 ; i < m_edges.size() ; i++)
+    {
+        if ( i < (m_edges.size() -(m_sommets.size()-1)) )
+            aretes.push_back(false);
+        else
+            aretes.push_back(true);
+    }
+    for (size_t i = 0 ; i <= (m_edges.size()-(m_sommets.size()-1)) ; i++ ) /// 0 = edg - som + 1 nombre de 0 ; final = 0 nombre de 0
+    {
+        do
+        {
+            DFS(aretes);
+        }
+        while(std::next_permutation(aretes.begin(), aretes.end()));
+        aretes.erase(aretes.begin() + 0);
+        aretes.push_back(true);
+    }
+    std::cout << m_sol_admissible.size() << std::endl;
+}
 
+void graphe::DFS(std::vector<bool> &aretes_local)
+{
+    std::vector<const Sommet *> marked;
+    std::stack<const Sommet *> pile;
+    std::vector<const Sommet*> voisins;
+    const Sommet* sommet_actuelle = m_sommets[0];
+    pile.push(sommet_actuelle);
+    marked.push_back(sommet_actuelle);
+
+    std::vector<int> arete_select;
+    for (size_t i = 0 ; i <aretes_local.size() ; i++)
+    {
+        if (aretes_local[i] == 1)
+        arete_select.push_back(i);
+    }
+
+    do
+    {
+        sommet_actuelle = pile.top();
+        pile.pop();
+        voisins = sommet_actuelle->getVoisins();
+        for (size_t a = 0 ; a < arete_select.size() ; a++)
+        {
+            if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
+            {
+                for (size_t i = 0 ; i < voisins.size() ; i ++)
+                {
+                    ///si les sommets appartiennent à l'arête
+                    if ((m_edges[arete_select[a]]->getStart() == sommet_actuelle || m_edges[a]->getSecond() == sommet_actuelle) && (m_edges[arete_select[a]]->getStart() == voisins[i] || m_edges[arete_select[a]]->getSecond() == voisins[i]))
+                    {
+                        bool used = false;
+                        for (size_t j = 0 ; j < marked.size() ; j ++) ///vérifie si le sommet d'arrivé est déjà marqué ou découvert
+                        {
+                            if (marked[j] == voisins[i]) ///le sommet d'arrivé est marqué ou découvert
+                                used = true;
+                        }
+                        if (!used) ///le sommet n'est ni découvert ni marqué
+                        {
+                            marked.push_back(voisins[i]);
+                            pile.push(voisins[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    while (!pile.empty());
+
+    if (marked.size() == m_sommets.size())
+            m_sol_admissible.push_back(aretes_local);
+}
+
+
+float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
+{
+    std::vector<int> chemin (m_sommets.size(), 0);
+    graphe g = *this; /// graphe résiduel qui copie le graphe complet
+    float flot_max = 0;
+    int i = 0;
+
+    while (g.BFS(aretes_local,chemin,posP))
+    {
+        g.BFS(aretes_local,chemin,posP);
+        float flot_min = INT_MAX;
+        std::vector<int> arete_nb;
+        int sommet_nb = m_sommets.size() - 1; /// on part du puit
+        while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
+        {
+            for (size_t i = 0 ; i < m_edges.size() ; i++)
+            {
+                if ((m_edges[i]->getStart() == m_sommets[sommet_nb] || m_edges[i]->getSecond() == m_sommets[sommet_nb]) && (m_edges[i]->getStart() == m_sommets[chemin[sommet_nb]] || m_edges[i]->getSecond() == m_sommets[chemin[sommet_nb]]))
+                {
+                    flot_min = std::min (flot_min, m_edges[i]->getWeight(posP));
+                    arete_nb.push_back(i);
+                }
+            }
+            sommet_nb = chemin[sommet_nb];
+        }
+        std::cout << std::endl;
+        sommet_nb = m_sommets.size() - 1; /// on part du puit
+        if(flot_min<INT_MAX){
+            while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
+            {
+                for(size_t i = 0 ; i < arete_nb.size(); ++i)
+                {
+                    ///si sens directe (sachant qu'on est en chemin inverse)
+                    if ( (m_edges[arete_nb[i]]->getSecond() == m_sommets[sommet_nb]) && (m_edges[arete_nb[i]]->getStart() == m_sommets[chemin[sommet_nb]]))
+                        m_edges[arete_nb[i]]->setNewFlot(posP, m_edges[arete_nb[i]]->getWeight(posP) - flot_min); /// on le descend à 0
+                    ///si sens indirecte
+                    if ( (m_edges[arete_nb[i]]->getStart() == m_sommets[sommet_nb]) && (m_edges[arete_nb[i]]->getSecond() == m_sommets[chemin[sommet_nb]]))
+                         m_edges[arete_nb[i]]->setNewFlot(posP, m_edges[arete_nb[i]]->getWeight(posP) + flot_min); /// on l'augmente
+                }
+                sommet_nb = chemin[sommet_nb];
+            }
+            std::cout << std::endl;
+            std::cout << std::endl;
+            flot_max += flot_min;
+        }
+        i++;
+    }
+    std::cout << "max = " << flot_max << std::endl;
+    return flot_max;
+}
+
+bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP)
+{
+    std::vector<const Sommet *> marked;
+    std::queue<const Sommet *> file;
+    std::vector<const Sommet*> voisins;
+    const Sommet* sommet_actuelle = m_sommets[0];
+    file.push(sommet_actuelle);
+    marked.push_back(sommet_actuelle);
+    do
+    {
+        sommet_actuelle = file.front();
+        file.pop();
+        voisins = sommet_actuelle->getVoisins();
+        for (size_t a = 0 ; a < m_edges.size() ; ++a)
+        {
+            if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
+            {
+                for (size_t i = 0 ; i < voisins.size() ; i ++)
+                {
+                    ///si les sommets appartiennent à l'arête
+                    if ((m_edges[a]->getStart() == sommet_actuelle || m_edges[a]->getSecond() == sommet_actuelle) && (m_edges[a]->getStart() == voisins[i] || m_edges[a]->getSecond() == voisins[i]))
+                    {
+                        bool used = false;
+                        for (size_t j = 0 ; j < marked.size() ; j ++) ///vérifie si le sommet d'arrivé est déjà marqué ou découvert
+                        {
+                            if (marked[j] == voisins[i]) ///le sommet d'arrivé est marqué ou découvert
+                                used = true;
+                        }
+                        ///vérifier les flots à partir de là (si le flot de l'arete ou voisin ? n'est pas max mettre dans file)
+                        if ((!used) && (m_edges[a]->getWeight(posP) != 0)) ///le sommet n'est ni découvert ni marqué et l'arete est ni saturé
+                        {
+                            chemin [voisins[i]->getId()] = sommet_actuelle->getId();
+                            marked.push_back(voisins[i]);
+                            file.push(voisins[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    while (!file.empty());
+    if (marked[marked.size()-1]->getId() == m_sommets[m_sommets.size() - 1]->getId())
+        return true;
+    else
+        return false;
+}*/
 void graphe::search_sol()
 {
     std::vector<bool > aretes; ///aretes affichés et non affichés
