@@ -25,13 +25,12 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
             fprintf(pipe, "set term wx\n");
             fprintf(pipe, "set hidden3d\n");
             fprintf(pipe, "unset key\n");
-            fprintf(pipe, "set dgrid3d 50,50 qnorm 2\n");
             fprintf(pipe, "set title \"3D Plot of Pareto frontier\"\n");
             fprintf(pipe, "set xlabel \"Economic cost\"\n");
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
             fprintf(pipe, "set zlabel \"Max Flow\" offset 0,5\n");
             fprintf(pipe, "set palette defined ( 0 \"green\" ,1 \"red\" )\n");
-            fprintf(pipe, "splot \"frt.txt\" with lines lc palette\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" with lp lc 'green' pt 7 ps 3 , \"rst.txt\" pt 7 ps 3 lc 'red'\n"); // plot type
                      // termination character
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
@@ -64,7 +63,7 @@ void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vec
             fclose(frtTxt);
             FILE* rstTxt = fopen("rst.txt","w");
             for(size_t i = 0; i < rest.size(); i++){
-                fprintf(frtTxt, "%3.2f %3.2f %3.2f\n", rest[i][0],rest[i][1], rest[i][2]);           // data terminated with \n
+                fprintf(rstTxt, "%3.2f %3.2f %3.2f\n", rest[i][0],rest[i][1], rest[i][2]);           // data terminated with \n
             }
             fclose(rstTxt);
         if (pipe != NULL)

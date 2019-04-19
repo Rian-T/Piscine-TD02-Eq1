@@ -99,59 +99,59 @@ void graphe::search_sol()
     }
     std::cout << m_sol_admissible.size() << std::endl;
 }
-/*
-void graphe::DFS(std::vector<bool> &aretes_local)
-{
-    std::vector<const Sommet *> marked;
-    std::stack<const Sommet *> pile;
-    std::vector<const Sommet*> voisins;
-    const Sommet* sommet_actuelle = m_sommets[0];
-    pile.push(sommet_actuelle);
-    marked.push_back(sommet_actuelle);
 
-    std::vector<int> arete_select;
-    for (size_t i = 0 ; i <aretes_local.size() ; i++)
-    {
-        if (aretes_local[i] == 1)
-        arete_select.push_back(i);
-    }
+//void graphe::DFS(std::vector<bool> &aretes_local)
+//{
+//    std::vector<const Sommet *> marked;
+//    std::stack<const Sommet *> pile;
+//    std::vector<const Sommet*> voisins;
+//    const Sommet* sommet_actuelle = m_sommets[0];
+//    pile.push(sommet_actuelle);
+//    marked.push_back(sommet_actuelle);
+//
+//    std::vector<int> arete_select;
+//    for (size_t i = 0 ; i <aretes_local.size() ; i++)
+//    {
+//        if (aretes_local[i] == 1)
+//        arete_select.push_back(i);
+//    }
+//
+//    do
+//    {
+//        sommet_actuelle = pile.top();
+//        pile.pop();
+//        voisins = sommet_actuelle->getVoisins();
+//        for (size_t a = 0 ; a < arete_select.size() ; a++)
+//        {
+//            if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
+//            {
+//                for (size_t i = 0 ; i < voisins.size() ; i ++)
+//                {
+//                    ///si les sommets appartiennent à l'arête
+//                    if ((m_edges[arete_select[a]]->getStart() == sommet_actuelle || m_edges[a]->getSecond() == sommet_actuelle) && (m_edges[arete_select[a]]->getStart() == voisins[i] || m_edges[arete_select[a]]->getSecond() == voisins[i]))
+//                    {
+//                        bool used = false;
+//                        for (size_t j = 0 ; j < marked.size() ; j ++) ///vérifie si le sommet d'arrivé est déjà marqué ou découvert
+//                        {
+//                            if (marked[j] == voisins[i]) ///le sommet d'arrivé est marqué ou découvert
+//                                used = true;
+//                        }
+//                        if (!used) ///le sommet n'est ni découvert ni marqué
+//                        {
+//                            marked.push_back(voisins[i]);
+//                            pile.push(voisins[i]);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    while (!pile.empty());
+//
+//    if (marked.size() == m_sommets.size())
+//            m_sol_admissible.push_back(aretes_local);
+//}
 
-    do
-    {
-        sommet_actuelle = pile.top();
-        pile.pop();
-        voisins = sommet_actuelle->getVoisins();
-        for (size_t a = 0 ; a < arete_select.size() ; a++)
-        {
-            if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
-            {
-                for (size_t i = 0 ; i < voisins.size() ; i ++)
-                {
-                    ///si les sommets appartiennent à l'arête
-                    if ((m_edges[arete_select[a]]->getStart() == sommet_actuelle || m_edges[a]->getSecond() == sommet_actuelle) && (m_edges[arete_select[a]]->getStart() == voisins[i] || m_edges[arete_select[a]]->getSecond() == voisins[i]))
-                    {
-                        bool used = false;
-                        for (size_t j = 0 ; j < marked.size() ; j ++) ///vérifie si le sommet d'arrivé est déjà marqué ou découvert
-                        {
-                            if (marked[j] == voisins[i]) ///le sommet d'arrivé est marqué ou découvert
-                                used = true;
-                        }
-                        if (!used) ///le sommet n'est ni découvert ni marqué
-                        {
-                            marked.push_back(voisins[i]);
-                            pile.push(voisins[i]);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    while (!pile.empty());
-
-    if (marked.size() == m_sommets.size())
-            m_sol_admissible.push_back(aretes_local);
-}
-*/
 
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
