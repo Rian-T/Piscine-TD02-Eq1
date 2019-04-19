@@ -18,6 +18,7 @@ class graphe
         float max_flot(std::vector<bool> &aretes_local, int posP);
         bool BFS(std::vector<bool> &arete_local, std::unordered_map<const Sommet* ,const Sommet*> & chemin, int &posP);
         ~graphe();
+        bool BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP);
         void afficher() const;
         float faireDjikstra(std::vector<bool>,int poids);
         float faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv);

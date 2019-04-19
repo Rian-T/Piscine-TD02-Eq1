@@ -77,7 +77,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
         (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
     }
 }
-/*void graphe::search_sol()
+void graphe::search_sol()
 {
     std::vector<bool > aretes; ///aretes affichés et non affichés
     for (size_t i = 0 ; i < m_edges.size() ; i++)
@@ -99,7 +99,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
     }
     std::cout << m_sol_admissible.size() << std::endl;
 }
-
+/*
 void graphe::DFS(std::vector<bool> &aretes_local)
 {
     std::vector<const Sommet *> marked;
@@ -151,7 +151,7 @@ void graphe::DFS(std::vector<bool> &aretes_local)
     if (marked.size() == m_sommets.size())
             m_sol_admissible.push_back(aretes_local);
 }
-
+*/
 
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
@@ -200,7 +200,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
         }
         i++;
     }
-    std::cout << "max = " << flot_max << std::endl;
+    //std::cout << "max = " << flot_max << std::endl;
     return flot_max;
 }
 
@@ -249,29 +249,8 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
         return true;
     else
         return false;
-}*/
-void graphe::search_sol()
-{
-    std::vector<bool > aretes; ///aretes affichés et non affichés
-    for (size_t i = 0 ; i < m_edges.size() ; i++)
-    {
-        if ( i < (m_edges.size() -(m_sommets.size()-1)) )
-            aretes.push_back(false);
-        else
-            aretes.push_back(true);
-    }
-    for (size_t i = 0 ; i <= (m_edges.size()-(m_sommets.size()-1)) ; i++ ) /// 0 = edg - som + 1 nombre de 0 ; final = 0 nombre de 0
-    {
-        do
-        {
-            DFS(aretes);
-        }
-        while(std::next_permutation(aretes.begin(), aretes.end()));
-        aretes.erase(aretes.begin() + 0);
-        aretes.push_back(true);
-    }
-    std::cout << "desuyuyuuyuyu" << m_sol_admissible.size();
 }
+
 
 void graphe::DFS(std::vector<bool> &aretes_local)
 {
@@ -299,7 +278,7 @@ void graphe::DFS(std::vector<bool> &aretes_local)
         }
     }
     while (!pile.empty());
-    if (std::count(marked.begin(),marked.end(),true) == m_sommets.size())
+    if (  std::count(marked.begin(),marked.end(),true) == (int)m_sommets.size())
             m_sol_admissible.push_back(aretes_local);
 }
 
@@ -387,7 +366,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
         }
     }
     while (!file.empty());
-    /*
+
     for (auto &elem : chemin)
     {
         std::cout << elem.first->getId() << " " << elem.second->getId() << std::endl;
@@ -426,7 +405,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
     do
     {
         int minPoids=INT_MAX;
-        Edge* best;
+        Edge* best = nullptr;
         for(size_t i=0;i<m_edges.size();i++)
         {
             const Sommet* st=m_edges[i]->getStart();
@@ -564,7 +543,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
                 objectif.push_back(faireDjikstra(m_sol_admissible[i],j));
                 break;
             case 2:
-                //objectif.push_back(max_flot(m_sol_admissible[i],j));
+                objectif.push_back(max_flot(m_sol_admissible[i],j));
                 break;
             }
         }
@@ -616,7 +595,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
         else
         {
             tot_object_rest.push_back(tot_object[i]);
-            std::cout << " TOT REST : " << tot_object[i][0] << " " <<tot_object[i][1]<< " " <<tot_object[i][2] << std::endl;
+            //std::cout << " TOT REST : " << tot_object[i][0] << " " <<tot_object[i][1]<< " " <<tot_object[i][2] << std::endl;
         }
     }
     return std::make_pair(tot_object_pareto,tot_object_rest);
