@@ -3,41 +3,26 @@
 #include "plot/ploting.h"
 #include <vector>
 #include "plot/svgfile.h"
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 int main()
 {
+    using namespace std::chrono;
     Svgfile svgout;
-    std::vector<bool> prim;
-    std::vector<bool> prim2;
-    std::vector<bool> djik(5,1);
     float som1;
-    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
+    high_resolution_clock::time_point start_point = high_resolution_clock::now();
+    graphe g("files/manhattan.txt","files/manhattan_weights_0.txt");
     g.search_sol();
     std::cout << "Graphe charge !" << std::endl;
     std::cout << "Affichage de la frontiere de pareto : " << std::endl;
-    //g.afficher();
-    /*prim=g.fairePrim(0);
-    for(size_t i=0;i<prim.size();++i)
-    {
-        std::cout<<prim[i];
-    }
-    std::cout<<std::endl;
-    prim2=g.fairePrim(1);
-    for(size_t j=0;j<prim2.size();++j)
-    {
-        std::cout<<prim2[j];
-    }
-    som1=g.faireSomme(prim,0);
-    som2=g.faireSomme(prim2,1);
-    std::cout<<std::endl<<som1<<std::endl<<som2;*/
-    som1=g.faireDjikstra(djik,1);
-    std::cout<<som1;
-    std::vector<bool> o = {1,1,1,1,1};
-    std::unordered_map<const Sommet*,const Sommet* > c;
-    int pos = 1;
-    std::cout << g.max_flot(o,pos) << std::endl;
-    auto pareto = g.fairePareto({0,1,1});
-    plotPareto3D(pareto.first, pareto.second);
-    printPareto3D(pareto.first,pareto.second,svgout);
+    auto pareto = g.fairePareto({0,1});
+    high_resolution_clock::time_point end_point = high_resolution_clock::now();
+    duration<double> time_elpased = duration_cast<duration<double>>(end_point - start_point);
+    std::cout << std::endl << "Time of computation elapsed : " << time_elpased.count() << " s" << std::endl;
+    std::cout << std::endl << "PARETO :" << pareto.first.size() << std::endl;
+    plotPareto2D(pareto.first);
+    //printPareto3D(pareto.first,pareto.second,svgout);
     return 0;
 }

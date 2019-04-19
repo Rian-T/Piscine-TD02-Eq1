@@ -106,15 +106,15 @@ void plotPareto2D(std::vector<std::vector<float>> frontier){
         #else
             FILE *pipe = popen(GNUPLOT_NAME, "w");
         #endif
-
+        FILE* frtTxt = fopen("frt.txt","w");
+        for(size_t i = 0; i < frontier.size(); i++){
+                fprintf(frtTxt, "%f %f\n", frontier[i][0],frontier[i][1]);           // data terminated with \n
+        }
+        fclose(frtTxt);
         if (pipe != NULL)
         {
             fprintf(pipe, "set term wx\n");         // set the terminal
-            fprintf(pipe, "plot '-' using 1:2:(sprintf(\"(%d, %d)\", $1, $2)) with lp pt 4 lt 0\n"); // plot type
-            for(size_t i = 0; i < frontier.size(); i++){
-                fprintf(pipe, "%f %f\n", frontier[i][0],frontier[i][1]);           // data terminated with \n
-            }
-            fprintf(pipe, "%s\n", "e");             // termination character
+            fprintf(pipe, "plot \"frt.txt\" using 1:2:(sprintf(\"(%d, %d)\", $1, $2)) with lp pt 4 lt 0\n"); // plot type
             fflush(pipe);                           // flush the pipe
 
             // wait for key press

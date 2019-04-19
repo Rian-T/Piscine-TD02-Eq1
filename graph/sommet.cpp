@@ -7,7 +7,7 @@
 #include<unordered_set>
 #include "sommet.h"
 
-Sommet::Sommet(std::string id,double x,double y):m_id{id},m_x{x},m_y{y}
+Sommet::Sommet(int id,double x,double y):m_id{id},m_x{x},m_y{y}
 {
 
 }
@@ -45,8 +45,31 @@ std::vector<const Sommet *> Sommet::getVoisins() const
     }
     return voisins;
 }
-
-
+/*
+int Sommet::connexe(int nb,)
+{
+    int nb_sommet=1;
+    std::stack<const Sommet*>pile;
+    std::vector<const Sommet*>marque(nb,0);
+    const Sommet* top;
+    pile.emplace(this);
+    marque[m_id]=1;
+    while(pile.size()!=0)
+    {
+        top=pile.top();
+        pile.pop();
+        for(auto v:top->m_voisins)
+        {
+            if(marque[v->first->getId()]==0)
+            {
+                marque[v->first->getId()]==0
+                pile.emplace(v);
+                nb_sommet++;
+            }
+        }
+    }
+    return nb_sommet;
+}*/
 
 Sommet::~Sommet()
 {
