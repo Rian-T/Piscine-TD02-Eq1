@@ -13,7 +13,7 @@ int main()
     Svgfile svgout;
     float som1;
     high_resolution_clock::time_point start_point = high_resolution_clock::now();
-    graphe g("files/manhattan.txt","files/manhattan_weights_0.txt");
+    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
     g.search_sol();
     std::cout << "Graphe charge !" << std::endl;
     std::cout << "Affichage de la frontiere de pareto : " << std::endl;
