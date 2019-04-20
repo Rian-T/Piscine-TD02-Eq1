@@ -28,9 +28,11 @@ class graphe
         std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> fairePareto(std::vector<int> choix_pond);
 
         //Svgfile
-        void dessiner(Svgfile &svgout);
-        void dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x,double ecart_y);
-        void test();
+        void InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y);
+        void dessinerGrapheOrg(Svgfile &svgout, double &ecart_x);
+        void dessinerGraphe(Svgfile &svgout, std::vector<bool> &aretes, double ecart_x,double ecart_y);
+        void dessinerGraphesPareto(Svgfile &svgout, double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot );
+        void dessinerGraphesPrim(Svgfile &svgout,double &ecart_x, double &ecart_u, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts);
     private:
         /// Le réseau est constitué d'une collection de sommets
         std::vector<Sommet*> m_sommets;//stockée dans une map (clé=id du sommet, valeur= pointeur sur le sommet)

@@ -88,14 +88,21 @@ class Svgfile
         int getWidth();
         int getHeight();
 
+        ///position pour affichages
+        int getCptY() const {return cpt_y;}
+        void incremCptY() {++cpt_y;}
+        void initCptY() {cpt_y = 0; }
+
     private:
         std::string m_filename;
         std::ofstream m_ostrm;
         int m_width;
         int m_height;
-
         // Pour éviter les ouverture multiples
         static std::set<std::string> s_openfiles;
+
+        ///valeurs affichage constant :
+        int cpt_y;
 };
 
 #endif // SVGFILE_H_INCLUDED

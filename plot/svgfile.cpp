@@ -16,7 +16,7 @@ std::set<std::string> Svgfile::s_openfiles;
 bool Svgfile::s_verbose = true;
 
 Svgfile::Svgfile(std::string _filename, int _width, int _height) :
-    m_filename{_filename}, m_width{_width}, m_height{_height}
+    m_filename{_filename}, m_width{_width}, m_height{_height},cpt_y{1}
 {
 
     if (s_verbose)
@@ -504,5 +504,6 @@ void Svgfile::addRadGrad3(std::string gradId)
             <<"</radialGradient>\n"
             <<"</defs>\n";
 }
+
 
 
