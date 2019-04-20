@@ -74,7 +74,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori)
         m_edge_matrix[id_voisin][id] = id_edge;
         //ajouter chaque extrémité à la liste des voisins de l'autre (graphe non orienté)
         m_sommets[id]->ajouterVoisin(m_sommets[id_voisin],tmp_weight);
-        if(ori==2)
+        if(ori==1)
             (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
     }
 }
@@ -202,7 +202,6 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
         i++;
     }
     //std::cout << "max = " << flot_max << std::endl;
-    std::cout<<flot_max<<std::endl;
     return flot_max;
 }
 
