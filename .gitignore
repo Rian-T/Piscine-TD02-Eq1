@@ -6,6 +6,9 @@
 # specific to CodeBlocks IDE
 *.layout
 *.depend
+*.svg
+*.gif
+*.txt
 # generated directories
 bin/
 obj/

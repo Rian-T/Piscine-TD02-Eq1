@@ -112,7 +112,7 @@ void plotPareto2D(std::vector<std::vector<float>> frontier){
         if (pipe != NULL)
         {
             fprintf(pipe, "set term wx\n");         // set the terminal
-            fprintf(pipe, "plot \"frt.txt\" using 1:2:(sprintf(\"(%d, %d)\", $1, $2)) with lp pt 4 lt 0\n"); // plot type
+            fprintf(pipe, "plot \"frt.txt\" using 1:2:(sprintf(\"(%3d, %3d)\", $1, $2)) with lp pt 4 lt 0\n"); // plot type
             fflush(pipe);                           // flush the pipe
 
             // wait for key press
