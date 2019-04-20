@@ -9,33 +9,23 @@
 
 int main()
 {
-    Svgfile svgout;
-    svgout.addGrid();
-    svgout.addLine(500,0,500,800,"black");
-    svgout.addLine(1300,0,1300,800,"black");
 
+
+    Svgfile svgout;
+    ///Pour affichage Svg : a toujours déclaré
+    double ecart_x;
+    double ecart_y;
     std::string a = "files/broadway.txt";
     std::string aa = "files/broadway_weights_0.txt";
-    /*
-    std::string a = "files/cubetown.txt";
-    std::string aa = "files/cubetown_weights_0.txt";
-    /*
-    std::string a = "files/triville.txt";
-    std::string aa = "files/triville_weights_0.txt";
-    */
-    /*
-    std::string a = "files/manhattan.txt";
-    std::string aa = "files/manhattan_weights_0.txt";
-*/
-
     graphe g(a,aa);
+    ///Pour affichage Svg : a écrire après avoir déclarer le graphe
+    g.InitialisationDonneeAffichageSvg(ecart_x,ecart_y);
+
     g.search_sol();
-    //std::pair< std::vector<std::vector<float>>, std::vector<std::vector<float>>> p_pareto;
-    //p_pareto = g.fairePareto({0,0});
-    //printPareto3D(p_pareto.first,p_pareto.second,svgout);
-    g.dessiner(svgout);
-    //g.dessinerGrapheOrg(svgout);
-    //g.dessinerGraphePrim(svgout,1);
+    g.dessinerGrapheOrg(svgout,ecart_x);
+    /// il faut que les conteneurs sois remplie pour le fonctionner ces 2 derniers méthodes :
+    g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,f);
+    g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,t,f);
     return 0;
 }
 

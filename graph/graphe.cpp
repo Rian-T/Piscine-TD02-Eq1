@@ -43,7 +43,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
     int taille;
     ifs >> taille;
     m_edge_matrix = (int**) malloc(sizeof(int**)*ordre);
-    for(int i=0;i<ordre;i++)
+    for(int i=0; i<ordre; i++)
         m_edge_matrix[i] = (int*) malloc(sizeof(int*)*ordre);
     if ( ifs.fail() )
         throw std::runtime_error("Probleme lecture taille du graphe");
@@ -99,6 +99,7 @@ void graphe::search_sol()
         aretes.push_back(true);
     }
     std::cout << m_sol_admissible.size() << std::endl;
+    m_pareto_frontier = m_sol_admissible;
 }
 
 //void graphe::DFS(std::vector<bool> &aretes_local)
@@ -153,18 +154,6 @@ void graphe::search_sol()
 //            m_sol_admissible.push_back(aretes_local);
 //}
 
-void graphe::test()
-{
-    for (int i = 0; i< m_sol_admissible.size() ; ++i)
-    {
-        for (int j = 0 ; j < m_sol_admissible[i].size() ; ++j)
-        {
-            std::cout << m_sol_admissible[i][j];
-        }
-        std::cout<<std::endl;
-        std::cout<<max_flot(m_sol_admissible[i],1)<<std::endl;
-    }
-}
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
     std::vector<int> chemin (m_sommets.size(), 0);
@@ -189,7 +178,8 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
             sommet_nb = chemin[sommet_nb];
         }
         sommet_nb = g.m_sommets.size() - 1; /// on part du puit
-        if(flot_min<INT_MAX){
+        if(flot_min<INT_MAX)
+        {
             while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
             {
                 for(size_t i = 0 ; i < arete_nb.size(); ++i)
@@ -199,7 +189,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
                         g.m_edges[arete_nb[i]]->setNewFlot(posP, g.m_edges[arete_nb[i]]->getWeight(posP) - flot_min); /// on le descend à 0
                     ///si sens indirecte
                     if ( (g.m_edges[arete_nb[i]]->getStart() == g.m_sommets[sommet_nb]) && (g.m_edges[arete_nb[i]]->getSecond() == g.m_sommets[chemin[sommet_nb]]))
-                         g.m_edges[arete_nb[i]]->setNewFlot(posP, g.m_edges[arete_nb[i]]->getWeight(posP) + flot_min); /// on l'augmente
+                        g.m_edges[arete_nb[i]]->setNewFlot(posP, g.m_edges[arete_nb[i]]->getWeight(posP) + flot_min); /// on l'augmente
                 }
                 sommet_nb = chemin[sommet_nb];
             }
@@ -273,20 +263,22 @@ void graphe::DFS(std::vector<bool> &aretes_local)
         pile.pop();
         voisins = sommet_actuelle->getVoisins();
         const int nb_voisins = voisins.size();
-        if(!marked[id]){
-                marked[id] = true;
+        if(!marked[id])
+        {
+            marked[id] = true;
         }
-        for(unsigned i = nb_voisins; i--;){
-                const int id_voisin= voisins[i]->getId();
-                if(aretes_local[m_edge_matrix[id][id_voisin]])
-                        if(!marked[id_voisin])
-                            pile.push(id_voisin);
+        for(unsigned i = nb_voisins; i--;)
+        {
+            const int id_voisin= voisins[i]->getId();
+            if(aretes_local[m_edge_matrix[id][id_voisin]])
+                if(!marked[id_voisin])
+                    pile.push(id_voisin);
 
         }
     }
     while (!pile.empty());
     if (  std::count(marked.begin(),marked.end(),true) == (int)m_sommets.size())
-            m_sol_admissible.push_back(aretes_local);
+        m_sol_admissible.push_back(aretes_local);
 }
 
 /*
@@ -385,10 +377,11 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
         return false;
 }
  */
-void graphe::afficher() const{
+void graphe::afficher() const
+{
     std::cout<<"graphe : "<<std::endl;
     std::cout<<"ordre : "<<m_sommets.size()<<std::endl;
-    for(size_t i=0;i<m_sommets.size();i++)
+    for(size_t i=0; i<m_sommets.size(); i++)
     {
         std::cout<<"sommet : ";
         m_sommets[i]->afficher();
@@ -396,7 +389,7 @@ void graphe::afficher() const{
     }
     std::cout<<std::endl<<std::endl;
     std::cout<<"taille : "<<m_edges.size()<<std::endl;
-    for(size_t i=0;i<m_edges.size();i++)
+    for(size_t i=0; i<m_edges.size(); i++)
     {
         std::cout<<"arretes : ";
         m_edges[i]->afficher();
@@ -413,7 +406,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
     {
         int minPoids=INT_MAX;
         Edge* best = nullptr;
-        for(size_t i=0;i<m_edges.size();i++)
+        for(size_t i=0; i<m_edges.size(); i++)
         {
             const Sommet* st=m_edges[i]->getStart();
             const Sommet* se=m_edges[i]->getSecond();
@@ -444,7 +437,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
 float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
 {
     float somme=0;
-    for(size_t i=0;i<m_edges.size();i++)
+    for(size_t i=0; i<m_edges.size(); i++)
     {
         if(sol_admi[i]==1)
         {
@@ -457,7 +450,7 @@ float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
 float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
 {
     float tot=0;
-    for(size_t i=0;i<m_sommets.size();i++)
+    for(size_t i=0; i<m_sommets.size(); i++)
     {
         float sous_tot=0;
         std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
@@ -471,7 +464,7 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
             pq.pop();
             for(auto v:m_sommets[temp]->getVoisinsList())
             {
-                for(size_t j=0;j<m_edges.size();j++)
+                for(size_t j=0; j<m_edges.size(); j++)
                 {
                     if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                     {
@@ -487,7 +480,7 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
                 }
             }
         }
-        for(size_t j=0;j<dist.size();j++)
+        for(size_t j=0; j<dist.size(); j++)
         {
             if(dist[j]<INT_MAX)
                 sous_tot=sous_tot+dist[j];
@@ -511,7 +504,7 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, So
         pq.pop();
         for(auto v:m_sommets[temp]->getVoisinsList())
         {
-            for(size_t j=0;j<m_edges.size();j++)
+            for(size_t j=0; j<m_edges.size(); j++)
             {
                 if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                 {
@@ -536,10 +529,10 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     std::vector<std::vector<float>> tot_object;
     std::vector<std::vector<float>> tot_object_pareto;
     std::vector<std::vector<float>> tot_object_rest;
-    for(size_t i=0;i<m_sol_admissible.size();i++)
+    for(size_t i=0; i<m_sol_admissible.size(); i++)
     {
         std::vector<float> objectif;
-        for(size_t j=0;j<choix_pond.size();j++)
+        for(size_t j=0; j<choix_pond.size(); j++)
         {
             switch(choix_pond[j])
             {
@@ -557,31 +550,31 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
         tot_object.push_back(objectif);
     }
     std::vector<bool> marque(m_sol_admissible.size(),0);
-    for(size_t i=0;i<tot_object.size();i++)
+    for(size_t i=0; i<tot_object.size(); i++)
     {
         if(marque[i]==0)
         {
-            for(size_t j=0;j<tot_object.size();j++)
+            for(size_t j=0; j<tot_object.size(); j++)
             {
                 if((marque[j]==0)&&(j!=i))
                 {
                     unsigned int verif=0;
-                    for(size_t k=0;k<choix_pond.size();k++)
+                    for(size_t k=0; k<choix_pond.size(); k++)
                     {
                         switch(choix_pond[k])
                         {
-                            case 2:
-                                if(tot_object[i][k]>=tot_object[j][k])
-                                {
-                                    verif=verif+1;
-                                }
-                                break;
-                            default:
-                                if(tot_object[i][k]<=tot_object[j][k])
-                                {
-                                    verif=verif+1;
-                                }
-                                break;
+                        case 2:
+                            if(tot_object[i][k]>=tot_object[j][k])
+                            {
+                                verif=verif+1;
+                            }
+                            break;
+                        default:
+                            if(tot_object[i][k]<=tot_object[j][k])
+                            {
+                                verif=verif+1;
+                            }
+                            break;
                         }
                     }
                     if(verif==choix_pond.size())
@@ -592,7 +585,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
             }
         }
     }
-    for(size_t i=0;i<tot_object.size();i++)
+    for(size_t i=0; i<tot_object.size(); i++)
     {
         if(marque[i]==0)
         {
@@ -608,6 +601,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     return std::make_pair(tot_object_pareto,tot_object_rest);
 }
 
+///Dessin d'un graphe avec pour orgine origine_x et origine_y et avec un décalage x et y pour les sommets
 void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y)
 {
     double origine_x = ecart_x;
@@ -631,11 +625,27 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
                 int s2_x = m_edges[i-1]->getSecond()->getX()+origine_x;
                 int s2_y = m_edges[i-1]->getSecond()->getY()+origine_y;
                 svgout.addLine(s1_x,s1_y,s2_x,s2_y,"LightSalmon");
+                int x_min = std::min(s1_x, s2_x);
+                int y_min = std::min(s1_y, s2_y);
+                std::vector<float> poids = m_edges[i-1]->getWeight();
+
+                std::string ponderation = "(";
+                for (size_t j = 0 ; j < poids.size() ; ++j)
+                {
+                    std::string tmp = std::to_string(poids[j]);
+                    tmp = tmp.substr(0,1);
+                    ponderation += tmp;
+                    if (j != poids.size() - 1 )
+                        ponderation += ";";
+                }
+                ponderation += ")";
+                svgout.addText(x_min + std::abs(s1_x - s2_x)/2 - 20, y_min + std::abs(s1_y - s2_y)/2 - 2, ponderation, "red");
             }
         }
     }
 }
-void graphe::dessiner(Svgfile &svgout)
+///Initialise des valeurs necessaire pour les affichages, les valeurs sont en fonction des données du graphe complets
+void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
 {
     double ordre = m_sommets.size();
     double taille = m_edges.size();
@@ -650,72 +660,200 @@ void graphe::dessiner(Svgfile &svgout)
         y_min = std::min(y_min,m_sommets[i-1]->getY());
         y_max = std::max(y_max,m_sommets[i-1]->getY());
     }
-
+    ecart_x = (x_max - x_min); ///distance du graphe complet en x
+    std::cout << ecart_x << std::endl;
+    ecart_y = (y_max - y_min); ///distance du graphe complet en y
+}
+///dessine le graphe complet
+void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x)
+{
+    std::vector<bool> org(m_edges.size(), 1);
     ///graphe d'origine
-    double ecart_x = x_max - x_min;
-    dessinerGraphe(svgout,m_sol_admissible[m_sol_admissible.size()-1], svgout.getWidth()/2 - ecart_x - svgout.getWidth()/6,800);
-    //dessinerGrapheOrg(svgout, ecart_x);
+    svgout.addText(890,800+50, "Graphe initial :");
+    dessinerGraphe(svgout,org,((svgout.getWidth()/3)*2)-300 - ecart_x/2 - m_sommets[0]->getX(),800);
+}
 
-    ///prim
-    int poid = 1;
-    std::vector<bool> prim;
-    prim = fairePrim(poid);
-    dessinerGraphe(svgout,prim,svgout.getWidth()/2 + ecart_x/3, 800);
-
-    ///frontière Pareto
+///affiche et répartie tout les solutions de la frontière sur le svgout
+void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot)
+{
     int qte = m_pareto_frontier.size();
+    std::cout<<qte << std::endl;
     int diviseur = 3;
     int qte_rst = 0;
-    while (qte%diviseur != 0) /// si pas divisible
-    {
-        qte--;
-        ++qte_rst;
-    }
-    ///affichage
-    double ecart_y = y_max - y_min;
     int cpt_x = 1;
-    int cpt_y = 1;
+    svgout.addLine(100,800+(200+ecart_y)*svgout.getCptY(),1800,800+(200+ecart_y)*svgout.getCptY(),"black");
+    svgout.addText(825,800+(200+ecart_y)*svgout.getCptY()+50, "Solutions sur la Frontiere de Pareto :");
 
-    for (int i = 0 ; i < qte ; ++i)
+    if (qte >= 3)
     {
-        /*
-        std::cout<< " graphe position : "<<cpt_x << std::endl;
-            for (int j = 0 ; j < m_pareto_frontier[i].size() ; ++j)
-            {
-                std::cout<< m_pareto_frontier[i][j];
-            }
-            std::cout<<std::endl;
-            */
-        dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*cpt_y);
-        if (cpt_x == 3)
+        while (qte%diviseur != 0) /// si pas divisible
         {
-            ++cpt_y;
-            cpt_x = 0;
+            qte--;
+            ++qte_rst;
         }
-        cpt_x++;
+        ///affichage
+        for (int i = 0 ; i < qte ; ++i)
+        {
+            std::string msg = "(";
+            for (int j = 0 ; j <  valtot[i].size(); ++j)
+            {
+                std::string tmp = std::to_string(valtot[i][j]);
+                tmp = tmp.substr(0,1);
+                msg += tmp;
+                if (j != valtot[i].size() - 1)
+                    msg+= ";";
+            }
+            msg += ")";
+            ///à vérifier si la position du texte est correcte:
+            svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
+            dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            if (cpt_x == 3)
+            {
+                svgout.incremCptY();
+                cpt_x = 0;
+            }
+            cpt_x++;
+        }
     }
+    else
+        qte_rst = qte;
     cpt_x = 1;
     if (qte_rst== 1) ///pas encore vérifier
     {
-        dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/2 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*cpt_y);
+        if (qte == 1) /// cas il existe qu'un graphe
+            qte = 0;
+        std::string msg = "(";
+        for (int j = 0 ; j <  valtot[qte].size(); ++j)
+        {
+            std::string tmp = std::to_string(valtot[qte][j]);
+            tmp = tmp.substr(0,1);
+            msg += tmp;
+            if (j != valtot[qte].size() - 1)
+                msg+= ";";
+        }
+        msg += ")";
+        ///à vérifier si la position du texte est correcte:
+        svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
+        dessinerGraphe(svgout,m_pareto_frontier[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+        svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
     }
-
     if (qte_rst == 2)
     {
-        for (int i = qte; i < qte+qte_rst; ++i)
+        int empl;
+        if (qte == 2) /// cas où il existe 2 graphes
+            empl = 0;
+        else          /// cas où il reste encore 2 graphes
+            empl = qte;
+        for (int i = 0; i < 2; ++i)
         {
-            /*
-            for (int j = 0 ; j < m_pareto_frontier[i].size() ; ++j)
+            std::string msg = "(";
+            for (int j = 0 ; j <  valtot[i].size(); ++j)
             {
-                std::cout<< m_pareto_frontier[i][j];
+                std::string tmp = std::to_string(valtot[i][j]);
+                tmp = tmp.substr(0,1);
+                msg += tmp;
+                if (j != valtot[i].size() - 1)
+                    msg+= ";";
             }
-            std::cout<<std::endl;*/
-            dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*cpt_y);
+            msg += ")";
+            //à vérifier si la position du texte est correcte:
+            svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
+            dessinerGraphe(svgout,m_pareto_frontier[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
             ++cpt_x;
+        }
+        svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
+    }
+
+}
+///affiche l'ensemble des Arbres issu de prim
+void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart_y, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts)
+{
+    int qte = arbres.size(); ///nombre d'arbres à afficher
+    int diviseur = 3;
+    int qte_rst = 0;
+    int cpt_x = 1;
+    svgout.addLine(100,800+(200+ecart_y)*svgout.getCptY(),1800,800+(200+ecart_y)*svgout.getCptY(),"black");
+    svgout.addText(870,800+(200+ecart_y)*svgout.getCptY()+50, "Arbres issu de Prim :");
+    if (qte >= 3)
+    {
+        while (qte%diviseur != 0) /// si pas divisible
+        {
+            qte--;
+            ++qte_rst;
+        }
+        ///affichage
+        for (int i = 0 ; i < qte ; ++i)
+        {
+            std::string msg = "(";
+            for (int j = 0 ; j <  couts[i].size(); ++j)
+            {
+                std::string tmp = std::to_string(couts[i][j]);
+                tmp = tmp.substr(0,1);
+                msg += tmp;
+                if (j != couts[i].size() - 1)
+                    msg+= ";";
+            }
+            msg += ")";
+            ///à vérifier si la position du texte est correcte:
+            svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
+            dessinerGraphe(svgout,arbres[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            if (cpt_x == 3)
+            {
+                svgout.incremCptY();
+                cpt_x = 0;
+            }
+            cpt_x++;
+        }
+    }
+    else
+        qte_rst = qte; ///si 1 : il existe un graphe, si 2 : il existe 2 graphes
+    cpt_x = 1;
+    if (qte_rst== 1) ///pas encore vérifier
+    {
+        if (qte == 1) ///dans le cas où il n'existe qu'un graphe
+            qte = 0;
+        std::string msg = "(";
+        for (int j = 0 ; j <  couts[qte].size(); ++j)
+        {
+            std::string tmp = std::to_string(couts[qte][j]);
+            tmp = tmp.substr(0,1);
+            msg += tmp;
+            if (j != couts[qte].size() - 1)
+                msg+= ";";
+        }
+        msg += ")";
+        ///à vérifier si la position du texte est correcte:
+        svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
+        dessinerGraphe(svgout,arbres[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+        svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
+    }
+    if (qte_rst == 2)
+    {
+        int empl;
+        if (qte == 2) /// cas où il existe 2 graphes
+            empl = 0;
+        else          /// cas où il reste encore 2 graphes
+            empl = qte;
+        for (int i = 0; i < 2; ++i)
+        {
+            std::string msg = "(";
+            for (int j = 0 ; j <  couts[i].size(); ++j)
+            {
+                std::string tmp = std::to_string(couts[i][j]);
+                tmp = tmp.substr(0,1);
+                msg += tmp;
+                if (j != couts[i].size() - 1)
+                    msg+= ";";
+            }
+            msg += ")";
+            //à vérifier si la position du texte est correcte:
+            svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 +  m_sommets[0]->getX(), 800+(100+ecart_y)*svgout.getCptY() + 70, msg, "black");
+            dessinerGraphe(svgout,arbres[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            ++cpt_x;
+            svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
         }
     }
 }
-
 graphe::~graphe()
 {
     //dtor
