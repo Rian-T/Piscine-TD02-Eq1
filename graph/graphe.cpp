@@ -6,6 +6,7 @@
 #include <queue>
 #include "graphe.h"
 #include "sommet.h"
+#include "edge.h"
 #include <functional>
 #include <queue>
 
@@ -74,7 +75,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
         m_edge_matrix[id_voisin][id] = id_edge;
         //ajouter chaque extrémité à la liste des voisins de l'autre (graphe non orienté)
         m_sommets[id]->ajouterVoisin(m_sommets[id_voisin],tmp_weight);
-        (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
+        //(m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
     }
 }
 void graphe::search_sol()
@@ -152,53 +153,58 @@ void graphe::search_sol()
 //            m_sol_admissible.push_back(aretes_local);
 //}
 
-
+void graphe::test()
+{
+    for (int i = 0; i< m_sol_admissible.size() ; ++i)
+    {
+        for (int j = 0 ; j < m_sol_admissible[i].size() ; ++j)
+        {
+            std::cout << m_sol_admissible[i][j];
+        }
+        std::cout<<std::endl;
+        std::cout<<max_flot(m_sol_admissible[i],1)<<std::endl;
+    }
+}
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
     std::vector<int> chemin (m_sommets.size(), 0);
-    graphe g = *this; /// graphe résiduel qui copie le graphe complet
+    graphe g("files/broadway.txt","files/broadway_weights_4.txt");
     float flot_max = 0;
-    int i = 0;
 
     while (g.BFS(aretes_local,chemin,posP))
     {
-        g.BFS(aretes_local,chemin,posP);
         float flot_min = INT_MAX;
         std::vector<int> arete_nb;
-        int sommet_nb = m_sommets.size() - 1; /// on part du puit
+        int sommet_nb = g.m_sommets.size() - 1; /// on part du puit
         while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
         {
-            for (size_t i = 0 ; i < m_edges.size() ; i++)
+            for (size_t i = 0 ; i < g.m_edges.size() ; i++)
             {
-                if ((m_edges[i]->getStart() == m_sommets[sommet_nb] || m_edges[i]->getSecond() == m_sommets[sommet_nb]) && (m_edges[i]->getStart() == m_sommets[chemin[sommet_nb]] || m_edges[i]->getSecond() == m_sommets[chemin[sommet_nb]]))
+                if ((g.m_edges[i]->getStart() == g.m_sommets[sommet_nb] || g.m_edges[i]->getSecond() == g.m_sommets[sommet_nb]) && (g.m_edges[i]->getStart() == g.m_sommets[chemin[sommet_nb]] || g.m_edges[i]->getSecond() == g.m_sommets[chemin[sommet_nb]]))
                 {
-                    flot_min = std::min (flot_min, m_edges[i]->getWeight(posP));
+                    flot_min = std::min (flot_min, g.m_edges[i]->getWeight(posP));
                     arete_nb.push_back(i);
                 }
             }
             sommet_nb = chemin[sommet_nb];
         }
-        std::cout << std::endl;
-        sommet_nb = m_sommets.size() - 1; /// on part du puit
+        sommet_nb = g.m_sommets.size() - 1; /// on part du puit
         if(flot_min<INT_MAX){
             while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
             {
                 for(size_t i = 0 ; i < arete_nb.size(); ++i)
                 {
                     ///si sens directe (sachant qu'on est en chemin inverse)
-                    if ( (m_edges[arete_nb[i]]->getSecond() == m_sommets[sommet_nb]) && (m_edges[arete_nb[i]]->getStart() == m_sommets[chemin[sommet_nb]]))
-                        m_edges[arete_nb[i]]->setNewFlot(posP, m_edges[arete_nb[i]]->getWeight(posP) - flot_min); /// on le descend à 0
+                    if ( (g.m_edges[arete_nb[i]]->getSecond() == g.m_sommets[sommet_nb]) && (g.m_edges[arete_nb[i]]->getStart() == g.m_sommets[chemin[sommet_nb]]))
+                        g.m_edges[arete_nb[i]]->setNewFlot(posP, g.m_edges[arete_nb[i]]->getWeight(posP) - flot_min); /// on le descend à 0
                     ///si sens indirecte
-                    if ( (m_edges[arete_nb[i]]->getStart() == m_sommets[sommet_nb]) && (m_edges[arete_nb[i]]->getSecond() == m_sommets[chemin[sommet_nb]]))
-                         m_edges[arete_nb[i]]->setNewFlot(posP, m_edges[arete_nb[i]]->getWeight(posP) + flot_min); /// on l'augmente
+                    if ( (g.m_edges[arete_nb[i]]->getStart() == g.m_sommets[sommet_nb]) && (g.m_edges[arete_nb[i]]->getSecond() == g.m_sommets[chemin[sommet_nb]]))
+                         g.m_edges[arete_nb[i]]->setNewFlot(posP, g.m_edges[arete_nb[i]]->getWeight(posP) + flot_min); /// on l'augmente
                 }
                 sommet_nb = chemin[sommet_nb];
             }
-            std::cout << std::endl;
-            std::cout << std::endl;
             flot_max += flot_min;
         }
-        i++;
     }
     //std::cout << "max = " << flot_max << std::endl;
     return flot_max;
@@ -245,6 +251,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
         }
     }
     while (!file.empty());
+
     if (marked[marked.size()-1]->getId() == m_sommets[m_sommets.size() - 1]->getId())
         return true;
     else

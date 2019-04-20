@@ -30,7 +30,7 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
             fprintf(pipe, "set zlabel \"Max Flow\" offset 0,5\n");
             fprintf(pipe, "set palette defined ( 0 \"green\" ,1 \"red\" )\n");
-            fprintf(pipe, "splot \"frt.txt\" with lp lc 'green' pt 7 ps 3 , \"rst.txt\" pt 7 ps 3 lc 'red'\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" with lp pt 7 ps 2 lc 'green' , \"rst.txt\" pt 7 ps 2 lc 'red'\n"); // plot type
                      // termination character
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
@@ -72,16 +72,15 @@ void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vec
             fprintf(pipe, "set output 'pareto3D.gif'\n");
             fprintf(pipe, "set hidden3d\n");
             fprintf(pipe, "unset key\n");
-            fprintf(pipe, "set dgrid3d 50,50 qnorm 2\n");
             fprintf(pipe, "set title \"3D Plot of Pareto frontier\"\n");
             fprintf(pipe, "set xlabel \"Economic cost\"\n");
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
             fprintf(pipe, "set zlabel \"Max Flow\" offset 0,5\n");
-            fprintf(pipe, "splot \"frt.txt\" with lines lc palette\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" using 1:2:3: (sprintf(\"(%%3.2f, %%3.2f, %3.2f)\", $1, $2, $3)) with labels point  pt 7 ps 2 lc 'green' offset char 1,1 notitle, \"rst.txt\" pt 7 ps 2 lc 'red'\n"); // plot type
             fprintf(pipe, "n = 100\n");
             fprintf(pipe, "do for [i=1:n] {\n"); // plot type
-            fprintf(pipe, " set view 60, i*360/n\n"); // plot type
-            fprintf(pipe, "splot \"frt.txt\" with lines lc palette\n"); // plot type
+            fprintf(pipe, " set view 60, i*360/n\n"); // plot typeas
+            fprintf(pipe, "splot \"frt.txt\" using 1:2:3: (sprintf(\"(%%3.2f, %%3.2f, %3.2f)\", $1, $2, $3)) with labels point  pt 7 ps 2 lc 'green' offset char 1,1 notitle, \"rst.txt\" pt 7 ps 2 lc 'red'\n"); // plot type
             fprintf(pipe, "}\n");             // termination character
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
