@@ -10,7 +10,7 @@
 #include <queue>
 
 
-graphe::graphe(std::string nomFichier, std::string weightFile)
+graphe::graphe(std::string nomFichier, std::string weightFile, int ori)
 {
     std::ifstream ifs{nomFichier};
     std::ifstream ifs2(weightFile);
@@ -74,7 +74,8 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
         m_edge_matrix[id_voisin][id] = id_edge;
         //ajouter chaque extrémité à la liste des voisins de l'autre (graphe non orienté)
         m_sommets[id]->ajouterVoisin(m_sommets[id_voisin],tmp_weight);
-        (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
+        if(ori==2)
+            (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
     }
 }
 void graphe::search_sol()
@@ -201,6 +202,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
         i++;
     }
     //std::cout << "max = " << flot_max << std::endl;
+    std::cout<<flot_max<<std::endl;
     return flot_max;
 }
 
@@ -521,10 +523,11 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, So
         }
     }
     tot=dist[arriv->getId()];
+    std::cout<<tot<<" ";
     return tot;
 }
 
-std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int> choix_pond)
+std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int> choix_pond,int ori)
 {
     std::vector<std::vector<float>> tot_object;
     std::vector<std::vector<float>> tot_object_pareto;
@@ -540,7 +543,10 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
                 objectif.push_back(faireSomme(m_sol_admissible[i],j));
                 break;
             case 1:
-                objectif.push_back(faireDjikstra(m_sol_admissible[i],j));
+                if(ori==1)
+                    objectif.push_back(faireDjikstra(m_sol_admissible[i],j/*,m_sommets[0],m_sommets[m_sommets.size()-1]*/));
+                    else
+                        objectif.push_back(faireDjikstra(m_sol_admissible[i],j,m_sommets[0],m_sommets[m_sommets.size()-1]));
                 break;
             case 2:
                 objectif.push_back(max_flot(m_sol_admissible[i],j));
@@ -601,7 +607,10 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     return std::make_pair(tot_object_pareto,tot_object_rest);
 }
 
-
+int graphe::getNbWeight()
+{
+    return m_edges[0]->getWeight().size();
+}
 
 
 graphe::~graphe()
