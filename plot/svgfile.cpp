@@ -85,13 +85,14 @@ void Svgfile::addCircle(double x, double y, double r, double ep, std::string col
             << "/>\n";
 }
 
-void Svgfile::addImage(std::string url, double h, double w, double x)
+void Svgfile::addImage(std::string url, double h, double w, double x,double y)
 {
     m_ostrm << "<image "
             << attrib("href", url)
             << attrib("height", h)
             << attrib("width", w)
             << attrib("x", x)
+            << attrib("y", y)
             << "/>\n";
 }
 
@@ -206,10 +207,11 @@ void Svgfile::addText(double x, double y, double val, std::string color)
 
 void Svgfile::addGrid(double span, bool numbering, std::string color)
 {
+    double debut_ligne_Horiz= 800;
     double y=0;
     while (y<=m_height)
     {
-        addLine(0, y, m_width, y, color);
+        addLine(0, debut_ligne_Horiz+y, m_width, debut_ligne_Horiz+y, color);
         if (numbering)
             addText(5, y-5, y, color);
         y+=span;
@@ -218,7 +220,7 @@ void Svgfile::addGrid(double span, bool numbering, std::string color)
     double x=0;
     while (x<=m_width)
     {
-        addLine(x, 0, x, m_height, color);
+        addLine(x, 800, x, m_height, color);
         if (numbering)
             addText(x+5, 15, x, color);
         x+=span;

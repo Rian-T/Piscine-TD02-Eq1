@@ -1,7 +1,365 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1800" height="1600">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1800" height="4000">
 
-<image href="pareto3D.gif" height="800" width="800" x="500" />
+<line x1="0" y1="800" x2="1800" y2="800" stroke="lightgrey" />
+<text x="5" y="-5" fill="lightgrey" >0</text>
+<line x1="0" y1="850" x2="1800" y2="850" stroke="lightgrey" />
+<text x="5" y="45" fill="lightgrey" >50</text>
+<line x1="0" y1="900" x2="1800" y2="900" stroke="lightgrey" />
+<text x="5" y="95" fill="lightgrey" >100</text>
+<line x1="0" y1="950" x2="1800" y2="950" stroke="lightgrey" />
+<text x="5" y="145" fill="lightgrey" >150</text>
+<line x1="0" y1="1000" x2="1800" y2="1000" stroke="lightgrey" />
+<text x="5" y="195" fill="lightgrey" >200</text>
+<line x1="0" y1="1050" x2="1800" y2="1050" stroke="lightgrey" />
+<text x="5" y="245" fill="lightgrey" >250</text>
+<line x1="0" y1="1100" x2="1800" y2="1100" stroke="lightgrey" />
+<text x="5" y="295" fill="lightgrey" >300</text>
+<line x1="0" y1="1150" x2="1800" y2="1150" stroke="lightgrey" />
+<text x="5" y="345" fill="lightgrey" >350</text>
+<line x1="0" y1="1200" x2="1800" y2="1200" stroke="lightgrey" />
+<text x="5" y="395" fill="lightgrey" >400</text>
+<line x1="0" y1="1250" x2="1800" y2="1250" stroke="lightgrey" />
+<text x="5" y="445" fill="lightgrey" >450</text>
+<line x1="0" y1="1300" x2="1800" y2="1300" stroke="lightgrey" />
+<text x="5" y="495" fill="lightgrey" >500</text>
+<line x1="0" y1="1350" x2="1800" y2="1350" stroke="lightgrey" />
+<text x="5" y="545" fill="lightgrey" >550</text>
+<line x1="0" y1="1400" x2="1800" y2="1400" stroke="lightgrey" />
+<text x="5" y="595" fill="lightgrey" >600</text>
+<line x1="0" y1="1450" x2="1800" y2="1450" stroke="lightgrey" />
+<text x="5" y="645" fill="lightgrey" >650</text>
+<line x1="0" y1="1500" x2="1800" y2="1500" stroke="lightgrey" />
+<text x="5" y="695" fill="lightgrey" >700</text>
+<line x1="0" y1="1550" x2="1800" y2="1550" stroke="lightgrey" />
+<text x="5" y="745" fill="lightgrey" >750</text>
+<line x1="0" y1="1600" x2="1800" y2="1600" stroke="lightgrey" />
+<text x="5" y="795" fill="lightgrey" >800</text>
+<line x1="0" y1="1650" x2="1800" y2="1650" stroke="lightgrey" />
+<text x="5" y="845" fill="lightgrey" >850</text>
+<line x1="0" y1="1700" x2="1800" y2="1700" stroke="lightgrey" />
+<text x="5" y="895" fill="lightgrey" >900</text>
+<line x1="0" y1="1750" x2="1800" y2="1750" stroke="lightgrey" />
+<text x="5" y="945" fill="lightgrey" >950</text>
+<line x1="0" y1="1800" x2="1800" y2="1800" stroke="lightgrey" />
+<text x="5" y="995" fill="lightgrey" >1000</text>
+<line x1="0" y1="1850" x2="1800" y2="1850" stroke="lightgrey" />
+<text x="5" y="1045" fill="lightgrey" >1050</text>
+<line x1="0" y1="1900" x2="1800" y2="1900" stroke="lightgrey" />
+<text x="5" y="1095" fill="lightgrey" >1100</text>
+<line x1="0" y1="1950" x2="1800" y2="1950" stroke="lightgrey" />
+<text x="5" y="1145" fill="lightgrey" >1150</text>
+<line x1="0" y1="2000" x2="1800" y2="2000" stroke="lightgrey" />
+<text x="5" y="1195" fill="lightgrey" >1200</text>
+<line x1="0" y1="2050" x2="1800" y2="2050" stroke="lightgrey" />
+<text x="5" y="1245" fill="lightgrey" >1250</text>
+<line x1="0" y1="2100" x2="1800" y2="2100" stroke="lightgrey" />
+<text x="5" y="1295" fill="lightgrey" >1300</text>
+<line x1="0" y1="2150" x2="1800" y2="2150" stroke="lightgrey" />
+<text x="5" y="1345" fill="lightgrey" >1350</text>
+<line x1="0" y1="2200" x2="1800" y2="2200" stroke="lightgrey" />
+<text x="5" y="1395" fill="lightgrey" >1400</text>
+<line x1="0" y1="2250" x2="1800" y2="2250" stroke="lightgrey" />
+<text x="5" y="1445" fill="lightgrey" >1450</text>
+<line x1="0" y1="2300" x2="1800" y2="2300" stroke="lightgrey" />
+<text x="5" y="1495" fill="lightgrey" >1500</text>
+<line x1="0" y1="2350" x2="1800" y2="2350" stroke="lightgrey" />
+<text x="5" y="1545" fill="lightgrey" >1550</text>
+<line x1="0" y1="2400" x2="1800" y2="2400" stroke="lightgrey" />
+<text x="5" y="1595" fill="lightgrey" >1600</text>
+<line x1="0" y1="2450" x2="1800" y2="2450" stroke="lightgrey" />
+<text x="5" y="1645" fill="lightgrey" >1650</text>
+<line x1="0" y1="2500" x2="1800" y2="2500" stroke="lightgrey" />
+<text x="5" y="1695" fill="lightgrey" >1700</text>
+<line x1="0" y1="2550" x2="1800" y2="2550" stroke="lightgrey" />
+<text x="5" y="1745" fill="lightgrey" >1750</text>
+<line x1="0" y1="2600" x2="1800" y2="2600" stroke="lightgrey" />
+<text x="5" y="1795" fill="lightgrey" >1800</text>
+<line x1="0" y1="2650" x2="1800" y2="2650" stroke="lightgrey" />
+<text x="5" y="1845" fill="lightgrey" >1850</text>
+<line x1="0" y1="2700" x2="1800" y2="2700" stroke="lightgrey" />
+<text x="5" y="1895" fill="lightgrey" >1900</text>
+<line x1="0" y1="2750" x2="1800" y2="2750" stroke="lightgrey" />
+<text x="5" y="1945" fill="lightgrey" >1950</text>
+<line x1="0" y1="2800" x2="1800" y2="2800" stroke="lightgrey" />
+<text x="5" y="1995" fill="lightgrey" >2000</text>
+<line x1="0" y1="2850" x2="1800" y2="2850" stroke="lightgrey" />
+<text x="5" y="2045" fill="lightgrey" >2050</text>
+<line x1="0" y1="2900" x2="1800" y2="2900" stroke="lightgrey" />
+<text x="5" y="2095" fill="lightgrey" >2100</text>
+<line x1="0" y1="2950" x2="1800" y2="2950" stroke="lightgrey" />
+<text x="5" y="2145" fill="lightgrey" >2150</text>
+<line x1="0" y1="3000" x2="1800" y2="3000" stroke="lightgrey" />
+<text x="5" y="2195" fill="lightgrey" >2200</text>
+<line x1="0" y1="3050" x2="1800" y2="3050" stroke="lightgrey" />
+<text x="5" y="2245" fill="lightgrey" >2250</text>
+<line x1="0" y1="3100" x2="1800" y2="3100" stroke="lightgrey" />
+<text x="5" y="2295" fill="lightgrey" >2300</text>
+<line x1="0" y1="3150" x2="1800" y2="3150" stroke="lightgrey" />
+<text x="5" y="2345" fill="lightgrey" >2350</text>
+<line x1="0" y1="3200" x2="1800" y2="3200" stroke="lightgrey" />
+<text x="5" y="2395" fill="lightgrey" >2400</text>
+<line x1="0" y1="3250" x2="1800" y2="3250" stroke="lightgrey" />
+<text x="5" y="2445" fill="lightgrey" >2450</text>
+<line x1="0" y1="3300" x2="1800" y2="3300" stroke="lightgrey" />
+<text x="5" y="2495" fill="lightgrey" >2500</text>
+<line x1="0" y1="3350" x2="1800" y2="3350" stroke="lightgrey" />
+<text x="5" y="2545" fill="lightgrey" >2550</text>
+<line x1="0" y1="3400" x2="1800" y2="3400" stroke="lightgrey" />
+<text x="5" y="2595" fill="lightgrey" >2600</text>
+<line x1="0" y1="3450" x2="1800" y2="3450" stroke="lightgrey" />
+<text x="5" y="2645" fill="lightgrey" >2650</text>
+<line x1="0" y1="3500" x2="1800" y2="3500" stroke="lightgrey" />
+<text x="5" y="2695" fill="lightgrey" >2700</text>
+<line x1="0" y1="3550" x2="1800" y2="3550" stroke="lightgrey" />
+<text x="5" y="2745" fill="lightgrey" >2750</text>
+<line x1="0" y1="3600" x2="1800" y2="3600" stroke="lightgrey" />
+<text x="5" y="2795" fill="lightgrey" >2800</text>
+<line x1="0" y1="3650" x2="1800" y2="3650" stroke="lightgrey" />
+<text x="5" y="2845" fill="lightgrey" >2850</text>
+<line x1="0" y1="3700" x2="1800" y2="3700" stroke="lightgrey" />
+<text x="5" y="2895" fill="lightgrey" >2900</text>
+<line x1="0" y1="3750" x2="1800" y2="3750" stroke="lightgrey" />
+<text x="5" y="2945" fill="lightgrey" >2950</text>
+<line x1="0" y1="3800" x2="1800" y2="3800" stroke="lightgrey" />
+<text x="5" y="2995" fill="lightgrey" >3000</text>
+<line x1="0" y1="3850" x2="1800" y2="3850" stroke="lightgrey" />
+<text x="5" y="3045" fill="lightgrey" >3050</text>
+<line x1="0" y1="3900" x2="1800" y2="3900" stroke="lightgrey" />
+<text x="5" y="3095" fill="lightgrey" >3100</text>
+<line x1="0" y1="3950" x2="1800" y2="3950" stroke="lightgrey" />
+<text x="5" y="3145" fill="lightgrey" >3150</text>
+<line x1="0" y1="4000" x2="1800" y2="4000" stroke="lightgrey" />
+<text x="5" y="3195" fill="lightgrey" >3200</text>
+<line x1="0" y1="4050" x2="1800" y2="4050" stroke="lightgrey" />
+<text x="5" y="3245" fill="lightgrey" >3250</text>
+<line x1="0" y1="4100" x2="1800" y2="4100" stroke="lightgrey" />
+<text x="5" y="3295" fill="lightgrey" >3300</text>
+<line x1="0" y1="4150" x2="1800" y2="4150" stroke="lightgrey" />
+<text x="5" y="3345" fill="lightgrey" >3350</text>
+<line x1="0" y1="4200" x2="1800" y2="4200" stroke="lightgrey" />
+<text x="5" y="3395" fill="lightgrey" >3400</text>
+<line x1="0" y1="4250" x2="1800" y2="4250" stroke="lightgrey" />
+<text x="5" y="3445" fill="lightgrey" >3450</text>
+<line x1="0" y1="4300" x2="1800" y2="4300" stroke="lightgrey" />
+<text x="5" y="3495" fill="lightgrey" >3500</text>
+<line x1="0" y1="4350" x2="1800" y2="4350" stroke="lightgrey" />
+<text x="5" y="3545" fill="lightgrey" >3550</text>
+<line x1="0" y1="4400" x2="1800" y2="4400" stroke="lightgrey" />
+<text x="5" y="3595" fill="lightgrey" >3600</text>
+<line x1="0" y1="4450" x2="1800" y2="4450" stroke="lightgrey" />
+<text x="5" y="3645" fill="lightgrey" >3650</text>
+<line x1="0" y1="4500" x2="1800" y2="4500" stroke="lightgrey" />
+<text x="5" y="3695" fill="lightgrey" >3700</text>
+<line x1="0" y1="4550" x2="1800" y2="4550" stroke="lightgrey" />
+<text x="5" y="3745" fill="lightgrey" >3750</text>
+<line x1="0" y1="4600" x2="1800" y2="4600" stroke="lightgrey" />
+<text x="5" y="3795" fill="lightgrey" >3800</text>
+<line x1="0" y1="4650" x2="1800" y2="4650" stroke="lightgrey" />
+<text x="5" y="3845" fill="lightgrey" >3850</text>
+<line x1="0" y1="4700" x2="1800" y2="4700" stroke="lightgrey" />
+<text x="5" y="3895" fill="lightgrey" >3900</text>
+<line x1="0" y1="4750" x2="1800" y2="4750" stroke="lightgrey" />
+<text x="5" y="3945" fill="lightgrey" >3950</text>
+<line x1="0" y1="4800" x2="1800" y2="4800" stroke="lightgrey" />
+<text x="5" y="3995" fill="lightgrey" >4000</text>
+<line x1="0" y1="800" x2="0" y2="4000" stroke="lightgrey" />
+<text x="5" y="15" fill="lightgrey" >0</text>
+<line x1="50" y1="800" x2="50" y2="4000" stroke="lightgrey" />
+<text x="55" y="15" fill="lightgrey" >50</text>
+<line x1="100" y1="800" x2="100" y2="4000" stroke="lightgrey" />
+<text x="105" y="15" fill="lightgrey" >100</text>
+<line x1="150" y1="800" x2="150" y2="4000" stroke="lightgrey" />
+<text x="155" y="15" fill="lightgrey" >150</text>
+<line x1="200" y1="800" x2="200" y2="4000" stroke="lightgrey" />
+<text x="205" y="15" fill="lightgrey" >200</text>
+<line x1="250" y1="800" x2="250" y2="4000" stroke="lightgrey" />
+<text x="255" y="15" fill="lightgrey" >250</text>
+<line x1="300" y1="800" x2="300" y2="4000" stroke="lightgrey" />
+<text x="305" y="15" fill="lightgrey" >300</text>
+<line x1="350" y1="800" x2="350" y2="4000" stroke="lightgrey" />
+<text x="355" y="15" fill="lightgrey" >350</text>
+<line x1="400" y1="800" x2="400" y2="4000" stroke="lightgrey" />
+<text x="405" y="15" fill="lightgrey" >400</text>
+<line x1="450" y1="800" x2="450" y2="4000" stroke="lightgrey" />
+<text x="455" y="15" fill="lightgrey" >450</text>
+<line x1="500" y1="800" x2="500" y2="4000" stroke="lightgrey" />
+<text x="505" y="15" fill="lightgrey" >500</text>
+<line x1="550" y1="800" x2="550" y2="4000" stroke="lightgrey" />
+<text x="555" y="15" fill="lightgrey" >550</text>
+<line x1="600" y1="800" x2="600" y2="4000" stroke="lightgrey" />
+<text x="605" y="15" fill="lightgrey" >600</text>
+<line x1="650" y1="800" x2="650" y2="4000" stroke="lightgrey" />
+<text x="655" y="15" fill="lightgrey" >650</text>
+<line x1="700" y1="800" x2="700" y2="4000" stroke="lightgrey" />
+<text x="705" y="15" fill="lightgrey" >700</text>
+<line x1="750" y1="800" x2="750" y2="4000" stroke="lightgrey" />
+<text x="755" y="15" fill="lightgrey" >750</text>
+<line x1="800" y1="800" x2="800" y2="4000" stroke="lightgrey" />
+<text x="805" y="15" fill="lightgrey" >800</text>
+<line x1="850" y1="800" x2="850" y2="4000" stroke="lightgrey" />
+<text x="855" y="15" fill="lightgrey" >850</text>
+<line x1="900" y1="800" x2="900" y2="4000" stroke="lightgrey" />
+<text x="905" y="15" fill="lightgrey" >900</text>
+<line x1="950" y1="800" x2="950" y2="4000" stroke="lightgrey" />
+<text x="955" y="15" fill="lightgrey" >950</text>
+<line x1="1000" y1="800" x2="1000" y2="4000" stroke="lightgrey" />
+<text x="1005" y="15" fill="lightgrey" >1000</text>
+<line x1="1050" y1="800" x2="1050" y2="4000" stroke="lightgrey" />
+<text x="1055" y="15" fill="lightgrey" >1050</text>
+<line x1="1100" y1="800" x2="1100" y2="4000" stroke="lightgrey" />
+<text x="1105" y="15" fill="lightgrey" >1100</text>
+<line x1="1150" y1="800" x2="1150" y2="4000" stroke="lightgrey" />
+<text x="1155" y="15" fill="lightgrey" >1150</text>
+<line x1="1200" y1="800" x2="1200" y2="4000" stroke="lightgrey" />
+<text x="1205" y="15" fill="lightgrey" >1200</text>
+<line x1="1250" y1="800" x2="1250" y2="4000" stroke="lightgrey" />
+<text x="1255" y="15" fill="lightgrey" >1250</text>
+<line x1="1300" y1="800" x2="1300" y2="4000" stroke="lightgrey" />
+<text x="1305" y="15" fill="lightgrey" >1300</text>
+<line x1="1350" y1="800" x2="1350" y2="4000" stroke="lightgrey" />
+<text x="1355" y="15" fill="lightgrey" >1350</text>
+<line x1="1400" y1="800" x2="1400" y2="4000" stroke="lightgrey" />
+<text x="1405" y="15" fill="lightgrey" >1400</text>
+<line x1="1450" y1="800" x2="1450" y2="4000" stroke="lightgrey" />
+<text x="1455" y="15" fill="lightgrey" >1450</text>
+<line x1="1500" y1="800" x2="1500" y2="4000" stroke="lightgrey" />
+<text x="1505" y="15" fill="lightgrey" >1500</text>
+<line x1="1550" y1="800" x2="1550" y2="4000" stroke="lightgrey" />
+<text x="1555" y="15" fill="lightgrey" >1550</text>
+<line x1="1600" y1="800" x2="1600" y2="4000" stroke="lightgrey" />
+<text x="1605" y="15" fill="lightgrey" >1600</text>
+<line x1="1650" y1="800" x2="1650" y2="4000" stroke="lightgrey" />
+<text x="1655" y="15" fill="lightgrey" >1650</text>
+<line x1="1700" y1="800" x2="1700" y2="4000" stroke="lightgrey" />
+<text x="1705" y="15" fill="lightgrey" >1700</text>
+<line x1="1750" y1="800" x2="1750" y2="4000" stroke="lightgrey" />
+<text x="1755" y="15" fill="lightgrey" >1750</text>
+<line x1="1800" y1="800" x2="1800" y2="4000" stroke="lightgrey" />
+<text x="1805" y="15" fill="lightgrey" >1800</text>
+<line x1="500" y1="0" x2="500" y2="800" stroke="black" />
+<line x1="1300" y1="0" x2="1300" y2="800" stroke="black" />
+<line x1="600" y1="1000" x2="700" y2="1000" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="675" y="975" />
+<line x1="700" y1="900" x2="700" y2="1000" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="575" y="975" />
+<line x1="700" y1="900" x2="600" y2="1000" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="675" y="875" />
+<line x1="600" y1="900" x2="600" y2="1000" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="575" y="875" />
+<line x1="600" y1="900" x2="700" y2="900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1108.33" y="975" />
+<line x1="1133" y1="900" x2="1133" y2="1000" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1008.33" y="975" />
+<image href="images/village.png" height="50" width="50" x="1108.33" y="875" />
+<line x1="1033" y1="900" x2="1033" y2="1000" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1008.33" y="875" />
+<line x1="1033" y1="900" x2="1133" y2="900" stroke="LightSalmon" />
+<line x1="250" y1="1300" x2="350" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="325" y="1275" />
+<line x1="350" y1="1200" x2="350" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="225" y="1275" />
+<image href="images/village.png" height="50" width="50" x="325" y="1175" />
+<line x1="250" y1="1200" x2="250" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="225" y="1175" />
+<line x1="850" y1="1300" x2="950" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="925" y="1275" />
+<image href="images/village.png" height="50" width="50" x="825" y="1275" />
+<line x1="950" y1="1200" x2="850" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="925" y="1175" />
+<line x1="850" y1="1200" x2="850" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="825" y="1175" />
+<image href="images/village.png" height="50" width="50" x="1525" y="1275" />
+<line x1="1550" y1="1200" x2="1550" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1425" y="1275" />
+<line x1="1550" y1="1200" x2="1450" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="1175" />
+<line x1="1450" y1="1200" x2="1450" y2="1300" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1425" y="1175" />
+<line x1="250" y1="1600" x2="350" y2="1600" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="325" y="1575" />
+<line x1="350" y1="1500" x2="350" y2="1600" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="225" y="1575" />
+<image href="images/village.png" height="50" width="50" x="325" y="1475" />
+<image href="images/village.png" height="50" width="50" x="225" y="1475" />
+<line x1="250" y1="1500" x2="350" y2="1500" stroke="LightSalmon" />
+<line x1="850" y1="1600" x2="950" y2="1600" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="925" y="1575" />
+<image href="images/village.png" height="50" width="50" x="825" y="1575" />
+<line x1="950" y1="1500" x2="850" y2="1600" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="925" y="1475" />
+<image href="images/village.png" height="50" width="50" x="825" y="1475" />
+<line x1="850" y1="1500" x2="950" y2="1500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="1575" />
+<line x1="1550" y1="1500" x2="1550" y2="1600" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1425" y="1575" />
+<line x1="1550" y1="1500" x2="1450" y2="1600" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="1475" />
+<image href="images/village.png" height="50" width="50" x="1425" y="1475" />
+<line x1="1450" y1="1500" x2="1550" y2="1500" stroke="LightSalmon" />
+<line x1="250" y1="1900" x2="350" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="325" y="1875" />
+<image href="images/village.png" height="50" width="50" x="225" y="1875" />
+<image href="images/village.png" height="50" width="50" x="325" y="1775" />
+<line x1="250" y1="1800" x2="250" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="225" y="1775" />
+<line x1="250" y1="1800" x2="350" y2="1800" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="925" y="1875" />
+<line x1="950" y1="1800" x2="950" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="825" y="1875" />
+<image href="images/village.png" height="50" width="50" x="925" y="1775" />
+<line x1="850" y1="1800" x2="850" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="825" y="1775" />
+<line x1="850" y1="1800" x2="950" y2="1800" stroke="LightSalmon" />
+<line x1="1450" y1="1900" x2="1550" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="1875" />
+<line x1="1550" y1="1800" x2="1550" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1425" y="1875" />
+<line x1="1550" y1="1800" x2="1450" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="1775" />
+<line x1="1450" y1="1800" x2="1450" y2="1900" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1425" y="1775" />
+<line x1="250" y1="2200" x2="350" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="325" y="2175" />
+<line x1="350" y1="2100" x2="350" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="225" y="2175" />
+<line x1="350" y1="2100" x2="250" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="325" y="2075" />
+<image href="images/village.png" height="50" width="50" x="225" y="2075" />
+<line x1="250" y1="2100" x2="350" y2="2100" stroke="LightSalmon" />
+<line x1="850" y1="2200" x2="950" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="925" y="2175" />
+<line x1="950" y1="2100" x2="950" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="825" y="2175" />
+<image href="images/village.png" height="50" width="50" x="925" y="2075" />
+<line x1="850" y1="2100" x2="850" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="825" y="2075" />
+<line x1="850" y1="2100" x2="950" y2="2100" stroke="LightSalmon" />
+<line x1="1450" y1="2200" x2="1550" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="2175" />
+<image href="images/village.png" height="50" width="50" x="1425" y="2175" />
+<line x1="1550" y1="2100" x2="1450" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1525" y="2075" />
+<line x1="1450" y1="2100" x2="1450" y2="2200" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1425" y="2075" />
+<line x1="1450" y1="2100" x2="1550" y2="2100" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="625" y="2475" />
+<line x1="650" y1="2400" x2="650" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="525" y="2475" />
+<line x1="650" y1="2400" x2="550" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="625" y="2375" />
+<line x1="550" y1="2400" x2="550" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="525" y="2375" />
+<line x1="550" y1="2400" x2="650" y2="2400" stroke="LightSalmon" />
+<line x1="1150" y1="2500" x2="1250" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1225" y="2475" />
+<line x1="1250" y1="2400" x2="1250" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1125" y="2475" />
+<line x1="1250" y1="2400" x2="1150" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1225" y="2375" />
+<line x1="1150" y1="2400" x2="1150" y2="2500" stroke="LightSalmon" />
+<image href="images/village.png" height="50" width="50" x="1125" y="2375" />
+<line x1="1150" y1="2400" x2="1250" y2="2400" stroke="LightSalmon" />
 
 
 </svg>

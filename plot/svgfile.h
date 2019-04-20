@@ -12,7 +12,7 @@ constexpr char defcol[] = "black";
 class Svgfile
 {
     public:
-        Svgfile(std::string _filename = "output.svg", int _width=1800, int _height=1600);
+        Svgfile(std::string _filename = "output.svg", int _width=1800, int _height=4000);
         ~Svgfile();
 
         void useClipPath(std::string shape, std::string clipId);
@@ -68,14 +68,14 @@ class Svgfile
         void addText(double x, double y, std::string text, std::string color=defcol);
         void addText(double x, double y, double val, std::string color=defcol);
 
-        void addGrid(double span=100.0, bool numbering=true, std::string color="lightgrey");
+        void addGrid(double span=50.0, bool numbering=true, std::string color="lightgrey");
 
         static std::string makeRGB(int r, int g, int b);
         void addEndFusee();
         void addBeginFusee(std::string yo,std::mt19937& seed);
         void addPath(std::string path, std::string color, std::string rotation);
 
-        void addImage(std::string url, double h, double w, double x=500);
+        void addImage(std::string url, double h, double w, double x=500,double y= 0);
 
 
         /// Type non copiable

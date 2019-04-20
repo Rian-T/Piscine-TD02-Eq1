@@ -75,7 +75,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile)
         m_edge_matrix[id_voisin][id] = id_edge;
         //ajouter chaque extrémité à la liste des voisins de l'autre (graphe non orienté)
         m_sommets[id]->ajouterVoisin(m_sommets[id_voisin],tmp_weight);
-        //(m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
+        (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
     }
 }
 void graphe::search_sol()
@@ -168,7 +168,7 @@ void graphe::test()
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
     std::vector<int> chemin (m_sommets.size(), 0);
-    graphe g("files/broadway.txt","files/broadway_weights_4.txt");
+    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
     float flot_max = 0;
 
     while (g.BFS(aretes_local,chemin,posP))
@@ -608,8 +608,113 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     return std::make_pair(tot_object_pareto,tot_object_rest);
 }
 
+void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y)
+{
+    double origine_x = ecart_x;
+    double origine_y = ecart_y;
+    double image_size= 50;
+    double decaler = 25;
+    size_t ordre = m_sommets.size();
+    size_t taille = m_edges.size();
+    size_t val_max = std::max(m_sommets.size(),m_edges.size());
 
+    for (int i = val_max; i!=0; --i)
+    {
+        if ( i <= ordre)
+            svgout.addImage("images/village.png", image_size,image_size,m_sommets[i-1]->getX()-decaler+origine_x,m_sommets[i-1]->getY()-decaler+origine_y);
+        if ( i <= taille)
+        {
+            if (arete[i-1] == 1 )
+            {
+                int s1_x = m_edges[i-1]->getStart()->getX()+origine_x;
+                int s1_y = m_edges[i-1]->getStart()->getY()+origine_y;
+                int s2_x = m_edges[i-1]->getSecond()->getX()+origine_x;
+                int s2_y = m_edges[i-1]->getSecond()->getY()+origine_y;
+                svgout.addLine(s1_x,s1_y,s2_x,s2_y,"LightSalmon");
+            }
+        }
+    }
+}
+void graphe::dessiner(Svgfile &svgout)
+{
+    double ordre = m_sommets.size();
+    double taille = m_edges.size();
+    double x_min = 100000;
+    double x_max = 0;
+    double y_min = 100000;
+    double y_max = 0;
+    for (size_t i = ordre; i!= 0 ; --i)
+    {
+        x_min = std::min(x_min,m_sommets[i-1]->getX());
+        x_max = std::max(x_max,m_sommets[i-1]->getX());
+        y_min = std::min(y_min,m_sommets[i-1]->getY());
+        y_max = std::max(y_max,m_sommets[i-1]->getY());
+    }
 
+    ///graphe d'origine
+    double ecart_x = x_max - x_min;
+    dessinerGraphe(svgout,m_sol_admissible[m_sol_admissible.size()-1], svgout.getWidth()/2 - ecart_x - svgout.getWidth()/6,800);
+    //dessinerGrapheOrg(svgout, ecart_x);
+
+    ///prim
+    int poid = 1;
+    std::vector<bool> prim;
+    prim = fairePrim(poid);
+    dessinerGraphe(svgout,prim,svgout.getWidth()/2 + ecart_x/3, 800);
+
+    ///frontière Pareto
+    int qte = m_pareto_frontier.size();
+    int diviseur = 3;
+    int qte_rst = 0;
+    while (qte%diviseur != 0) /// si pas divisible
+    {
+        qte--;
+        ++qte_rst;
+    }
+    ///affichage
+    double ecart_y = y_max - y_min;
+    int cpt_x = 1;
+    int cpt_y = 1;
+
+    for (int i = 0 ; i < qte ; ++i)
+    {
+        /*
+        std::cout<< " graphe position : "<<cpt_x << std::endl;
+            for (int j = 0 ; j < m_pareto_frontier[i].size() ; ++j)
+            {
+                std::cout<< m_pareto_frontier[i][j];
+            }
+            std::cout<<std::endl;
+            */
+        dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*cpt_y);
+        if (cpt_x == 3)
+        {
+            ++cpt_y;
+            cpt_x = 0;
+        }
+        cpt_x++;
+    }
+    cpt_x = 1;
+    if (qte_rst== 1) ///pas encore vérifier
+    {
+        dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/2 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*cpt_y);
+    }
+
+    if (qte_rst == 2)
+    {
+        for (int i = qte; i < qte+qte_rst; ++i)
+        {
+            /*
+            for (int j = 0 ; j < m_pareto_frontier[i].size() ; ++j)
+            {
+                std::cout<< m_pareto_frontier[i][j];
+            }
+            std::cout<<std::endl;*/
+            dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*cpt_y);
+            ++cpt_x;
+        }
+    }
+}
 
 graphe::~graphe()
 {
