@@ -9,9 +9,12 @@
 
 int main()
 {
+
     using namespace std::chrono;
     Svgfile svgout;
     high_resolution_clock::time_point start_point = high_resolution_clock::now();
+
+
     graphe g("files/broadway.txt","files/broadway_weights_4.txt");
     g.search_sol();
     std::cout << "Graphe charge !" << std::endl;
@@ -25,6 +28,6 @@ int main()
     std::cout << std::endl << "Time of computation elapsed : " << time_elpased.count() << " s" << std::endl;
     std::cout << std::endl << "NUMBER OF PARETO OPTIMUM : " << pareto.first.size() << std::endl;
     plotPareto3D(pareto.first,pareto.second);
-    //printPareto3D(pareto.first,pareto.second,svgout);
+    printPareto3D(pareto.first,pareto.second,svgout);
     return 0;
 }

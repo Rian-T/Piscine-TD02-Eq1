@@ -26,6 +26,7 @@ class graphe
         float faireSomme(std::vector<bool>,int);
         std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> fairePareto(std::vector<int> choix_pond);
 
+        void test();
     private:
         /// Le réseau est constitué d'une collection de sommets
         std::vector<Sommet*> m_sommets;//stockée dans une map (clé=id du sommet, valeur= pointeur sur le sommet)

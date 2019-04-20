@@ -13,6 +13,8 @@ class Sommet
         ///constructeur qui reçoit en params les données du sommet
         Sommet(int,double,double);
         int getId() const { return m_id; }
+        double getX() const { return m_x; }
+        double getY() const { return m_y; }
         void ajouterVoisin(const Sommet*, std::vector<float> w);
         void afficher() const;
         std::list<std::pair<const Sommet*,std::vector<float>>> getVoisinsList(){return m_voisins;}

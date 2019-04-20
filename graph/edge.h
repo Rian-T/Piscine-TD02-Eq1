@@ -9,8 +9,8 @@ class Edge
         virtual ~Edge();
 
         int getId() const { return m_id; }            //GETTERS AND SETTERS
-        const Sommet* getStart() { return m_start; }
-        const Sommet* getSecond() { return m_end; }
+        Sommet* getStart() { return m_start; }
+        Sommet* getSecond() { return m_end; }
         std::vector<float> getWeight() { return m_weight;}
         void afficher() const;
         ///pour BFS
@@ -21,8 +21,8 @@ class Edge
 
     private:
         const int m_id;
-        const Sommet* m_start;
-        const Sommet* m_end;
+        Sommet* m_start;
+        Sommet* m_end;
         std::vector<float> m_weight;
 };
 
