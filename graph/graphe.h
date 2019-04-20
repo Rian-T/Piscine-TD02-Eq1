@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "sommet.h"
 #include "edge.h"
+#include "../plot/svgfile.h"
 
 class graphe
 {
@@ -26,6 +27,9 @@ class graphe
         float faireSomme(std::vector<bool>,int);
         std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> fairePareto(std::vector<int> choix_pond);
 
+        //Svgfile
+        void dessiner(Svgfile &svgout);
+        void dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x,double ecart_y);
         void test();
     private:
         /// Le réseau est constitué d'une collection de sommets
