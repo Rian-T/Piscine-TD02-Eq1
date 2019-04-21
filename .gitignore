@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/codeblocks
 # Edit at https://www.gitignore.io/?templates=codeblocks
 
@@ -9,6 +8,10 @@
 *.svg
 *.png
 *.gif
+pareto3D.gif
+pareto2D.png
+frt.txt
+rst.txt
 *.txt
 # generated directories
 bin/

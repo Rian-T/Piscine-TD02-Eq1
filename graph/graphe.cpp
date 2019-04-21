@@ -88,6 +88,7 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
     this->setOrdre(ordre);
     this->setTaille(taille);
 }
+
 void graphe::search_sol()
 {
     const int k = m_taille;
@@ -559,7 +560,7 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
 }
 
 void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<std::vector<bool>> m_sol_admissible,std::vector<int>& choix_pond,int ori,int debut, int fin){
-    std::cout << "DEBUT : " << debut << "FIN : " << fin << std::endl;
+    std::cout << "DEBUT : " << debut << " FIN : " << fin << std::endl;
     for(int i=debut; i<fin; i++){
         std::vector<float> objectif;
         for(size_t j=0; j<choix_pond.size(); j++)
@@ -580,35 +581,28 @@ void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<s
                     break;
                 }
             }
-            tot_object.push_back(objectif);
+            tot_object[i] = objectif;
     }
 }
 
 #warning TODO (Romain#9#): Verifier stabilité (meme input, meme output) de la frtoniere de pareto en 3D, notamment sur broadway_4
 std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int>& choix_pond,int ori)
 {
-    std::vector<std::vector<float>> tot_object;
-    std::vector<std::vector<float>> tot_object2;
-    std::vector<std::vector<float>> tot_object3;
-    std::vector<std::vector<float>> tot_object4;
-    std::vector<std::vector<float>> tot_object5;
-    std::vector<std::vector<float>> tot_object6;
-    std::vector<std::vector<float>> tot_object7;
-    std::vector<std::vector<float>> tot_object8;
+    std::vector<std::vector<float>> tot_object(m_sol_admissible.size());
     std::vector<std::vector<float>> tot_object_pareto;
     std::vector<std::vector<float>> tot_object_rest;
     std::cout << "NUMBER OF THREAD : " << std::thread::hardware_concurrency() << std::endl;
     if(std::thread::hardware_concurrency() <= 2){
         std::thread t1(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,0,m_sol_admissible.size()/2);
-        std::thread t2(scoring,std::ref(*this),std::ref(tot_object2),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/2,m_sol_admissible.size());
+        std::thread t2(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/2,m_sol_admissible.size());
         t1.join();
         t2.join();
     }
     else if(std::thread::hardware_concurrency() <= 4){
         std::thread t1(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,0,m_sol_admissible.size()/4);
-        std::thread t2(scoring,std::ref(*this),std::ref(tot_object2),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/4,m_sol_admissible.size()/2);
-        std::thread t3(scoring,std::ref(*this),std::ref(tot_object3),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/2,(m_sol_admissible.size()*3)/4);
-        std::thread t4(scoring,std::ref(*this),std::ref(tot_object4),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*3)/4,m_sol_admissible.size());
+        std::thread t2(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/4,m_sol_admissible.size()/2);
+        std::thread t3(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/2,(m_sol_admissible.size()*3)/4);
+        std::thread t4(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*3)/4,m_sol_admissible.size());
         t1.join();
         t2.join();
         t3.join();
@@ -616,13 +610,13 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     }
     else if(std::thread::hardware_concurrency() <= 8){
         std::thread t1(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,0,m_sol_admissible.size()/8);
-        std::thread t2(scoring,std::ref(*this),std::ref(tot_object2),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/8,(m_sol_admissible.size()*2)/8);
-        std::thread t3(scoring,std::ref(*this),std::ref(tot_object3),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*2)/8,(m_sol_admissible.size()*3)/8);
-        std::thread t4(scoring,std::ref(*this),std::ref(tot_object4),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*3)/8,(m_sol_admissible.size()*4)/8);
-        std::thread t5(scoring,std::ref(*this),std::ref(tot_object5),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*4)/8,(m_sol_admissible.size()*5)/8);
-        std::thread t6(scoring,std::ref(*this),std::ref(tot_object6),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*5)/8,(m_sol_admissible.size()*6)/8);
-        std::thread t7(scoring,std::ref(*this),std::ref(tot_object7),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*6)/8,(m_sol_admissible.size()*7)/8);
-        std::thread t8(scoring,std::ref(*this),std::ref(tot_object8),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*7)/8,m_sol_admissible.size());
+        std::thread t2(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/8,(m_sol_admissible.size()*2)/8);
+        std::thread t3(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*2)/8,(m_sol_admissible.size()*3)/8);
+        std::thread t4(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*3)/8,(m_sol_admissible.size()*4)/8);
+        std::thread t5(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*4)/8,(m_sol_admissible.size()*5)/8);
+        std::thread t6(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*5)/8,(m_sol_admissible.size()*6)/8);
+        std::thread t7(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*6)/8,(m_sol_admissible.size()*7)/8);
+        std::thread t8(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*7)/8,m_sol_admissible.size());
         t1.join();
         t2.join();
         t3.join();
@@ -632,20 +626,6 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
         t7.join();
         t8.join();
     }
-    for(auto tot : tot_object2)
-        tot_object.push_back(tot);
-    for(auto tot : tot_object3)
-        tot_object.push_back(tot);
-    for(auto tot : tot_object4)
-        tot_object.push_back(tot);
-    for(auto tot : tot_object5)
-        tot_object.push_back(tot);
-    for(auto tot : tot_object6)
-        tot_object.push_back(tot);
-    for(auto tot : tot_object7)
-        tot_object.push_back(tot);
-    for(auto tot : tot_object8)
-        tot_object.push_back(tot);
     std::vector<bool> marque(m_sol_admissible.size(),0);
     const size_t tsoladmi=m_sol_admissible.size();
     const size_t tchoixpond=choix_pond.size();
