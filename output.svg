@@ -1,54 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1800" height="4000">
 
-<image href="pareto2D.png" height="800" width="800" x="500" y="0" />
 <text x="890" y="850" fill="black" >Graphe initial :</text>
-<line x1="800" y1="1140" x2="900" y2="1140" stroke="LightSalmon" />
-<text x="830" y="1138" fill="red" >(9;5)</text>
-<line x1="700" y1="1140" x2="800" y2="1140" stroke="LightSalmon" />
-<text x="730" y="1138" fill="red" >(8;7)</text>
-<line x1="600" y1="1140" x2="700" y2="1140" stroke="LightSalmon" />
-<text x="630" y="1138" fill="red" >(6;1)</text>
-<line x1="850" y1="1055" x2="900" y2="1140" stroke="LightSalmon" />
-<text x="855" y="1095" fill="red" >(8;3)</text>
-<line x1="850" y1="1055" x2="800" y2="1140" stroke="LightSalmon" />
-<text x="805" y="1095" fill="red" >(7;1)</text>
-<line x1="750" y1="1055" x2="800" y2="1140" stroke="LightSalmon" />
-<text x="755" y="1095" fill="red" >(8;3)</text>
-<line x1="750" y1="1055" x2="700" y2="1140" stroke="LightSalmon" />
-<text x="705" y="1095" fill="red" >(3;6)</text>
-<line x1="650" y1="1055" x2="700" y2="1140" stroke="LightSalmon" />
-<text x="655" y="1095" fill="red" >(9;9)</text>
-<image href="images/village.png" height="50" width="50" x="875" y="1115" />
-<line x1="650" y1="1055" x2="600" y2="1140" stroke="LightSalmon" />
-<text x="605" y="1095" fill="red" >(3;6)</text>
-<image href="images/village.png" height="50" width="50" x="775" y="1115" />
-<line x1="750" y1="1055" x2="850" y2="1055" stroke="LightSalmon" />
-<text x="780" y="1053" fill="red" >(8;7)</text>
-<image href="images/village.png" height="50" width="50" x="675" y="1115" />
-<line x1="650" y1="1055" x2="750" y2="1055" stroke="LightSalmon" />
-<text x="680" y="1053" fill="red" >(1;8)</text>
-<image href="images/village.png" height="50" width="50" x="575" y="1115" />
-<line x1="800" y1="970" x2="850" y2="1055" stroke="LightSalmon" />
-<text x="805" y="1010" fill="red" >(4;5)</text>
-<image href="images/village.png" height="50" width="50" x="825" y="1030" />
-<line x1="800" y1="970" x2="750" y2="1055" stroke="LightSalmon" />
-<text x="755" y="1010" fill="red" >(2;1)</text>
-<image href="images/village.png" height="50" width="50" x="725" y="1030" />
-<line x1="700" y1="970" x2="750" y2="1055" stroke="LightSalmon" />
-<text x="705" y="1010" fill="red" >(9;6)</text>
-<image href="images/village.png" height="50" width="50" x="625" y="1030" />
-<line x1="700" y1="970" x2="650" y2="1055" stroke="LightSalmon" />
-<text x="655" y="1010" fill="red" >(5;7)</text>
-<image href="images/village.png" height="50" width="50" x="775" y="945" />
-<line x1="700" y1="970" x2="800" y2="970" stroke="LightSalmon" />
-<text x="730" y="968" fill="red" >(8;1)</text>
-<image href="images/village.png" height="50" width="50" x="675" y="945" />
-<line x1="750" y1="885" x2="800" y2="970" stroke="LightSalmon" />
-<text x="755" y="925" fill="red" >(9;1)</text>
-<image href="images/village.png" height="50" width="50" x="725" y="860" />
-<line x1="750" y1="885" x2="700" y2="970" stroke="LightSalmon" />
-<text x="705" y="925" fill="red" >(6;4)</text>
+<line x1="1150" y1="1100" x2="1150" y2="1200" stroke="LightSalmon" />
+<text x="1130" y="1148" fill="red" >(1;8)</text>
+<line x1="1050" y1="1100" x2="1050" y2="1200" stroke="LightSalmon" />
+<text x="1030" y="1148" fill="red" >(6;4)</text>
+<line x1="950" y1="1100" x2="950" y2="1200" stroke="LightSalmon" />
+<text x="930" y="1148" fill="red" >(7;3)</text>
+<line x1="850" y1="1100" x2="850" y2="1200" stroke="LightSalmon" />
+<text x="830" y="1148" fill="red" >(1;7)</text>
+<line x1="1150" y1="1000" x2="1150" y2="1100" stroke="LightSalmon" />
+<text x="1130" y="1048" fill="red" >(1;4)</text>
+<line x1="1050" y1="1000" x2="1050" y2="1100" stroke="LightSalmon" />
+<text x="1030" y="1048" fill="red" >(4;3)</text>
+<line x1="950" y1="1000" x2="950" y2="1100" stroke="LightSalmon" />
+<text x="930" y="1048" fill="red" >(9;7)</text>
+<line x1="850" y1="1000" x2="850" y2="1100" stroke="LightSalmon" />
+<text x="830" y="1048" fill="red" >(8;3)</text>
+<image href="images/village.png" height="50" width="50" x="1125" y="1175" />
+<line x1="1150" y1="900" x2="1150" y2="1000" stroke="LightSalmon" />
+<text x="1130" y="948" fill="red" >(6;4)</text>
+<image href="images/village.png" height="50" width="50" x="1025" y="1175" />
+<line x1="1050" y1="900" x2="1050" y2="1000" stroke="LightSalmon" />
+<text x="1030" y="948" fill="red" >(8;8)</text>
+<image href="images/village.png" height="50" width="50" x="925" y="1175" />
+<line x1="950" y1="900" x2="950" y2="1000" stroke="LightSalmon" />
+<text x="930" y="948" fill="red" >(7;2)</text>
+<image href="images/village.png" height="50" width="50" x="825" y="1175" />
+<line x1="850" y1="900" x2="850" y2="1000" stroke="LightSalmon" />
+<text x="830" y="948" fill="red" >(8;9)</text>
+<image href="images/village.png" height="50" width="50" x="1125" y="1075" />
+<line x1="1050" y1="1200" x2="1150" y2="1200" stroke="LightSalmon" />
+<text x="1080" y="1198" fill="red" >(3;5)</text>
+<image href="images/village.png" height="50" width="50" x="1025" y="1075" />
+<line x1="950" y1="1200" x2="1050" y2="1200" stroke="LightSalmon" />
+<text x="980" y="1198" fill="red" >(9;7)</text>
+<image href="images/village.png" height="50" width="50" x="925" y="1075" />
+<line x1="850" y1="1200" x2="950" y2="1200" stroke="LightSalmon" />
+<text x="880" y="1198" fill="red" >(3;1)</text>
+<image href="images/village.png" height="50" width="50" x="825" y="1075" />
+<line x1="1050" y1="1100" x2="1150" y2="1100" stroke="LightSalmon" />
+<text x="1080" y="1098" fill="red" >(8;3)</text>
+<image href="images/village.png" height="50" width="50" x="1125" y="975" />
+<line x1="950" y1="1100" x2="1050" y2="1100" stroke="LightSalmon" />
+<text x="980" y="1098" fill="red" >(1;1)</text>
+<image href="images/village.png" height="50" width="50" x="1025" y="975" />
+<line x1="850" y1="1100" x2="950" y2="1100" stroke="LightSalmon" />
+<text x="880" y="1098" fill="red" >(4;3)</text>
+<image href="images/village.png" height="50" width="50" x="925" y="975" />
+<line x1="1050" y1="1000" x2="1150" y2="1000" stroke="LightSalmon" />
+<text x="1080" y="998" fill="red" >(2;6)</text>
+<image href="images/village.png" height="50" width="50" x="825" y="975" />
+<line x1="950" y1="1000" x2="1050" y2="1000" stroke="LightSalmon" />
+<text x="980" y="998" fill="red" >(9;9)</text>
+<image href="images/village.png" height="50" width="50" x="1125" y="875" />
+<line x1="850" y1="1000" x2="950" y2="1000" stroke="LightSalmon" />
+<text x="880" y="998" fill="red" >(5;6)</text>
+<image href="images/village.png" height="50" width="50" x="1025" y="875" />
+<line x1="1050" y1="900" x2="1150" y2="900" stroke="LightSalmon" />
+<text x="1080" y="898" fill="red" >(8;7)</text>
+<image href="images/village.png" height="50" width="50" x="925" y="875" />
+<line x1="950" y1="900" x2="1050" y2="900" stroke="LightSalmon" />
+<text x="980" y="898" fill="red" >(9;8)</text>
+<image href="images/village.png" height="50" width="50" x="825" y="875" />
+<line x1="850" y1="900" x2="950" y2="900" stroke="LightSalmon" />
+<text x="880" y="898" fill="red" >(6;5)</text>
 
 
 </svg>
