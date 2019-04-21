@@ -134,11 +134,14 @@ void graphe::search_sol2()
     while(std::next_permutation(aretes.begin(), aretes.end()));
 }
 
+<<<<<<< HEAD
 /** \brief  Calcul le flot maximal du graphe pondéré, connexe et orienté
  * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
  * \param   int posP    Indique quel pondération a utilisé
  * \return un float qui représente le flot maximal
  */
+
+>>>>>>> 902f19b4b0063c77c711b5b341e7ca531f815fc7
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
     std::vector<int> chemin (m_ordre, 0);
@@ -273,6 +276,9 @@ void graphe::DFS(std::vector<bool> &aretes_local)
         m_sol_admissible.push_back(aretes_local);
 }
 
+<<<<<<< HEAD
+
+>>>>>>> 902f19b4b0063c77c711b5b341e7ca531f815fc7
 void graphe::afficher() const
 {
     std::cout<<"graphe : "<<std::endl;
@@ -448,9 +454,12 @@ void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<s
     }
 }
 
-#warning TODO (Romain#9#): Verifier stabilité (meme input, meme output) de la frtoniere de pareto en 3D, notamment sur broadway_4
 std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int>& choix_pond,int ori)
 {
+
+    /** \brief Methode pour trouver les optimums de pareto, utilise le multithreading selon les capacite de l'ordinateur pour optimiser
+ *
+ */
     std::vector<std::vector<float>> tot_object(m_sol_admissible.size());
     std::vector<std::vector<float>> tot_object_pareto;
     std::vector<std::vector<float>> tot_object_rest;

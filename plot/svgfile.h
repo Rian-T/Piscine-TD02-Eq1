@@ -9,6 +9,11 @@
 
 constexpr char defcol[] = "black";
 
+/** \class Svgfile
+ *  \brief Creation d'un fichier SVG
+ *
+ */
+
 class Svgfile
 {
     public:

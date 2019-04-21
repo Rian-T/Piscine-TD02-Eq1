@@ -7,6 +7,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
+/** \class Sommet
+ *  \brief Sommet d'un graphe, relie par des aretes, il possede une liste de voisins et des coordonnees cartesiennes
+ *
+ */
+
 class Sommet
 {
     public:
