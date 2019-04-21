@@ -2,6 +2,10 @@
 #define EDGE_H
 #include "sommet.h"
 
+/** \brief \class Edge
+    Arete reliant des sommets dans un arbre
+    Elle possede un ensemble de poids et 2 sommets
+ */
 class Edge
 {
     public:
