@@ -41,6 +41,8 @@
 		<Unit filename="graph/sommet.cpp" />
 		<Unit filename="graph/sommet.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="menu/menu.cpp" />
+		<Unit filename="menu/menu.h" />
 		<Unit filename="pareto/p_func.cpp" />
 		<Unit filename="pareto/p_func.h" />
 		<Unit filename="plot/ploting.cpp" />

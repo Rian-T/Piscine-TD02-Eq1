@@ -24,7 +24,8 @@ extern "C" void *pclose(FILE*);
 
 void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest);
 void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout);
-void plotPareto2D(std::vector<std::vector<float>> frontier);
+void printPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout);
+void plotPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest);
 void plotPareto3Dtest();
 void plotPareto2Dtest();
 

@@ -6,7 +6,8 @@
 #include <ctime>
 #include <ratio>
 #include <chrono>
-
+#include "menu/menu.h"
+/*
 int main()
 {
 
@@ -27,32 +28,104 @@ int main()
     g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,f);
     g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,t,f);
     return 0;
-}
+}*/
 
-/*
+
 int main()
 {
-    using namespace std::chrono;
-    Svgfile svgout;
-    high_resolution_clock::time_point start_point = high_resolution_clock::now();
-
-
-    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
-    g.search_sol();
-    g.test();
-    std::cout << "Graphe charge !" << std::endl;
-    high_resolution_clock::time_point end_point = high_resolution_clock::now();
-    duration<double> time_elpased = duration_cast<duration<double>>(end_point - start_point);
-    std::cout << std::endl << "Time for generatating all connected subgraph elapsed : " << time_elpased.count() << " s" << std::endl;
-    std::cout << "Affichage de la frontiere de pareto : " << std::endl;
-    auto pareto = g.fairePareto({0,1,2});
-    end_point = high_resolution_clock::now();
-    time_elpased = duration_cast<duration<double>>(end_point - start_point);
-    std::cout << std::endl << "Time of computation elapsed : " << time_elpased.count() << " s" << std::endl;
-    std::cout << std::endl << "NUMBER OF PARETO OPTIMUM : " << pareto.first.size() << std::endl;
-    plotPareto3D(pareto.first,pareto.second);
-    printPareto3D(pareto.first,pareto.second,svgout);
-
+//    using namespace std::chrono;
+//    Svgfile svgout;
+//    high_resolution_clock::time_point start_point = high_resolution_clock::now();
+//
+//
+//    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
+//    g.search_sol();
+//    g.test();
+//    std::cout << "Graphe charge !" << std::endl;
+//    high_resolution_clock::time_point end_point = high_resolution_clock::now();
+//    duration<double> time_elpased = duration_cast<duration<double>>(end_point - start_point);
+//    std::cout << std::endl << "Time for generatating all connected subgraph elapsed : " << time_elpased.count() << " s" << std::endl;
+//    std::cout << "Affichage de la frontiere de pareto : " << std::endl;
+//    auto pareto = g.fairePareto({0,1,2});
+//    end_point = high_resolution_clock::now();
+//    time_elpased = duration_cast<duration<double>>(end_point - start_point);
+//    std::cout << std::endl << "Time of computation elapsed : " << time_elpased.count() << " s" << std::endl;
+//    std::cout << std::endl << "NUMBER OF PARETO OPTIMUM : " << pareto.first.size() << std::endl;
+//    plotPareto3D(pareto.first,pareto.second);
+//    printPareto3D(pareto.first,pareto.second,svgout);
+//
+//    return 0;
+//}
+//
+    std::string nomFichier,weightFile;
+    int orientation;
+        double ecart_x=100,ecart_y=100;
+    std::string tmp = choixFichier();
+    nomFichier="files/"+tmp+".txt";
+    weightFile="files/"+tmp+"_weights_"+choixWeight()+".txt";
+    orientation=choixOrient();
+    graphe g(nomFichier,weightFile,orientation);
+    size_t k=g.getNbWeight();
+    //int choix;
+    //do
+    //{
+        //choix=choixAction();
+        //switch(choix)
+        //{
+        //case 1:
+            {
+                std::vector<std::vector<bool>> prim;
+                std::vector<std::vector<float>> primPoidsTot;
+                for(size_t i=0;i<k;i++)
+                {
+                    std::vector<float>primPoids;
+                    prim.push_back(g.fairePrim(i));
+                    for(size_t j=0;j<k;j++)
+                    {
+                        primPoids.push_back(g.faireSomme(prim[i],j));
+                    }
+                    primPoidsTot.push_back(primPoids);
+                }
+                //afficher les grpahes de Prim;
+                //break;
+            }
+        //case 2:
+            {
+                std::vector<int> choixP;
+                choixP=choixPoids(k,orientation);
+                using namespace std::chrono;
+                Svgfile svgout;
+                high_resolution_clock::time_point start_point = high_resolution_clock::now();
+                g.search_sol();
+                std::cout << "Graphe charge !" << std::endl;
+                high_resolution_clock::time_point end_point = high_resolution_clock::now();
+                duration<double> time_elpased = duration_cast<duration<double>>(end_point - start_point);
+                std::cout << std::endl << "Time for generatating all connected subgraph elapsed : " << time_elpased.count() << " s" << std::endl;
+                std::cout << "Affichage de la frontiere de pareto : " << std::endl;
+                auto pareto = g.fairePareto(choixP,orientation);
+                end_point = high_resolution_clock::now();
+                time_elpased = duration_cast<duration<double>>(end_point - start_point);
+                std::cout << std::endl << "Time of computation elapsed : " << time_elpased.count() << " s" << std::endl;
+                std::cout << std::endl << "NUMBER OF PARETO OPTIMUM : " << pareto.first.size() << std::endl;
+                fflush(stdin);
+                if(k==2)
+                {
+                    plotPareto2D(pareto.first,pareto.second);
+                    printPareto2D(pareto.first,pareto.second,svgout);
+                }
+                else
+                {
+                    plotPareto3D(pareto.first,pareto.second);
+                    printPareto3D(pareto.first,pareto.second,svgout);
+                }
+                g.InitialisationDonneeAffichageSvg(ecart_x,ecart_y);
+                g.dessinerGrapheOrg(svgout,ecart_x);
+                #warning TODO (Anyone#9#): Implementer svg pour prim et pareto
+                //g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,pareto.first);
+                //break;
+            }
+        //}
+    //}while(choix!=2);
     return 0;
 }
-*/
+

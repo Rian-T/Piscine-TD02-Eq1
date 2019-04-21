@@ -1,6 +1,7 @@
 #include "ploting.h"
 #include<time.h>
 #include<cmath>
+#include<algorithm>
 #include "svgfile.h"
 
 void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest){
@@ -9,6 +10,7 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
         #else
             FILE *pipe = popen(GNUPLOT_NAME, "w");
         #endif
+            std::sort(frontier.begin(),frontier.end());
             srand(time(nullptr));
             FILE* frtTxt = fopen("frt.txt","w");
             for(size_t i = 0; i < frontier.size(); i++){
@@ -55,6 +57,7 @@ void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vec
         #else
             FILE *pipe = popen(GNUPLOT_NAME, "w");
         #endif
+            std::sort(frontier.begin(),frontier.end());
             srand(time(nullptr));
             FILE* frtTxt = fopen("frt.txt","w");
             for(size_t i = 0; i < frontier.size(); i++){
@@ -98,21 +101,71 @@ void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vec
             std::cout << "Could not open pipe" << std::endl;
 }
 
-void plotPareto2D(std::vector<std::vector<float>> frontier){
+void printPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout){
     #ifdef WIN32
             FILE *pipe = _popen(GNUPLOT_NAME, "w");
         #else
             FILE *pipe = popen(GNUPLOT_NAME, "w");
         #endif
-        FILE* frtTxt = fopen("frt.txt","w");
-        for(size_t i = 0; i < frontier.size(); i++){
-                fprintf(frtTxt, "%f %f\n", frontier[i][0],frontier[i][1]);           // data terminated with \n
+            std::sort(frontier.begin(),frontier.end());
+            srand(time(nullptr));
+            FILE* frtTxt = fopen("frt.txt","w");
+            for(size_t i = 0; i < frontier.size(); i++){
+                fprintf(frtTxt, "%3.2f %3.2f\n", frontier[i][0],frontier[i][1]);           // data terminated with \n
+            }
+            fclose(frtTxt);
+            FILE* rstTxt = fopen("rst.txt","w");
+            for(size_t i = 0; i < rest.size(); i++){
+                fprintf(rstTxt, "%3.2f %3.2f\n", rest[i][0],rest[i][1]);           // data terminated with \n
+            }
+            fclose(rstTxt);
+        if (pipe != NULL)
+        {         // set the terminal
+            fprintf(pipe, "set terminal png\n");
+            fprintf(pipe, "set output 'pareto2D.png'\n");
+            fprintf(pipe, "unset key\n");
+            fprintf(pipe, "set title \"2D Plot of Pareto frontier\"\n");
+            fprintf(pipe, "set xlabel \"Economic cost\"\n");
+            fprintf(pipe, "set ylabel \"Shortest Path\"\n");
+            fprintf(pipe, "plot \"frt.txt\" using 1:2: (sprintf(\"(%%d, %%d)\", $1, $2)) with labels point  pt 7 ps 2 lc 'green' offset char 1,1 notitle, \"rst.txt\" pt 7 ps 1 lc 'red'\n");
+            //fprintf(pipe, "%s\n", "e");             // termination character
+            fflush(pipe);                           // flush the pipe
+            // wait for key press
+            std::cin.clear();
+            std::cin.ignore(std::cin.rdbuf()->in_avail());
+            #ifdef WIN32
+                    _pclose(pipe);
+            #else
+                    pclose(pipe);
+            #endif
+            svgout.addImage("pareto2D.png",800,800);
         }
-        fclose(frtTxt);
+        else
+            std::cout << "Could not open pipe" << std::endl;
+}
+
+void plotPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest){
+    #ifdef WIN32
+            FILE *pipe = _popen(GNUPLOT_NAME, "w");
+        #else
+            FILE *pipe = popen(GNUPLOT_NAME, "w");
+        #endif
+        std::sort(frontier.begin(),frontier.end());
+        FILE* frtTxt = fopen("frt.txt","w");
+            for(size_t i = 0; i < frontier.size(); i++){
+                fprintf(frtTxt, "%3.2f %3.2f\n", frontier[i][0],frontier[i][1]);           // data terminated with \n
+            }
+            fclose(frtTxt);
+            FILE* rstTxt = fopen("rst.txt","w");
+            for(size_t i = 0; i < rest.size(); i++){
+                fprintf(rstTxt, "%3.2f %3.2f\n", rest[i][0],rest[i][1]);           // data terminated with \n
+            }
+            fclose(rstTxt);
         if (pipe != NULL)
         {
             fprintf(pipe, "set term wx\n");         // set the terminal
-            fprintf(pipe, "plot \"frt.txt\" using 1:2:(sprintf(\"(%3d, %3d)\", $1, $2)) with lp pt 4 lt 0\n"); // plot type
+            fprintf(pipe, "unset key\n");         // set the terminal
+            fprintf(pipe, "plot \"frt.txt\" with lp  pt 7 ps 2 lc 'green', \"rst.txt\" pt 7 ps 1 lc 'red'\n");
             fflush(pipe);                           // flush the pipe
 
             // wait for key press
