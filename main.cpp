@@ -66,13 +66,15 @@ int main()
     orientation=choixOrient();
     graphe g(nomFichier,weightFile,orientation);
     size_t nbP=g.getNbWeight();
-    //int choix;
-    //do
-    //{
-        //choix=choixAction();
-        //switch(choix)
-        //{
-        //case 1:
+    int choix;
+    do
+    {
+        choix=choixAction();
+        Svgfile svgout;
+        g.dessinerGrapheOrg(svgout,ecart_x,orientation);
+        switch(choix)
+        {
+        case 1:
             {
                 std::vector<std::vector<bool>> prim;
                 std::vector<std::vector<float>> primPoidsTot;
@@ -86,15 +88,14 @@ int main()
                     }
                     primPoidsTot.push_back(primPoids);
                 }
-                //afficher les grpahes de Prim;
-                //break;
+                g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,prim,primPoidsTot,orientation);
+                break;
             }
-        //case 2:
+        case 2:
             {
                 std::vector<int> choixP;
                 choixP=choixPoids(nbP,orientation);
                 using namespace std::chrono;
-                Svgfile svgout;
                 high_resolution_clock::time_point start_point = high_resolution_clock::now();
                 int s;
                 if(nbP==2)
@@ -126,14 +127,12 @@ int main()
                     printPareto3D(pareto.first,pareto.second,svgout);
                     plotPareto3D(pareto.first,pareto.second);
                 }
-                g.InitialisationDonneeAffichageSvg(ecart_x,ecart_y);
-                g.dessinerGrapheOrg(svgout,ecart_x);
                 #warning TODO (Anyone#9#): Implementer svg pour prim et pareto
-                //g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,pareto.first);
-                //break;
+                g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,pareto.first,orientation);
+                break;
             }
-        //}
-    //}while(choix!=2);
+        }
+    }while(choix!=3);
     return 0;
 }
 

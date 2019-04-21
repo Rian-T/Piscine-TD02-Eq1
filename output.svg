@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1800" height="4000">
 
-<image href="pareto2D.png" height="800" width="800" x="500" y="0" />
 <text x="890" y="850" fill="black" >Graphe initial :</text>
-<line x1="800" y1="1140" x2="900" y2="1140" stroke="LightSalmon" />
-<text x="830" y="1138" fill="red" >(9;5)</text>
-<line x1="700" y1="1140" x2="800" y2="1140" stroke="LightSalmon" />
-<text x="730" y="1138" fill="red" >(8;7)</text>
-<line x1="600" y1="1140" x2="700" y2="1140" stroke="LightSalmon" />
-<text x="630" y="1138" fill="red" >(6;1)</text>
-<line x1="850" y1="1055" x2="900" y2="1140" stroke="LightSalmon" />
-<text x="855" y="1095" fill="red" >(8;3)</text>
-<line x1="850" y1="1055" x2="800" y2="1140" stroke="LightSalmon" />
-<text x="805" y="1095" fill="red" >(7;1)</text>
-<line x1="750" y1="1055" x2="800" y2="1140" stroke="LightSalmon" />
-<text x="755" y="1095" fill="red" >(8;3)</text>
-<line x1="750" y1="1055" x2="700" y2="1140" stroke="LightSalmon" />
-<text x="705" y="1095" fill="red" >(3;6)</text>
-<line x1="650" y1="1055" x2="700" y2="1140" stroke="LightSalmon" />
-<text x="655" y="1095" fill="red" >(9;9)</text>
-<image href="images/village.png" height="50" width="50" x="875" y="1115" />
-<line x1="650" y1="1055" x2="600" y2="1140" stroke="LightSalmon" />
-<text x="605" y="1095" fill="red" >(3;6)</text>
-<image href="images/village.png" height="50" width="50" x="775" y="1115" />
-<line x1="750" y1="1055" x2="850" y2="1055" stroke="LightSalmon" />
-<text x="780" y="1053" fill="red" >(8;7)</text>
-<image href="images/village.png" height="50" width="50" x="675" y="1115" />
-<line x1="650" y1="1055" x2="750" y2="1055" stroke="LightSalmon" />
-<text x="680" y="1053" fill="red" >(1;8)</text>
-<image href="images/village.png" height="50" width="50" x="575" y="1115" />
-<line x1="800" y1="970" x2="850" y2="1055" stroke="LightSalmon" />
-<text x="805" y="1010" fill="red" >(4;5)</text>
-<image href="images/village.png" height="50" width="50" x="825" y="1030" />
-<line x1="800" y1="970" x2="750" y2="1055" stroke="LightSalmon" />
-<text x="755" y="1010" fill="red" >(2;1)</text>
-<image href="images/village.png" height="50" width="50" x="725" y="1030" />
-<line x1="700" y1="970" x2="750" y2="1055" stroke="LightSalmon" />
-<text x="705" y="1010" fill="red" >(9;6)</text>
-<image href="images/village.png" height="50" width="50" x="625" y="1030" />
-<line x1="700" y1="970" x2="650" y2="1055" stroke="LightSalmon" />
-<text x="655" y="1010" fill="red" >(5;7)</text>
-<image href="images/village.png" height="50" width="50" x="775" y="945" />
-<line x1="700" y1="970" x2="800" y2="970" stroke="LightSalmon" />
-<text x="730" y="968" fill="red" >(8;1)</text>
-<image href="images/village.png" height="50" width="50" x="675" y="945" />
-<line x1="750" y1="885" x2="800" y2="970" stroke="LightSalmon" />
-<text x="755" y="925" fill="red" >(9;1)</text>
-<image href="images/village.png" height="50" width="50" x="725" y="860" />
-<line x1="750" y1="885" x2="700" y2="970" stroke="LightSalmon" />
-<text x="705" y="925" fill="red" >(6;4)</text>
+<line x1="850" y1="1000" x2="950" y2="1000" stroke="LightSalmon" />
+<circle cx="925" cy="1000" r="5" fill="LightSalmon" />
+<text x="880" y="998" fill="red" >(6;9)</text>
+<image href="images/village.png" height="50" width="50" x="925" y="975" />
+<line x1="950" y1="900" x2="950" y2="1000" stroke="LightSalmon" />
+<circle cx="950" cy="975" r="5" fill="LightSalmon" />
+<text x="930" y="948" fill="red" >(8;4)</text>
+<image href="images/village.png" height="50" width="50" x="825" y="975" />
+<line x1="950" y1="900" x2="850" y2="1000" stroke="LightSalmon" />
+<circle cx="875" cy="975" r="5" fill="LightSalmon" />
+<text x="880" y="948" fill="red" >(3;6)</text>
+<image href="images/village.png" height="50" width="50" x="925" y="875" />
+<line x1="850" y1="900" x2="850" y2="1000" stroke="LightSalmon" />
+<circle cx="850" cy="975" r="5" fill="LightSalmon" />
+<text x="830" y="948" fill="red" >(2;5)</text>
+<image href="images/village.png" height="50" width="50" x="825" y="875" />
+<line x1="850" y1="900" x2="950" y2="900" stroke="LightSalmon" />
+<circle cx="925" cy="900" r="5" fill="LightSalmon" />
+<text x="880" y="898" fill="red" >(8;5)</text>
+<line x1="100" y1="1250" x2="1800" y2="1250" stroke="black" />
+<text x="870" y="1300" fill="black" >Arbres issu de Prim :</text>
+<text x="650" y="1320" fill="black" >(11.00;20.00)</text>
+<line x1="550" y1="1450" x2="650" y2="1450" stroke="LightSalmon" />
+<circle cx="625" cy="1450" r="5" fill="LightSalmon" />
+<text x="580" y="1448" fill="red" >(6;9)</text>
+<image href="images/village.png" height="50" width="50" x="625" y="1425" />
+<image href="images/village.png" height="50" width="50" x="525" y="1425" />
+<line x1="650" y1="1350" x2="550" y2="1450" stroke="LightSalmon" />
+<circle cx="575" cy="1425" r="5" fill="LightSalmon" />
+<text x="580" y="1398" fill="red" >(3;6)</text>
+<image href="images/village.png" height="50" width="50" x="625" y="1325" />
+<line x1="550" y1="1350" x2="550" y2="1450" stroke="LightSalmon" />
+<circle cx="550" cy="1425" r="5" fill="LightSalmon" />
+<text x="530" y="1398" fill="red" >(2;5)</text>
+<image href="images/village.png" height="50" width="50" x="525" y="1325" />
+<text x="1250" y="1320" fill="black" >(18.00;14.00)</text>
+<image href="images/village.png" height="50" width="50" x="1225" y="1425" />
+<line x1="1250" y1="1350" x2="1250" y2="1450" stroke="LightSalmon" />
+<circle cx="1250" cy="1425" r="5" fill="LightSalmon" />
+<text x="1230" y="1398" fill="red" >(8;4)</text>
+<image href="images/village.png" height="50" width="50" x="1125" y="1425" />
+<image href="images/village.png" height="50" width="50" x="1225" y="1325" />
+<line x1="1150" y1="1350" x2="1150" y2="1450" stroke="LightSalmon" />
+<circle cx="1150" cy="1425" r="5" fill="LightSalmon" />
+<text x="1130" y="1398" fill="red" >(2;5)</text>
+<image href="images/village.png" height="50" width="50" x="1125" y="1325" />
+<line x1="1150" y1="1350" x2="1250" y2="1350" stroke="LightSalmon" />
+<circle cx="1225" cy="1350" r="5" fill="LightSalmon" />
+<text x="1180" y="1348" fill="red" >(8;5)</text>
 
 
 </svg>

@@ -682,7 +682,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
 }
 
 ///Dessin d'un graphe avec pour orgine origine_x et origine_y et avec un décalage x et y pour les sommets
-void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y)
+void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y, int ori)
 {
     double origine_x = ecart_x;
     double origine_y = ecart_y;
@@ -705,6 +705,10 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
                 int s2_x = m_edges[i-1]->getSecond()->getX()+origine_x;
                 int s2_y = m_edges[i-1]->getSecond()->getY()+origine_y;
                 svgout.addLine(s1_x,s1_y,s2_x,s2_y,"LightSalmon");
+                if(ori==2)
+                {
+                    svgout.addDisk(s1_x+(s2_x-s1_x)*3/4,s1_y+(s2_y-s1_y)*3/4,5,"LightSalmon");
+                }
                 int x_min = std::min(s1_x, s2_x);
                 int y_min = std::min(s1_y, s2_y);
                 std::vector<float> poids = m_edges[i-1]->getWeight();
@@ -745,12 +749,12 @@ void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
     ecart_y = (y_max - y_min); ///distance du graphe complet en y
 }
 ///dessine le graphe complet
-void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x)
+void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x,int ori)
 {
     std::vector<bool> org(m_taille, 1);
     ///graphe d'origine
     svgout.addText(890,800+50, "Graphe initial :");
-    dessinerGraphe(svgout,org,((svgout.getWidth()/3)*2)-300 - ecart_x/2 - m_sommets[0]->getX(),800);
+    dessinerGraphe(svgout,org,((svgout.getWidth()/3)*2)-300 - ecart_x/2 - m_sommets[0]->getX(),800,ori);
 }
 
 int graphe::getNbWeight()
@@ -759,15 +763,14 @@ int graphe::getNbWeight()
 }
 
 ///affiche et répartie tout les solutions de la frontière sur le svgout
-void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot)
+void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot,int ori)
 {
     int qte = m_pareto_frontier.size();
-    std::cout<<qte << std::endl;
     int diviseur = 3;
     int qte_rst = 0;
     int cpt_x = 1;
-    svgout.addLine(100,800+(200+ecart_y)*svgout.getCptY(),1800,800+(200+ecart_y)*svgout.getCptY(),"black");
-    svgout.addText(825,800+(200+ecart_y)*svgout.getCptY()+50, "Solutions sur la Frontiere de Pareto :");
+    svgout.addLine(100,800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,1800,800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,"black");
+    svgout.addText(825,800+(200+ecart_y)*svgout.getCptY()+50+1.5*ecart_y, "Solutions sur la Frontiere de Pareto :");
 
     if (qte >= 3)
     {
@@ -783,15 +786,15 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
             for (int j = 0 ; j <  valtot[i].size(); ++j)
             {
                 std::string tmp = std::to_string(valtot[i][j]);
-                tmp = tmp.substr(0,1);
+                tmp = tmp.substr(0,5);
                 msg += tmp;
                 if (j != valtot[i].size() - 1)
                     msg+= ";";
             }
             msg += ")";
             ///à vérifier si la position du texte est correcte:
-            svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
-            dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
+            dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
             if (cpt_x == 3)
             {
                 svgout.incremCptY();
@@ -811,15 +814,16 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
         for (int j = 0 ; j <  valtot[qte].size(); ++j)
         {
             std::string tmp = std::to_string(valtot[qte][j]);
-            tmp = tmp.substr(0,1);
+
+            tmp = tmp.substr(0,5);
             msg += tmp;
             if (j != valtot[qte].size() - 1)
                 msg+= ";";
         }
         msg += ")";
         ///à vérifier si la position du texte est correcte:
-        svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
-        dessinerGraphe(svgout,m_pareto_frontier[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+        svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
+        dessinerGraphe(svgout,m_pareto_frontier[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
         svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
     }
     if (qte_rst == 2)
@@ -835,15 +839,15 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
             for (int j = 0 ; j <  valtot[i].size(); ++j)
             {
                 std::string tmp = std::to_string(valtot[i][j]);
-                tmp = tmp.substr(0,1);
+                tmp = tmp.substr(0,5);
                 msg += tmp;
                 if (j != valtot[i].size() - 1)
                     msg+= ";";
             }
             msg += ")";
             //à vérifier si la position du texte est correcte:
-            svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
-            dessinerGraphe(svgout,m_pareto_frontier[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
+            dessinerGraphe(svgout,m_pareto_frontier[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y, ori);
             ++cpt_x;
         }
         svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
@@ -851,14 +855,14 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
 
 }
 ///affiche l'ensemble des Arbres issu de prim
-void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart_y, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts)
+void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart_y, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts, int ori)
 {
     int qte = arbres.size(); ///nombre d'arbres à afficher
     int diviseur = 3;
     int qte_rst = 0;
     int cpt_x = 1;
-    svgout.addLine(100,800+(200+ecart_y)*svgout.getCptY(),1800,800+(200+ecart_y)*svgout.getCptY(),"black");
-    svgout.addText(870,800+(200+ecart_y)*svgout.getCptY()+50, "Arbres issu de Prim :");
+    svgout.addLine(100,800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,1800,800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,"black");
+    svgout.addText(870,800+(200+ecart_y)*svgout.getCptY()+50+1.5*ecart_y, "Arbres issu de Prim :");
     if (qte >= 3)
     {
         while (qte%diviseur != 0) /// si pas divisible
@@ -873,15 +877,15 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
             for (int j = 0 ; j <  couts[i].size(); ++j)
             {
                 std::string tmp = std::to_string(couts[i][j]);
-                tmp = tmp.substr(0,1);
+                tmp = tmp.substr(0,5);
                 msg += tmp;
                 if (j != couts[i].size() - 1)
                     msg+= ";";
             }
             msg += ")";
             ///à vérifier si la position du texte est correcte:
-            svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
-            dessinerGraphe(svgout,arbres[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
+            dessinerGraphe(svgout,arbres[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
             if (cpt_x == 3)
             {
                 svgout.incremCptY();
@@ -901,15 +905,15 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
         for (int j = 0 ; j <  couts[qte].size(); ++j)
         {
             std::string tmp = std::to_string(couts[qte][j]);
-            tmp = tmp.substr(0,1);
+            tmp = tmp.substr(0,5);
             msg += tmp;
             if (j != couts[qte].size() - 1)
                 msg+= ";";
         }
         msg += ")";
         ///à vérifier si la position du texte est correcte:
-        svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70, msg, "black");
-        dessinerGraphe(svgout,arbres[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+        svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
+        dessinerGraphe(svgout,arbres[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
         svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
     }
     if (qte_rst == 2)
@@ -925,18 +929,18 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
             for (int j = 0 ; j <  couts[i].size(); ++j)
             {
                 std::string tmp = std::to_string(couts[i][j]);
-                tmp = tmp.substr(0,1);
+                tmp = tmp.substr(0,5);
                 msg += tmp;
                 if (j != couts[i].size() - 1)
                     msg+= ";";
             }
             msg += ")";
             //à vérifier si la position du texte est correcte:
-            svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 +  m_sommets[0]->getX(), 800+(100+ecart_y)*svgout.getCptY() + 70, msg, "black");
-            dessinerGraphe(svgout,arbres[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY());
+            svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 +  m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
+            dessinerGraphe(svgout,arbres[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
             ++cpt_x;
-            svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
         }
+        svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
     }
 }
 graphe::~graphe()

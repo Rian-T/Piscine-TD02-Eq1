@@ -36,10 +36,10 @@ class graphe
 
         //Svgfile
         void InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y);
-        void dessinerGrapheOrg(Svgfile &svgout, double &ecart_x);
-        void dessinerGraphe(Svgfile &svgout, std::vector<bool> &aretes, double ecart_x,double ecart_y);
-        void dessinerGraphesPareto(Svgfile &svgout, double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot );
-        void dessinerGraphesPrim(Svgfile &svgout,double &ecart_x, double &ecart_u, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts);
+        void dessinerGrapheOrg(Svgfile &svgout, double &ecart_x,int ori);
+        void dessinerGraphe(Svgfile &svgout, std::vector<bool> &aretes, double ecart_x,double ecart_y,int ori);
+        void dessinerGraphesPareto(Svgfile &svgout, double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot ,int ori);
+        void dessinerGraphesPrim(Svgfile &svgout,double &ecart_x, double &ecart_u, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts,int ori);
     private:
         /// Le réseau est constitué d'une collection de sommets
         std::vector<Sommet*> m_sommets;//stockée dans une map (clé=id du sommet, valeur= pointeur sur le sommet)
