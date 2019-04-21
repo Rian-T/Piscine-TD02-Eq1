@@ -4,8 +4,23 @@
 #include<algorithm>
 #include "svgfile.h"
 
-void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest)   /**< Fonction pour l'affichage en 3D de la frontiere de Pareto avec gnuplot*/
+/** \file ploting.cpp
+ *  \brief Affichage des courbes et des nuages de points en 2D et en 3D avec GNUplot, en GIF ou en PNG, à l'aide d'une pipe
+ *
+ *
+ */
+
+
+void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest)
 {
+    /** \brief Fonction pour l'affichage en 3D de la frontiere de Pareto avec gnuplot
+     *
+     * \param frontier      Ensemble des coordonnees de la frontiere de Pareto
+     * \param rest      Ensemble des coordonnees du nuage de points qui ne sont pas dans la frontiere de pareto
+     *
+     *
+     */
+
 #ifdef WIN32
     FILE *pipe = _popen(GNUPLOT_NAME, "w");
 #else
@@ -55,8 +70,17 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
         std::cout << "Could not open pipe" << std::endl;
 }
 
-void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout)   /**<  Fonction pour l'enregistrement en 3D de la frontiere de Pareto en GIF*/
+
+void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout)
 {
+    /** \brief  Fonction pour l'enregistrement en 3D de la frontiere de Pareto en GIF
+     *
+     * \param frontier      Ensemble des coordonnees de la frontiere de Pareto
+     * \param rest      Ensemble des coordonnees du nuage de points qui ne sont pas dans la frontiere de pareto
+     *
+     *
+     */
+
 #ifdef WIN32
     FILE *pipe = _popen(GNUPLOT_NAME, "w");
 #else
@@ -103,14 +127,23 @@ void printPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vec
 #else
         pclose(pipe);
 #endif
-        svgout.addImage("pareto3D.gif",800,800);
+        svgout.addImage("pareto3D.gif",800,800);   //ajoute le gif au SVG
     }
     else
         std::cout << "Could not open pipe" << std::endl;
 }
 
-void printPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout)  /**<  Fonction pour l'enregistrement en 2D de la frontiere de Pareto en PNG*/
+
+
+void printPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest, Svgfile& svgout)
 {
+    /** \brief  Fonction pour l'enregistrement en 2D de la frontiere de Pareto en PNG
+     *
+     * \param frontier      Ensemble des coordonnees de la frontiere de Pareto
+     * \param rest      Ensemble des coordonnees du nuage de points qui ne sont pas dans la frontiere de pareto
+     *
+     *
+     */
 #ifdef WIN32
     FILE *pipe = _popen(GNUPLOT_NAME, "w");
 #else
@@ -150,14 +183,23 @@ void printPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vec
 #else
         pclose(pipe);
 #endif
-        svgout.addImage("pareto2D.png",800,800);
+        svgout.addImage("pareto2D.png",800,800); //ajoute le png au SVG
     }
     else
         std::cout << "Could not open pipe" << std::endl;
 }
 
-void plotPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest)   /**< Fonction pour l'affichage en 2D de la frontiere de Pareto avec GNUplot */
+void plotPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vector<float>> rest)
 {
+
+/** \brief  Fonction pour l'affichage en 2D de la frontiere de Pareto avec GNUplot
+     *
+     * \param frontier      Ensemble des coordonnees de la frontiere de Pareto
+     * \param rest      Ensemble des coordonnees du nuage de points qui ne sont pas dans la frontiere de pareto
+     *
+     *
+     */
+
 #ifdef WIN32
     FILE *pipe = _popen(GNUPLOT_NAME, "w");
 #else

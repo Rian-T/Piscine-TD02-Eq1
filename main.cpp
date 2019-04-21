@@ -7,56 +7,11 @@
 #include <ratio>
 #include <chrono>
 #include "menu/menu.h"
-/*
-int main()
-{
 
-
-    Svgfile svgout;
-    ///Pour affichage Svg : a toujours déclaré
-    double ecart_x;
-    double ecart_y;
-    std::string a = "files/broadway.txt";
-    std::string aa = "files/broadway_weights_0.txt";
-    graphe g(a,aa);
-    ///Pour affichage Svg : a écrire après avoir déclarer le graphe
-    g.InitialisationDonneeAffichageSvg(ecart_x,ecart_y);
-
-    g.search_sol();
-    g.dessinerGrapheOrg(svgout,ecart_x);
-    /// il faut que les conteneurs sois remplie pour le fonctionner ces 2 derniers méthodes :
-    g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,f);
-    g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,t,f);
-    return 0;
-}*/
 
 
 int main()
 {
-//    using namespace std::chrono;
-//    Svgfile svgout;
-//    high_resolution_clock::time_point start_point = high_resolution_clock::now();
-//
-//
-//    graphe g("files/broadway.txt","files/broadway_weights_0.txt");
-//    g.search_sol();
-//    g.test();
-//    std::cout << "Graphe charge !" << std::endl;
-//    high_resolution_clock::time_point end_point = high_resolution_clock::now();
-//    duration<double> time_elpased = duration_cast<duration<double>>(end_point - start_point);
-//    std::cout << std::endl << "Time for generatating all connected subgraph elapsed : " << time_elpased.count() << " s" << std::endl;
-//    std::cout << "Affichage de la frontiere de pareto : " << std::endl;
-//    auto pareto = g.fairePareto({0,1,2});
-//    end_point = high_resolution_clock::now();
-//    time_elpased = duration_cast<duration<double>>(end_point - start_point);
-//    std::cout << std::endl << "Time of computation elapsed : " << time_elpased.count() << " s" << std::endl;
-//    std::cout << std::endl << "NUMBER OF PARETO OPTIMUM : " << pareto.first.size() << std::endl;
-//    plotPareto3D(pareto.first,pareto.second);
-//    printPareto3D(pareto.first,pareto.second,svgout);
-//
-//    return 0;
-//}
-//
     std::string nomFichier,weightFile;
     int orientation;
         double ecart_x=200,ecart_y=300;
@@ -119,15 +74,14 @@ int main()
                 fflush(stdin);
                 if(nbP==2)
                 {
-                    printPareto2D(pareto.first,pareto.second,svgout);
-                    plotPareto2D(pareto.first,pareto.second);
+                    printPareto2D(pareto.first,pareto.second,svgout); //enregistre un png
+                    plotPareto2D(pareto.first,pareto.second);           //affiche une courbe interactive
                 }
                 else
                 {
-                    printPareto3D(pareto.first,pareto.second,svgout);
-                    plotPareto3D(pareto.first,pareto.second);
+                    printPareto3D(pareto.first,pareto.second,svgout);   //enregistre un gif
+                    plotPareto3D(pareto.first,pareto.second);           //affiche un nuage de point interactif
                 }
-                #warning TODO (Anyone#9#): Implementer svg pour prim et pareto
                 g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,pareto.first,orientation);
                 break;
             }
