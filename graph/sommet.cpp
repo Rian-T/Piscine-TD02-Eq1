@@ -16,19 +16,21 @@ void Sommet::ajouterVoisin(const Sommet* a,std::vector<float> w){
     m_voisins.push_back({a,w});
 }
 
-/** \brief Affiche les coordonnees du sommet
- *
- */
+
 void Sommet::afficher() const
 {
+    /** \brief Affiche les coordonnees du sommet
+ *
+ */
     std::cout<<m_id<<"   "<<m_x<<"  "<<m_y<<"  "<<std::endl;
 }
 
-/** \brief Affiche les informations des voisins du sommet
- *
- */
+
 void Sommet::afficherVoisins() const
 {
+    /** \brief Affiche les informations des voisins du sommet
+ *
+ */
     std::cout<<"voisins :"<<std::endl;
     for(auto v:m_voisins)
     {
