@@ -12,6 +12,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Winit-self" />
+					<Add option="-Wall" />
 					<Add option="-g" />
 					<Add directory="graph" />
 				</Compiler>

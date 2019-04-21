@@ -152,7 +152,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
         int sommet_nb = g.m_ordre - 1; /// on part du puit
         while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
         {
-            for (size_t i = 0 ; i < g.m_taille ; i++)
+            for (int i = 0 ; i < g.m_taille ; i++)
             {
                 if ((g.m_edges[i]->getStart() == g.m_sommets[sommet_nb] || g.m_edges[i]->getSecond() == g.m_sommets[sommet_nb]) && (g.m_edges[i]->getStart() == g.m_sommets[chemin[sommet_nb]] || g.m_edges[i]->getSecond() == g.m_sommets[chemin[sommet_nb]]))
                 {
@@ -203,7 +203,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
         sommet_actuelle = file.front();
         file.pop();
         voisins = sommet_actuelle->getVoisins();
-        for (size_t a = 0 ; a < m_taille ; ++a)
+        for (int a = 0 ; a < m_taille ; ++a)
         {
             if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
             {
@@ -281,7 +281,7 @@ void graphe::afficher() const
 {
     std::cout<<"graphe : "<<std::endl;
     std::cout<<"ordre : "<<m_ordre<<std::endl;
-    for(size_t i=0; i<m_ordre; i++)
+    for(int i=0; i<m_ordre; i++)
     {
         std::cout<<"sommet : ";
         m_sommets[i]->afficher();
@@ -289,7 +289,7 @@ void graphe::afficher() const
     }
     std::cout<<std::endl<<std::endl;
     std::cout<<"taille : "<<m_taille<<std::endl;
-    for(size_t i=0; i<m_taille; i++)
+    for(int i=0; i<m_taille; i++)
     {
         std::cout<<"arretes : ";
         m_edges[i]->afficher();
@@ -307,13 +307,12 @@ std::vector<bool> graphe::fairePrim(int poids) const
     std::vector<bool> prim(m_taille,0);
     std::vector<bool> marque(m_ordre,0);
     marque[0]=1;
-    size_t nbAjout=0;
-    const size_t tsommet=m_sommets.size();
+    int nbAjout=0;
     do
     {
         int minPoids=INT_MAX;
         Edge* best = nullptr;
-        for(size_t i=0; i<m_taille; i++)
+        for(int i=0; i<m_taille; i++)
         {
             const Sommet* st=m_edges[i]->getStart();
             const Sommet* se=m_edges[i]->getSecond();
@@ -351,7 +350,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
 float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 {
     float somme=0;
-    for(size_t i=0; i<m_taille; i++)
+    for(int i=0; i<m_taille; i++)
     {
         if(sol_admi[i]==1)
         {
@@ -373,7 +372,7 @@ float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 {
     float tot=0;
-    for(size_t i=0; i<m_ordre; i++)
+    for(int i=0; i<m_ordre; i++)
     {
         float sous_tot=0;
         std::vector<float>dist(m_ordre,INT_MAX);//distance max
@@ -436,7 +435,7 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
         pq.pop();
         for(auto v:m_sommets[temp]->getVoisinsList())
         {
-            for(size_t j=0; j<m_taille; j++)
+            for(int j=0; j<m_taille; j++)
             {
                 if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                 {
@@ -543,7 +542,6 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     std::vector<bool> marque(m_sol_admissible.size(),0);
     const size_t tsoladmi=m_sol_admissible.size();
     const size_t tchoixpond=choix_pond.size();
-    const size_t tsommet=m_sommets.size();
     for(size_t i=0;i<tsoladmi;i++)
     {
         if(marque[i]==0)
@@ -612,7 +610,7 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
     size_t taille = m_taille;
     size_t val_max = std::max(m_ordre,m_taille);
 
-    for (int i = val_max; i!=0; --i)
+    for (size_t i = val_max; i!=0; --i)
     {
         if ( i <= ordre)
             svgout.addImage("images/village.png", image_size,image_size,m_sommets[i-1]->getX()-decaler+origine_x,m_sommets[i-1]->getY()-decaler+origine_y);
@@ -656,7 +654,6 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
  void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
 {
     double ordre = m_ordre;
-    double taille = m_taille;
     double x_min = 100000;
     double x_max = 0;
     double y_min = 100000;
@@ -718,7 +715,7 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
         for (int i = 0 ; i < qte ; ++i)
         {
             std::string msg = "(";
-            for (int j = 0 ; j <  valtot[i].size(); ++j)
+            for (size_t j = 0 ; j <  valtot[i].size(); ++j)
             {
                 std::string tmp = std::to_string(valtot[i][j]);
                 tmp = tmp.substr(0,5);
@@ -745,7 +742,7 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
         if (qte == 1) /// cas il existe qu'un graphe
             qte = 0;
         std::string msg = "(";
-        for (int j = 0 ; j <  valtot[qte].size(); ++j)
+        for (size_t j = 0 ; j <  valtot[qte].size(); ++j)
         {
             std::string tmp = std::to_string(valtot[qte][j]);
 
@@ -769,7 +766,7 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
         for (int i = 0; i < 2; ++i)
         {
             std::string msg = "(";
-            for (int j = 0 ; j <  valtot[i].size(); ++j)
+            for (size_t j = 0 ; j <  valtot[i].size(); ++j)
             {
                 std::string tmp = std::to_string(valtot[i][j]);
                 tmp = tmp.substr(0,5);
@@ -813,7 +810,7 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
         for (int i = 0 ; i < qte ; ++i)
         {
             std::string msg = "(";
-            for (int j = 0 ; j <  couts[i].size(); ++j)
+            for (size_t j = 0 ; j <  couts[i].size(); ++j)
             {
                 std::string tmp = std::to_string(couts[i][j]);
                 tmp = tmp.substr(0,5);
@@ -840,7 +837,7 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
         if (qte == 1) ///dans le cas où il n'existe qu'un graphe
             qte = 0;
         std::string msg = "(";
-        for (int j = 0 ; j <  couts[qte].size(); ++j)
+        for (size_t j = 0 ; j <  couts[qte].size(); ++j)
         {
             std::string tmp = std::to_string(couts[qte][j]);
             tmp = tmp.substr(0,5);
@@ -863,7 +860,7 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
         for (int i = 0; i < 2; ++i)
         {
             std::string msg = "(";
-            for (int j = 0 ; j <  couts[i].size(); ++j)
+            for (size_t j = 0 ; j <  couts[i].size(); ++j)
             {
                 std::string tmp = std::to_string(couts[i][j]);
                 tmp = tmp.substr(0,5);
