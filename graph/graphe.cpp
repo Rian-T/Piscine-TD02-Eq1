@@ -11,7 +11,7 @@
 #include <queue>
 
 
-graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(ori)
+graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(ori), m_nomFichier(nomFichier), m_weightFile(weightFile)
 {
     std::ifstream ifs{nomFichier};
     std::ifstream ifs2(weightFile);
@@ -81,15 +81,15 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
 }
 void graphe::search_sol()
 {
-    std::vector<bool > aretes; ///aretes affichés et non affichés
-    for (size_t i = 0 ; i < m_edges.size() ; i++)
+    const int k = m_edges.size();
+    const int n = m_sommets.size();
+    const int nb_arete = k-(n-1);
+    std::vector<bool > aretes(nb_arete,false); ///aretes affichés et non affichés
+    for (int i = k-(n-1) ; i < k ; ++i)
     {
-        if ( i < (m_edges.size() -(m_sommets.size()-1)) )
-            aretes.push_back(false);
-        else
             aretes.push_back(true);
     }
-    for (size_t i = 0 ; i <= (m_edges.size()-(m_sommets.size()-1)) ; i++ ) /// 0 = edg - som + 1 nombre de 0 ; final = 0 nombre de 0
+    for (int i = 0 ; i <= nb_arete ; ++i ) /// 0 = edg - som + 1 nombre de 0 ; final = 0 nombre de 0
     {
         do
         {
@@ -99,9 +99,11 @@ void graphe::search_sol()
         aretes.erase(aretes.begin() + 0);
         aretes.push_back(true);
     }
-    std::cout << m_sol_admissible.size() << std::endl;
-    m_pareto_frontier = m_sol_admissible;
+    //std::cout << m_sol_admissible.size() << std::endl;
+    //m_pareto_frontier = m_sol_admissible;
 }
+
+
 
 //void graphe::DFS(std::vector<bool> &aretes_local)
 //{
@@ -158,7 +160,7 @@ void graphe::search_sol()
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
     std::vector<int> chemin (m_sommets.size(), 0);
-    graphe g("files/broadway.txt","files/broadway_weights_0.txt",2);
+    graphe g(this->getFile(),this->getWeightFile(),2);
     float flot_max = 0;
 
     while (g.BFS(aretes_local,chemin,posP))
@@ -435,7 +437,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
     return prim;
 }
 
-float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
+float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 {
     float somme=0;
     for(size_t i=0; i<m_edges.size(); i++)
@@ -448,7 +450,7 @@ float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
     return somme;
 }
 
-float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
+float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 {
     float tot=0;
     for(size_t i=0; i<m_sommets.size(); i++)
@@ -491,7 +493,7 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
     return tot;
 }
 
-float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv)
+float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, Sommet* arriv)
 {
     float tot=0;
     std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
@@ -527,7 +529,7 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, So
 }
 
 #warning TODO (Romain#9#): Verifier stabilité (meme input, meme output) de la frtoniere de pareto en 3D, notamment sur broadway_4
-std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int> choix_pond,int ori)
+std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int>& choix_pond,int ori)
 {
     std::vector<std::vector<float>> tot_object;
     std::vector<std::vector<float>> tot_object_pareto;

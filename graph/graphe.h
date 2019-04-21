@@ -22,11 +22,13 @@ class graphe
         bool BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP);
         void afficher() const;
         int getNbWeight();
-        float faireDjikstra(std::vector<bool>,int poids);
-        float faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv);
+        std::string getFile()const {return m_nomFichier;}
+        std::string getWeightFile()const {return m_weightFile;}
+        float faireDjikstra(std::vector<bool>&,int poids);
+        float faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, Sommet* arriv);
         std::vector<bool> fairePrim(int) const;
-        float faireSomme(std::vector<bool>,int);
-        std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> fairePareto(std::vector<int> choix_pond, int ori);
+        float faireSomme(std::vector<bool>&,int);
+        std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> fairePareto(std::vector<int>& choix_pond, int ori);
 
         //Svgfile
         void InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y);
@@ -42,6 +44,7 @@ class graphe
         int m_ori;
         std::vector<std::vector<bool>> m_sol_admissible;
         std::vector<std::vector<bool>> m_pareto_frontier;
+        std::string m_nomFichier,m_weightFile;
 };
 
 #endif // GRAPHE_H

@@ -127,7 +127,7 @@ void printPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vec
             fprintf(pipe, "set title \"2D Plot of Pareto frontier\"\n");
             fprintf(pipe, "set xlabel \"Economic cost\"\n");
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
-            fprintf(pipe, "plot \"frt.txt\" using 1:2: (sprintf(\"(%%d, %%d)\", $1, $2)) with labels point  pt 7 ps 2 lc 'green' offset char 1,1 notitle, \"rst.txt\" pt 7 ps 1 lc 'red'\n");
+            fprintf(pipe, "plot \"frt.txt\" using 1:2: (sprintf(\"(%%d, %%d)\", $1, $2)) every 2::0 with labels font \",9\" point  pt 7 ps 2 lc 'green' offset char 1,1 notitle ,    \"frt.txt\" using 1:2: (sprintf(\"(%%d, %%d)\", $1, $2)) every 2::1 with labels font \",9\" point  pt 7 ps 2 lc 'green' offset char 1,-1 notitle, \"rst.txt\" pt 7 ps 0.3 lc 'red'\n");
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
             // wait for key press
@@ -165,7 +165,7 @@ void plotPareto2D(std::vector<std::vector<float>> frontier,std::vector<std::vect
         {
             fprintf(pipe, "set term wx\n");         // set the terminal
             fprintf(pipe, "unset key\n");         // set the terminal
-            fprintf(pipe, "plot \"frt.txt\" with lp  pt 7 ps 2 lc 'green', \"rst.txt\" pt 7 ps 1 lc 'red'\n");
+            fprintf(pipe, "plot \"frt.txt\" with lp  pt 7 ps 2 lc 'green', \"rst.txt\" pt 7 ps 0.3 lc 'red'\n");
             fflush(pipe);                           // flush the pipe
 
             // wait for key press
