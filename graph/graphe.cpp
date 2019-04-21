@@ -89,10 +89,11 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
     this->setTaille(taille);
 }
 
-/** \brief Recherche toute les solutions admissibles: les graphes partiels couvrants connexes
- */
+
 void graphe::search_sol()
 {
+    /** \brief Recherche toute les solutions admissibles: les graphes partiels couvrants connexes
+ */
     const int k = m_taille;
     const int n = m_ordre;
     const int nb_arete = k-(n-1);
@@ -113,10 +114,11 @@ void graphe::search_sol()
     }
 }
 
-/** \brief Recherche toutes les solutions admissibles: Les arbres couvrants
- */
+
 void graphe::search_sol2()
 {
+    /** \brief Recherche toutes les solutions admissibles: Les arbres couvrants
+ */
     std::vector<bool > aretes; ///aretes affichés et non affichés
     const size_t tarete= m_edges.size();
     const size_t tsommet= m_sommets.size();
@@ -134,13 +136,14 @@ void graphe::search_sol2()
     while(std::next_permutation(aretes.begin(), aretes.end()));
 }
 
-/** \brief  Calcul le flot maximal du graphe pondéré, connexe et orienté
+
+float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
+{
+    /** \brief  Calcul le flot maximal du graphe pondéré, connexe et orienté
  * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
  * \param   int posP    Indique quel pondération a utilisé
  * \return un float qui représente le flot maximal
  */
-float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
-{
     std::vector<int> chemin (m_ordre, 0);
     graphe g(this->getFile(),this->getWeightFile(),2);
     float flot_max = 0;
@@ -184,14 +187,15 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
     return flot_max;
 }
 
-/** \brief Parcours en largeur du graphe : permet de savoir s'il existe un chemin vers la destination fixée
+
+bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP)
+{
+    /** \brief Parcours en largeur du graphe : permet de savoir s'il existe un chemin vers la destination fixée
  * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
  * \param   std::vector<int> &chemin            Conteneur contenant les indices des sommets précesseurs des sommets dont leurs indices sont les positions dans le conteneur
  * \param   int &posP       Indique quel pondération a utilisé
  * \return un bool qui indique si il existe un chemin permettant d'arriver à la destination fixée
  */
-bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP)
-{
     std::vector<const Sommet *> marked;
     std::queue<const Sommet *> file;
     std::vector<const Sommet*> voisins;
@@ -238,11 +242,11 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
         return false;
 }
 
-/** \brief Parcours en profondeur du graphe : Permet de savoir si une solution est connexe
- * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
- */
 void graphe::DFS(std::vector<bool> &aretes_local)
 {
+    /** \brief Parcours en profondeur du graphe : Permet de savoir si une solution est connexe
+    * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
+    */
     std::vector<bool> marked(m_ordre,false);
     std::stack<int> pile;
     std::vector<const Sommet*> voisins;
@@ -273,12 +277,13 @@ void graphe::DFS(std::vector<bool> &aretes_local)
         m_sol_admissible.push_back(aretes_local);
 }
 
- /** \brief Affiche les informations du graphe
- *   \details On parcourt tous les sommets et toutes les aretes du graphe et on demande d'afficher leurs informations correspondantes
- *
- */
+
 void graphe::afficher() const
 {
+    /** \brief Affiche les informations du graphe
+    *   \details On parcourt tous les sommets et toutes les aretes du graphe et on demande d'afficher leurs informations correspondantes
+    *
+    */
     std::cout<<"graphe : "<<std::endl;
     std::cout<<"ordre : "<<m_ordre<<std::endl;
     for(int i=0; i<m_ordre; i++)
@@ -296,14 +301,15 @@ void graphe::afficher() const
     }
 }
 
-/** \brief Trouve l'arbre couvrant de poids minimum
- * \details On determine l'arbre couvrant de poids minimum selon une ponderation grace à l'algorithme de Prim
- * \param  poids    Numero de la ponderation sur laquelle appliquer l'algorithme
- * \return Un vecteur de booléen représente l'arbre couvrant de poids minimum. Chaque case correspond a une arete
- *
- */
+
 std::vector<bool> graphe::fairePrim(int poids) const
 {
+    /** \brief Trouve l'arbre couvrant de poids minimum
+    * \details On determine l'arbre couvrant de poids minimum selon une ponderation grace à l'algorithme de Prim
+    * \param  poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+    * \return Un vecteur de booléen représente l'arbre couvrant de poids minimum. Chaque case correspond a une arete
+    *
+    */
     std::vector<bool> prim(m_taille,0);
     std::vector<bool> marque(m_ordre,0);
     marque[0]=1;
@@ -340,15 +346,16 @@ std::vector<bool> graphe::fairePrim(int poids) const
     return prim;
 }
 
-/** \brief Calcule la somme des poids des aretes d'un graphe
- * \details On somme tous les poids de meme type
- * \param sol_admi  Vecteur de booléen représentant un graphe
- * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
- * \return Un float représentant la somme des aretes selon une pondération
- *
- */
+
 float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 {
+    /** \brief Calcule la somme des poids des aretes d'un graphe
+    * \details On somme tous les poids de meme type
+    * \param sol_admi  Vecteur de booléen représentant un graphe
+    * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+    * \return Un float représentant la somme des aretes selon une pondération
+    *
+    */
     float somme=0;
     for(int i=0; i<m_taille; i++)
     {
@@ -360,17 +367,18 @@ float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
     return somme;
 }
 
-/** \brief Calcul la somme des plus courts chemins entre tous les points
- * \details On applique sur chaque sommet l'algorithme de Djikstra et
- *          on somme les plus courts chemins entre ce sommet et tous les autres
- *          Pour appliquer l'algorithme de Djikstra on utilise une priority queue
- * \param sol_admi  Vecteur de booléen représentant un graphe
- * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
- * \return Un float représentant la somme des plus courts chemins entre tous les points
- *
- */
+
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 {
+    /** \brief Calcul la somme des plus courts chemins entre tous les points
+    * \details On applique sur chaque sommet l'algorithme de Djikstra et
+    *          on somme les plus courts chemins entre ce sommet et tous les autres
+    *          Pour appliquer l'algorithme de Djikstra on utilise une priority queue
+    * \param sol_admi  Vecteur de booléen représentant un graphe
+    * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+    * \return Un float représentant la somme des plus courts chemins entre tous les points
+    *
+    */
     float tot=0;
     for(int i=0; i<m_ordre; i++)
     {
@@ -411,18 +419,19 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
     return tot;
 }
 
-/** \brief Calcul le plus court chemin entre 2 points
- * \details On applique l'algorithme de Djikstra pour obtenir le plus court chemin
- *          entre un point de depart et un point d'arrivee. On utilise une priority queue pour appliquer Djikstra
- * \param sol_admi  Vecteur de booléen représentant un graphe
- * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
- * \param dep   Sommet de depart
- * \param arriv     Sommet d'arrivée
- * \return Un float représentant la somme du plus court chemin
- *
- */
+
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, Sommet* arriv)
 {
+    /** \brief Calcul le plus court chemin entre 2 points
+    * \details On applique l'algorithme de Djikstra pour obtenir le plus court chemin
+    *          entre un point de depart et un point d'arrivee. On utilise une priority queue pour appliquer Djikstra
+    * \param sol_admi  Vecteur de booléen représentant un graphe
+    * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+    * \param dep   Sommet de depart
+    * \param arriv     Sommet d'arrivée
+    * \return Un float représentant la somme du plus court chemin
+    *
+    */
     float tot=0;
     std::vector<float>dist(m_ordre,INT_MAX);//distance max
     int temp;
@@ -455,7 +464,9 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
     return tot;
 }
 
-/** \brief Calcule pour chaque graphe partiel admissible ses differentes composantes
+
+void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<std::vector<bool>> m_sol_admissible,std::vector<int>& choix_pond,int ori,int debut, int fin){
+    /** \brief Calcule pour chaque graphe partiel admissible ses differentes composantes
  *  \details Pour chaque graphe partiel admissible, on applique selon le type de ponderation un calcul specifique.
  *           On obtient 2 ou 3 donnees pour chaque solution, que l'on va pouvoir comparé
  *           avec les autres pour trouver la frontiere de Pareto.
@@ -468,7 +479,6 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
  * \param fin   Numero de test
  *
  */
-void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<std::vector<bool>> m_sol_admissible,std::vector<int>& choix_pond,int ori,int debut, int fin){
     std::cout << "DEBUT : " << debut << " FIN : " << fin << std::endl;
     for(int i=debut; i<fin; i++){
         std::vector<float> objectif;
@@ -593,15 +603,16 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     return std::make_pair(tot_object_pareto,tot_object_rest);
 }
 
-/** \brief Dessine un graphe/arbre sur le document .svg
+
+void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y, int ori)
+{
+    /** \brief Dessine un graphe/arbre sur le document .svg
  * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
  * \param   std::vector<bool> &arete        Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
  * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
  * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
  * \param   int ori             Indique si le graphe est orienté ou non
  */
-void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y, int ori)
-{
     double origine_x = ecart_x;
     double origine_y = ecart_y;
     double image_size= 50;
@@ -647,12 +658,13 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
     }
 }
 
-/** \brief Calcul la distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x et également pour y
+
+ void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
+{
+    /** \brief Calcul la distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x et également pour y
  * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
  * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
  */
- void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
-{
     double ordre = m_ordre;
     double x_min = 100000;
     double x_max = 0;
@@ -670,13 +682,14 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
     ecart_y = (y_max - y_min); ///distance du graphe complet en y
 }
 
-/** \brief  Affiche le graphe du fichier sur le document .svg
+
+void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x,int ori)
+{
+    /** \brief  Affiche le graphe du fichier sur le document .svg
  * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
  * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
  * \param   int ori             Indique si le graphe est orienté ou non
  */
-void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x,int ori)
-{
     std::vector<bool> org(m_taille, 1);
     ///graphe d'origine
     svgout.addText(890,800+50, "Graphe initial :");
@@ -688,15 +701,16 @@ int graphe::getNbWeight()
     return m_edges[0]->getWeight().size();
 }
 
-/** \brief  Affiche chaque solution de la frontière pareto sur le document .svg
+
+void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot,int ori)
+{
+    /** \brief  Affiche chaque solution de la frontière pareto sur le document .svg
  * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
  * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
  * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
  * \param   std::vector<std::vector<float>> &valtot     Conteneur qui contient pour chaque solution de la frontière pareto : les valeurs des objectifs
  * \param   int ori             Indique si le graphe est orienté ou non
  */
-void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot,int ori)
-{
     int qte = m_pareto_frontier.size();
     int diviseur = 3;
     int qte_rst = 0;
@@ -784,7 +798,10 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
 
 }
 
-/** \brief  Affiche chaque arbre couvrant de poids minimal de chaque pondération du fichier et du graphe choisi sur le document .svg
+
+void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart_y, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts, int ori)
+{
+    /** \brief  Affiche chaque arbre couvrant de poids minimal de chaque pondération du fichier et du graphe choisi sur le document .svg
  * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
  * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
  * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
@@ -792,8 +809,6 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
  * \param   std::vector<std::vector<float>> &couts     Conteneur qui contient pour chaque arbre : la somme des couts pour chaque pondération du fichier de poids
  * \param   int ori             Indique si le graphe est orienté ou non
  */
-void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart_y, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts, int ori)
-{
     int qte = arbres.size(); ///nombre d'arbres à afficher
     int diviseur = 3;
     int qte_rst = 0;
