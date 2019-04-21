@@ -71,7 +71,7 @@ int main()
     {
         choix=choixAction();
         Svgfile svgout;
-        g.dessinerGrapheOrg(svgout,ecart_x);
+        g.dessinerGrapheOrg(svgout,ecart_x,orientation);
         switch(choix)
         {
         case 1:
@@ -88,7 +88,7 @@ int main()
                     }
                     primPoidsTot.push_back(primPoids);
                 }
-                g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,prim,primPoidsTot);
+                g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,prim,primPoidsTot,orientation);
                 break;
             }
         case 2:
@@ -128,7 +128,7 @@ int main()
                     plotPareto3D(pareto.first,pareto.second);
                 }
                 #warning TODO (Anyone#9#): Implementer svg pour prim et pareto
-                g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,pareto.first);
+                g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,pareto.first,orientation);
                 break;
             }
         }
