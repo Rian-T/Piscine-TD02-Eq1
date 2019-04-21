@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stack>
 #include <vector>
+#include <thread>
 #include <queue>
 #include "graphe.h"
 #include "sommet.h"
@@ -10,6 +11,8 @@
 #include <functional>
 #include <queue>
 
+
+void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<std::vector<bool>> m_sol_admissible,std::vector<int>& choix_pond,int ori,int debut, int fin);
 
 graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(ori), m_nomFichier(nomFichier), m_weightFile(weightFile)
 {
@@ -45,6 +48,9 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
     m_edge_matrix = (int**) malloc(sizeof(int**)*ordre);
     for(int i=0; i<ordre; i++)
         m_edge_matrix[i] = (int*) malloc(sizeof(int*)*ordre);
+    for(int i=0; i<ordre; i++)
+        for(int j=0; j<ordre; j++)
+            m_edge_matrix[i][j] =-1;
     if ( ifs.fail() )
         throw std::runtime_error("Probleme lecture taille du graphe");
     int id_voisin;
@@ -72,17 +78,20 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
         }
         m_edges.push_back(new Edge(id_edge,m_sommets[id],m_sommets[id_voisin],tmp_weight));
         m_edge_matrix[id][id_voisin] = id_edge;
-        m_edge_matrix[id_voisin][id] = id_edge;
         //ajouter chaque extrémité à la liste des voisins de l'autre (graphe non orienté)
         m_sommets[id]->ajouterVoisin(m_sommets[id_voisin],tmp_weight);
-        if(ori==1)
+        if(ori==1){
             (m_sommets[id_voisin])->ajouterVoisin(m_sommets[id],tmp_weight);//remove si graphe orienté
+             m_edge_matrix[id_voisin][id] = id_edge;
+        }
     }
+    this->setOrdre(ordre);
+    this->setTaille(taille);
 }
 void graphe::search_sol()
 {
-    const int k = m_edges.size();
-    const int n = m_sommets.size();
+    const int k = m_taille;
+    const int n = m_ordre;
     const int nb_arete = k-(n-1);
     std::vector<bool > aretes(nb_arete,false); ///aretes affichés et non affichés
     for (int i = k-(n-1) ; i < k ; ++i)
@@ -153,13 +162,13 @@ void graphe::search_sol()
 //    }
 //    while (!pile.empty());
 //
-//    if (marked.size() == m_sommets.size())
+//    if (marked.size() == m_ordre)
 //            m_sol_admissible.push_back(aretes_local);
 //}
 
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
-    std::vector<int> chemin (m_sommets.size(), 0);
+    std::vector<int> chemin (m_ordre, 0);
     graphe g(this->getFile(),this->getWeightFile(),2);
     float flot_max = 0;
 
@@ -167,10 +176,10 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
     {
         float flot_min = INT_MAX;
         std::vector<int> arete_nb;
-        int sommet_nb = g.m_sommets.size() - 1; /// on part du puit
+        int sommet_nb = g.m_ordre - 1; /// on part du puit
         while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
         {
-            for (size_t i = 0 ; i < g.m_edges.size() ; i++)
+            for (size_t i = 0 ; i < g.m_taille ; i++)
             {
                 if ((g.m_edges[i]->getStart() == g.m_sommets[sommet_nb] || g.m_edges[i]->getSecond() == g.m_sommets[sommet_nb]) && (g.m_edges[i]->getStart() == g.m_sommets[chemin[sommet_nb]] || g.m_edges[i]->getSecond() == g.m_sommets[chemin[sommet_nb]]))
                 {
@@ -180,7 +189,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
             }
             sommet_nb = chemin[sommet_nb];
         }
-        sommet_nb = g.m_sommets.size() - 1; /// on part du puit
+        sommet_nb = g.m_ordre - 1; /// on part du puit
         if(flot_min<INT_MAX)
         {
             while (sommet_nb != 0) /// fin quand le chemin inverse arrive à la source
@@ -216,7 +225,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
         sommet_actuelle = file.front();
         file.pop();
         voisins = sommet_actuelle->getVoisins();
-        for (size_t a = 0 ; a < m_edges.size() ; ++a)
+        for (size_t a = 0 ; a < m_taille ; ++a)
         {
             if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
             {
@@ -245,7 +254,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
     }
     while (!file.empty());
 
-    if (marked[marked.size()-1]->getId() == m_sommets[m_sommets.size() - 1]->getId())
+    if (marked[marked.size()-1]->getId() == m_sommets[m_ordre - 1]->getId())
         return true;
     else
         return false;
@@ -254,7 +263,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
 
 void graphe::DFS(std::vector<bool> &aretes_local)
 {
-    std::vector<bool> marked(m_sommets.size(),false);
+    std::vector<bool> marked(m_ordre,false);
     std::stack<int> pile;
     std::vector<const Sommet*> voisins;
     Sommet* sommet_actuelle = m_sommets[0];
@@ -280,7 +289,7 @@ void graphe::DFS(std::vector<bool> &aretes_local)
         }
     }
     while (!pile.empty());
-    if (  std::count(marked.begin(),marked.end(),true) == (int)m_sommets.size())
+    if (  std::count(marked.begin(),marked.end(),true) == (int)m_ordre)
         m_sol_admissible.push_back(aretes_local);
 }
 
@@ -294,7 +303,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
     {
         float flot_min = INT_MAX;
         const Sommet * sommet_actuelle;
-        sommet_actuelle = m_sommets.find(std::to_string(m_sommets.size()-1))->second; /// on part du puit
+        sommet_actuelle = m_sommets.find(std::to_string(m_ordre-1))->second; /// on part du puit
 
         while (sommet_actuelle != m_sommets.find("0")->second) /// fin quand le chemin inverse arrive à la source
         {
@@ -305,7 +314,7 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
             }
             sommet_actuelle = chemin.find(sommet_actuelle)->second;
         }
-        sommet_actuelle = m_sommets.find(std::to_string(m_sommets.size()-1))->second; /// on part du puit
+        sommet_actuelle = m_sommets.find(std::to_string(m_ordre-1))->second; /// on part du puit
         if(flot_min<INT_MAX){
             while (sommet_actuelle != m_sommets.find("0")->second) /// fin quand le chemin inverse arrive à la source
             {
@@ -342,7 +351,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
         voisins = sommet_actuelle->getVoisins();
         for (auto &elem : m_edges)
         {
-            if ((aretes_local[(m_edges.size()-1) - std::stoi (elem.first)] == 1)) ///si arête utilisé dans le graphe
+            if ((aretes_local[(m_taille-1) - std::stoi (elem.first)] == 1)) ///si arête utilisé dans le graphe
             {
                 for (size_t i = 0 ; i < voisins.size() ; i ++)
                 {
@@ -374,7 +383,7 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
         std::cout << elem.first->getId() << " " << elem.second->getId() << std::endl;
     }
 
-    if (marked[marked.size()-1]->getId() == m_sommets.find(std::to_string(m_sommets.size()-1))->second->getId())
+    if (marked[marked.size()-1]->getId() == m_sommets.find(std::to_string(m_ordre-1))->second->getId())
         return true;
     else
         return false;
@@ -383,16 +392,16 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
 void graphe::afficher() const
 {
     std::cout<<"graphe : "<<std::endl;
-    std::cout<<"ordre : "<<m_sommets.size()<<std::endl;
-    for(size_t i=0; i<m_sommets.size(); i++)
+    std::cout<<"ordre : "<<m_ordre<<std::endl;
+    for(size_t i=0; i<m_ordre; i++)
     {
         std::cout<<"sommet : ";
         m_sommets[i]->afficher();
         m_sommets[i]->afficherVoisins();
     }
     std::cout<<std::endl<<std::endl;
-    std::cout<<"taille : "<<m_edges.size()<<std::endl;
-    for(size_t i=0; i<m_edges.size(); i++)
+    std::cout<<"taille : "<<m_taille<<std::endl;
+    for(size_t i=0; i<m_taille; i++)
     {
         std::cout<<"arretes : ";
         m_edges[i]->afficher();
@@ -401,15 +410,15 @@ void graphe::afficher() const
 
 std::vector<bool> graphe::fairePrim(int poids) const
 {
-    std::vector<bool> prim(m_edges.size(),0);
-    std::vector<bool> marque(m_sommets.size(),0);
+    std::vector<bool> prim(m_taille,0);
+    std::vector<bool> marque(m_ordre,0);
     marque[0]=1;
     size_t nbAjout=0;
     do
     {
         int minPoids=INT_MAX;
         Edge* best = nullptr;
-        for(size_t i=0; i<m_edges.size(); i++)
+        for(size_t i=0; i<m_taille; i++)
         {
             const Sommet* st=m_edges[i]->getStart();
             const Sommet* se=m_edges[i]->getSecond();
@@ -433,14 +442,14 @@ std::vector<bool> graphe::fairePrim(int poids) const
         nbAjout++;
         prim[best->getId()]=1;
     }
-    while (nbAjout<m_sommets.size()-1);
+    while (nbAjout<m_ordre-1);
     return prim;
 }
 
 float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 {
     float somme=0;
-    for(size_t i=0; i<m_edges.size(); i++)
+    for(size_t i=0; i<m_taille; i++)
     {
         if(sol_admi[i]==1)
         {
@@ -453,40 +462,37 @@ float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 {
     float tot=0;
-    for(size_t i=0; i<m_sommets.size(); i++)
+    for(size_t i=0; i<m_ordre; i++)
     {
         float sous_tot=0;
-        std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
+        std::vector<float>dist(m_ordre,INT_MAX);//distance max
         int temp;
         std::priority_queue<std::pair<float,int>,std::vector<std::pair<float,int>>> pq;//poids et sommet
         pq.push(std::make_pair(0,i));
         dist[i]=0;
-        while(pq.size())
+        while(!pq.empty())
         {
             temp=pq.top().second;
             pq.pop();
-            for(auto v:m_sommets[temp]->getVoisinsList())
+            auto voisins = m_sommets[temp]->getVoisinsList();
+            for(auto v : voisins)
             {
-                for(size_t j=0; j<m_edges.size(); j++)
+                const int v_id = v.first->getId();
+                if(m_edge_matrix[temp][v_id]!=-1 && sol_admi[m_edge_matrix[temp][v_id]])
                 {
-                    if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
-                    {
-                        if(sol_admi[j]==1)
+                        if(dist[v_id]>dist[temp]+v.second[poids])
                         {
-                            if(dist[v.first->getId()]>dist[temp]+v.second[poids])
-                            {
-                                dist[v.first->getId()]=dist[temp]+v.second[poids];
-                                pq.push(std::make_pair(dist[v.first->getId()],v.first->getId()));
-                            }
+                            dist[v_id]=dist[temp]+v.second[poids];
+                            pq.push(std::make_pair(dist[v_id],v_id));
                         }
-                    }
                 }
             }
         }
         for(size_t j=0; j<dist.size(); j++)
         {
-            if(dist[j]<INT_MAX)
+            if(dist[j]<INT_MAX){
                 sous_tot=sous_tot+dist[j];
+            }
         }
         tot=tot+sous_tot;
     }
@@ -496,18 +502,18 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, Sommet* arriv)
 {
     float tot=0;
-    std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
+    std::vector<float>dist(m_ordre,INT_MAX);//distance max
     int temp;
     std::priority_queue<std::pair<float,int>,std::vector<std::pair<float,int>>> pq;//poids et sommet
     pq.push(std::make_pair(0,dep->getId()));
     dist[dep->getId()]=0;
-    while(pq.size())
+    while(!pq.empty())
     {
         temp=pq.top().second;
         pq.pop();
         for(auto v:m_sommets[temp]->getVoisinsList())
         {
-            for(size_t j=0; j<m_edges.size(); j++)
+            for(size_t j=0; j<m_taille; j++)
             {
                 if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                 {
@@ -528,35 +534,94 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
     return tot;
 }
 
+void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<std::vector<bool>> m_sol_admissible,std::vector<int>& choix_pond,int ori,int debut, int fin){
+    std::cout << "DEBUT : " << debut << "FIN : " << fin << std::endl;
+    for(int i=debut; i<fin; i++){
+        std::vector<float> objectif;
+        for(size_t j=0; j<choix_pond.size(); j++)
+            {
+                switch(choix_pond[j])
+                {
+                case 0:
+                    objectif.push_back(g.faireSomme(m_sol_admissible[i],j));
+                    break;
+                case 1:
+                    if(ori==1)
+                        objectif.push_back(g.faireDjikstra(m_sol_admissible[i],j/*,m_sommets[0],m_sommets[m_ordre-1]*/));
+                        else
+                            objectif.push_back(g.faireDjikstra(m_sol_admissible[i],j,g.getSommet()[0],g.getSommet()[g.getSommet().size()-1]));
+                    break;
+                case 2:
+                    objectif.push_back(g.max_flot(m_sol_admissible[i],j));
+                    break;
+                }
+            }
+            tot_object.push_back(objectif);
+    }
+}
+
 #warning TODO (Romain#9#): Verifier stabilité (meme input, meme output) de la frtoniere de pareto en 3D, notamment sur broadway_4
 std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int>& choix_pond,int ori)
 {
     std::vector<std::vector<float>> tot_object;
+    std::vector<std::vector<float>> tot_object2;
+    std::vector<std::vector<float>> tot_object3;
+    std::vector<std::vector<float>> tot_object4;
+    std::vector<std::vector<float>> tot_object5;
+    std::vector<std::vector<float>> tot_object6;
+    std::vector<std::vector<float>> tot_object7;
+    std::vector<std::vector<float>> tot_object8;
     std::vector<std::vector<float>> tot_object_pareto;
     std::vector<std::vector<float>> tot_object_rest;
-    for(size_t i=0; i<m_sol_admissible.size(); i++)
-    {
-        std::vector<float> objectif;
-        for(size_t j=0; j<choix_pond.size(); j++)
-        {
-            switch(choix_pond[j])
-            {
-            case 0:
-                objectif.push_back(faireSomme(m_sol_admissible[i],j));
-                break;
-            case 1:
-                if(ori==1)
-                    objectif.push_back(faireDjikstra(m_sol_admissible[i],j/*,m_sommets[0],m_sommets[m_sommets.size()-1]*/));
-                    else
-                        objectif.push_back(faireDjikstra(m_sol_admissible[i],j,m_sommets[0],m_sommets[m_sommets.size()-1]));
-                break;
-            case 2:
-                objectif.push_back(max_flot(m_sol_admissible[i],j));
-                break;
-            }
-        }
-        tot_object.push_back(objectif);
+    std::cout << "NUMBER OF THREAD : " << std::thread::hardware_concurrency() << std::endl;
+    if(std::thread::hardware_concurrency() <= 2){
+        std::thread t1(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,0,m_sol_admissible.size()/2);
+        std::thread t2(scoring,std::ref(*this),std::ref(tot_object2),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/2,m_sol_admissible.size());
+        t1.join();
+        t2.join();
     }
+    else if(std::thread::hardware_concurrency() <= 4){
+        std::thread t1(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,0,m_sol_admissible.size()/4);
+        std::thread t2(scoring,std::ref(*this),std::ref(tot_object2),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/4,m_sol_admissible.size()/2);
+        std::thread t3(scoring,std::ref(*this),std::ref(tot_object3),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/2,(m_sol_admissible.size()*3)/4);
+        std::thread t4(scoring,std::ref(*this),std::ref(tot_object4),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*3)/4,m_sol_admissible.size());
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+    }
+    else if(std::thread::hardware_concurrency() <= 8){
+        std::thread t1(scoring,std::ref(*this),std::ref(tot_object),m_sol_admissible,std::ref(choix_pond),ori,0,m_sol_admissible.size()/8);
+        std::thread t2(scoring,std::ref(*this),std::ref(tot_object2),m_sol_admissible,std::ref(choix_pond),ori,m_sol_admissible.size()/8,(m_sol_admissible.size()*2)/8);
+        std::thread t3(scoring,std::ref(*this),std::ref(tot_object3),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*2)/8,(m_sol_admissible.size()*3)/8);
+        std::thread t4(scoring,std::ref(*this),std::ref(tot_object4),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*3)/8,(m_sol_admissible.size()*4)/8);
+        std::thread t5(scoring,std::ref(*this),std::ref(tot_object5),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*4)/8,(m_sol_admissible.size()*5)/8);
+        std::thread t6(scoring,std::ref(*this),std::ref(tot_object6),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*5)/8,(m_sol_admissible.size()*6)/8);
+        std::thread t7(scoring,std::ref(*this),std::ref(tot_object7),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*6)/8,(m_sol_admissible.size()*7)/8);
+        std::thread t8(scoring,std::ref(*this),std::ref(tot_object8),m_sol_admissible,std::ref(choix_pond),ori,(m_sol_admissible.size()*7)/8,m_sol_admissible.size());
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+        t5.join();
+        t6.join();
+        t7.join();
+        t8.join();
+    }
+    for(auto tot : tot_object2)
+        tot_object.push_back(tot);
+    for(auto tot : tot_object3)
+        tot_object.push_back(tot);
+    for(auto tot : tot_object4)
+        tot_object.push_back(tot);
+    for(auto tot : tot_object5)
+        tot_object.push_back(tot);
+    for(auto tot : tot_object6)
+        tot_object.push_back(tot);
+    for(auto tot : tot_object7)
+        tot_object.push_back(tot);
+    for(auto tot : tot_object8)
+        tot_object.push_back(tot);
     std::vector<bool> marque(m_sol_admissible.size(),0);
     for(size_t i=0; i<tot_object.size(); i++)
     {
@@ -616,9 +681,9 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
     double origine_y = ecart_y;
     double image_size= 50;
     double decaler = 25;
-    size_t ordre = m_sommets.size();
-    size_t taille = m_edges.size();
-    size_t val_max = std::max(m_sommets.size(),m_edges.size());
+    size_t ordre = m_ordre;
+    size_t taille = m_taille;
+    size_t val_max = std::max(m_ordre,m_taille);
 
     for (int i = val_max; i!=0; --i)
     {
@@ -655,8 +720,8 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
 ///Initialise des valeurs necessaire pour les affichages, les valeurs sont en fonction des données du graphe complets
 void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
 {
-    double ordre = m_sommets.size();
-    double taille = m_edges.size();
+    double ordre = m_ordre;
+    double taille = m_taille;
     double x_min = 100000;
     double x_max = 0;
     double y_min = 100000;
@@ -675,7 +740,7 @@ void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
 ///dessine le graphe complet
 void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x)
 {
-    std::vector<bool> org(m_edges.size(), 1);
+    std::vector<bool> org(m_taille, 1);
     ///graphe d'origine
     svgout.addText(890,800+50, "Graphe initial :");
     dessinerGraphe(svgout,org,((svgout.getWidth()/3)*2)-300 - ecart_x/2 - m_sommets[0]->getX(),800);

@@ -21,9 +21,12 @@ class graphe
         ~graphe();
         bool BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP);
         void afficher() const;
+        void setOrdre(int o){m_ordre = o;}
+        void setTaille(int t){m_taille = t;}
         int getNbWeight();
         std::string getFile()const {return m_nomFichier;}
         std::string getWeightFile()const {return m_weightFile;}
+        std::vector<Sommet*> getSommet()const {return m_sommets;}
         float faireDjikstra(std::vector<bool>&,int poids);
         float faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, Sommet* arriv);
         std::vector<bool> fairePrim(int) const;
@@ -41,7 +44,9 @@ class graphe
         std::vector<Sommet*> m_sommets;//stockée dans une map (clé=id du sommet, valeur= pointeur sur le sommet)
         std::vector<Edge* > m_edges;
         int** m_edge_matrix;
-        int m_ori;
+        const int m_ori;
+        int m_ordre;
+        int m_taille;
         std::vector<std::vector<bool>> m_sol_admissible;
         std::vector<std::vector<bool>> m_pareto_frontier;
         std::string m_nomFichier,m_weightFile;

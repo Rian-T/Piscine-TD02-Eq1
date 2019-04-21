@@ -32,7 +32,7 @@ void plotPareto3D(std::vector<std::vector<float>> frontier,std::vector<std::vect
             fprintf(pipe, "set ylabel \"Shortest Path\"\n");
             fprintf(pipe, "set zlabel \"Max Flow\" offset 0,5\n");
             fprintf(pipe, "set palette defined ( 0 \"green\" ,1 \"red\" )\n");
-            fprintf(pipe, "splot \"frt.txt\" with lp pt 7 ps 2 lc 'green' , \"rst.txt\" pt 7 ps 2 lc 'red'\n"); // plot type
+            fprintf(pipe, "splot \"frt.txt\" with lp pt 7 ps 2 lc 'green' , \"rst.txt\" pt 7 ps 0.5 lc 'red'\n"); // plot type
                      // termination character
             //fprintf(pipe, "%s\n", "e");             // termination character
             fflush(pipe);                           // flush the pipe
