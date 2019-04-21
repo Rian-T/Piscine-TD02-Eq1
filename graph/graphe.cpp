@@ -109,7 +109,27 @@ void graphe::search_sol()
         aretes.push_back(true);
     }
     //std::cout << m_sol_admissible.size() << std::endl;
-    //m_pareto_frontier = m_sol_admissible;
+}
+
+
+void graphe::search_sol2()
+{
+    std::vector<bool > aretes; ///aretes affichés et non affichés
+    const size_t tarete= m_edges.size();
+    const size_t tsommet= m_sommets.size();
+    for (size_t i = 0 ; i < tarete; i++)
+    {
+        if ( i < (tarete -(tsommet-1)) )
+            aretes.push_back(false);
+        else
+            aretes.push_back(true);
+    }
+    do
+    {
+        DFS(aretes);
+    }
+    while(std::next_permutation(aretes.begin(), aretes.end()));
+    //std::cout << m_sol_admissible.size() << std::endl;
 }
 
 
@@ -414,6 +434,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
     std::vector<bool> marque(m_ordre,0);
     marque[0]=1;
     size_t nbAjout=0;
+    const size_t tsommet=m_sommets.size();
     do
     {
         int minPoids=INT_MAX;
@@ -446,6 +467,7 @@ std::vector<bool> graphe::fairePrim(int poids) const
     return prim;
 }
 
+
 float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 {
     float somme=0;
@@ -458,6 +480,7 @@ float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
     }
     return somme;
 }
+
 
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 {
@@ -479,6 +502,7 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
             {
                 const int v_id = v.first->getId();
                 if(m_edge_matrix[temp][v_id]!=-1 && sol_admi[m_edge_matrix[temp][v_id]])
+
                 {
                         if(dist[v_id]>dist[temp]+v.second[poids])
                         {
@@ -488,7 +512,8 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
                 }
             }
         }
-        for(size_t j=0; j<dist.size(); j++)
+        const size_t tdist=dist.size();
+        for(size_t j=0;j<tdist;j++)
         {
             if(dist[j]<INT_MAX){
                 sous_tot=sous_tot+dist[j];
@@ -530,7 +555,6 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
         }
     }
     tot=dist[arriv->getId()];
-    std::cout<<tot<<" ";
     return tot;
 }
 
@@ -623,34 +647,37 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     for(auto tot : tot_object8)
         tot_object.push_back(tot);
     std::vector<bool> marque(m_sol_admissible.size(),0);
-    for(size_t i=0; i<tot_object.size(); i++)
+    const size_t tsoladmi=m_sol_admissible.size();
+    const size_t tchoixpond=choix_pond.size();
+    const size_t tsommet=m_sommets.size();
+    for(size_t i=0;i<tsoladmi;i++)
     {
         if(marque[i]==0)
         {
-            for(size_t j=0; j<tot_object.size(); j++)
+            for(size_t j=0;j<tsoladmi;j++)
             {
                 if((marque[j]==0)&&(j!=i))
                 {
                     unsigned int verif=0;
-                    for(size_t k=0; k<choix_pond.size(); k++)
+                    for(size_t k=0;k<tchoixpond;k++)
                     {
                         switch(choix_pond[k])
                         {
-                        case 2:
-                            if(tot_object[i][k]>=tot_object[j][k])
-                            {
-                                verif=verif+1;
-                            }
-                            break;
-                        default:
-                            if(tot_object[i][k]<=tot_object[j][k])
-                            {
-                                verif=verif+1;
-                            }
-                            break;
+                            case 2:
+                                if(tot_object[i][k]>=tot_object[j][k])
+                                {
+                                    verif=verif+1;
+                                }
+                                break;
+                            default:
+                                if(tot_object[i][k]<=tot_object[j][k])
+                                {
+                                    verif=verif+1;
+                                }
+                                break;
                         }
                     }
-                    if(verif==choix_pond.size())
+                    if(verif==tchoixpond)
                     {
                         marque[j]=1;
                     }
@@ -658,7 +685,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
             }
         }
     }
-    for(size_t i=0; i<tot_object.size(); i++)
+    for(size_t i=0;i<tsoladmi;i++)
     {
         if(marque[i]==0)
         {

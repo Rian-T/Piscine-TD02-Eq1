@@ -14,6 +14,7 @@ class graphe
         graphe(std::string, std::string weightFile,int);
 
         void search_sol();
+        void search_sol2();
         void DFS(std::vector<bool> &arete_local);
 
         float max_flot(std::vector<bool> &aretes_local, int posP);
