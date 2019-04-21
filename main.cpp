@@ -7,29 +7,6 @@
 #include <ratio>
 #include <chrono>
 #include "menu/menu.h"
-/*
-int main()
-{
-
-
-    Svgfile svgout;
-    ///Pour affichage Svg : a toujours déclaré
-    double ecart_x;
-    double ecart_y;
-    std::string a = "files/broadway.txt";
-    std::string aa = "files/broadway_weights_0.txt";
-    graphe g(a,aa);
-    ///Pour affichage Svg : a écrire après avoir déclarer le graphe
-    g.InitialisationDonneeAffichageSvg(ecart_x,ecart_y);
-
-    g.search_sol();
-    g.dessinerGrapheOrg(svgout,ecart_x);
-    /// il faut que les conteneurs sois remplie pour le fonctionner ces 2 derniers méthodes :
-    g.dessinerGraphesPareto(svgout,ecart_x,ecart_y,f);
-    g.dessinerGraphesPrim(svgout,ecart_x,ecart_y,t,f);
-    return 0;
-}*/
-
 
 int main()
 {
