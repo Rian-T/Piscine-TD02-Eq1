@@ -410,6 +410,11 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Somme
         return false;
 }
  */
+
+ /** \brief Affiche les informations du graphe
+ *   \details On parcourt tous les sommets et toutes les aretes du graphe et on demande d'afficher leurs informations correspondantes
+ *
+ */
 void graphe::afficher() const
 {
     std::cout<<"graphe : "<<std::endl;
@@ -429,6 +434,12 @@ void graphe::afficher() const
     }
 }
 
+/** \brief Trouve l'arbre couvrant de poids minimum
+ * \details On determine l'arbre couvrant de poids minimum selon une ponderation grace à l'algorithme de Prim
+ * \param  poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+ * \return Un vecteur de booléen représente l'arbre couvrant de poids minimum. Chaque case correspond a une arete
+ *
+ */
 std::vector<bool> graphe::fairePrim(int poids) const
 {
     std::vector<bool> prim(m_taille,0);
@@ -468,7 +479,13 @@ std::vector<bool> graphe::fairePrim(int poids) const
     return prim;
 }
 
-
+/** \brief Calcule la somme des poids des aretes d'un graphe
+ * \details On somme tous les poids de meme type
+ * \param sol_admi  Vecteur de booléen représentant un graphe
+ * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+ * \return Un float représentant la somme des aretes selon une pondération
+ *
+ */
 float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
 {
     float somme=0;
@@ -482,7 +499,15 @@ float graphe::faireSomme(std::vector<bool>& sol_admi,int poids)
     return somme;
 }
 
-
+/** \brief Calcul la somme des plus courts chemins entre tous les points
+ * \details On applique sur chaque sommet l'algorithme de Djikstra et
+ *          on somme les plus courts chemins entre ce sommet et tous les autres
+ *          Pour appliquer l'algorithme de Djikstra on utilise une priority queue
+ * \param sol_admi  Vecteur de booléen représentant un graphe
+ * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+ * \return Un float représentant la somme des plus courts chemins entre tous les points
+ *
+ */
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
 {
     float tot=0;
@@ -525,6 +550,16 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids)
     return tot;
 }
 
+/** \brief Calcul le plus court chemin entre 2 points
+ * \details On applique l'algorithme de Djikstra pour obtenir le plus court chemin
+ *          entre un point de depart et un point d'arrivee. On utilise une priority queue pour appliquer Djikstra
+ * \param sol_admi  Vecteur de booléen représentant un graphe
+ * \param poids    Numero de la ponderation sur laquelle appliquer l'algorithme
+ * \param dep   Sommet de depart
+ * \param arriv     Sommet d'arrivée
+ * \return Un float représentant la somme du plus court chemin
+ *
+ */
 float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, Sommet* arriv)
 {
     float tot=0;
@@ -559,6 +594,19 @@ float graphe::faireDjikstra(std::vector<bool>& sol_admi,int poids,Sommet* dep, S
     return tot;
 }
 
+/** \brief Calcule pour chaque graphe partiel admissible ses differentes composantes
+ *  \details Pour chaque graphe partiel admissible, on applique selon le type de ponderation un calcul specifique.
+ *           On obtient 2 ou 3 donnees pour chaque solution, que l'on va pouvoir comparé
+ *           avec les autres pour trouver la frontiere de Pareto.
+ * \param g     Le graphe initial
+ * \param tot_object    Un vecteur de vecteur de float représentant l'ensemble des groupes de donnees de chaque solution
+ * \param m_sol_admissible      Un vecteur de vecteur de booleen représentant l'ensemble des graphes partiel qui sont des solutions possibles
+ * \param choix_pond    Un vecteur d'entier qui contient l'ensemble des types des ponderations qui peuvent etre, des couts, des distances ou des capacités
+ * \param ori   Entier designant si le graphe est orienté ou non
+ * \param debut Numero de test
+ * \param fin   Numero de test
+ *
+ */
 void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<std::vector<bool>> m_sol_admissible,std::vector<int>& choix_pond,int ori,int debut, int fin){
     std::cout << "DEBUT : " << debut << " FIN : " << fin << std::endl;
     for(int i=debut; i<fin; i++){
@@ -585,7 +633,7 @@ void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<s
     }
 }
 
-#warning TODO (Romain#9#): Verifier stabilité (meme input, meme output) de la frtoniere de pareto en 3D, notamment sur broadway_4
+
 std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int>& choix_pond,int ori)
 {
     std::vector<std::vector<float>> tot_object(m_sol_admissible.size());

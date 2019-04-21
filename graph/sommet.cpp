@@ -16,11 +16,17 @@ void Sommet::ajouterVoisin(const Sommet* a,std::vector<float> w){
     m_voisins.push_back({a,w});
 }
 
+/** \brief Affiche les coordonnees du sommet
+ *
+ */
 void Sommet::afficher() const
 {
     std::cout<<m_id<<"   "<<m_x<<"  "<<m_y<<"  "<<std::endl;
 }
 
+/** \brief Affiche les informations des voisins du sommet
+ *
+ */
 void Sommet::afficherVoisins() const
 {
     std::cout<<"voisins :"<<std::endl;
@@ -45,31 +51,6 @@ std::vector<const Sommet *> Sommet::getVoisins() const
     }
     return voisins;
 }
-/*
-int Sommet::connexe(int nb,)
-{
-    int nb_sommet=1;
-    std::stack<const Sommet*>pile;
-    std::vector<const Sommet*>marque(nb,0);
-    const Sommet* top;
-    pile.emplace(this);
-    marque[m_id]=1;
-    while(pile.size()!=0)
-    {
-        top=pile.top();
-        pile.pop();
-        for(auto v:top->m_voisins)
-        {
-            if(marque[v->first->getId()]==0)
-            {
-                marque[v->first->getId()]==0
-                pile.emplace(v);
-                nb_sommet++;
-            }
-        }
-    }
-    return nb_sommet;
-}*/
 
 Sommet::~Sommet()
 {

@@ -8,6 +8,9 @@ Edge::Edge(int id, Sommet* a, Sommet*b,std::vector<float> weight)
     //ctor
 }
 
+/** \brief Affiche les informations de l'arete
+ *
+ */
 void Edge::afficher() const
 {
     std::cout<<m_id<<std::endl;

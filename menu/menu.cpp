@@ -1,6 +1,11 @@
 #include <iostream>
 #include "menu.h"
 
+/** \brief Permet a l'utilisateur de choisir le fichier qu'il veut ouvrir
+ *
+ * \return Le nom du fichier
+ *
+ */
 std::string choixFichier()
 {
     std::string nomFichier;
@@ -13,6 +18,11 @@ std::string choixFichier()
     return nomFichier;
 }
 
+/** \brief Permet à l'utilisateur de choisir le fichier de poids qu'il veut ouvrir
+ *
+ * \return Le numero du fichier qu'il veut ouvrir
+ *
+ */
 std::string choixWeight()
 {
     std::string weightFile;
@@ -22,6 +32,12 @@ std::string choixWeight()
     std::cout<<std::endl;
     return weightFile;
 }
+
+/** \brief Permet à l'utilisateur de choisir si son graphe est orienté ou non
+ *
+ * \return Le choix d'orientation
+ *
+ */
 int choixOrient()
 {
     int ori;
@@ -36,7 +52,11 @@ int choixOrient()
     return ori;
 }
 
-
+/** \brief Permet a l'utilisateur de choisir l action qu il veut faire sur son graphe
+ *
+ * \return Le choix d'action
+ *
+ */
 int choixAction()
 {
     int choix;
@@ -53,6 +73,12 @@ int choixAction()
     return choix;
 }
 
+/** \brief Permet à l'utilisateur de choisir le type de pondertion qu'il veut pour son graphe
+ * \param tailleP   le nombre de ponderation
+ * \param ori   le choix d'orientation
+ * \return L'ensemble des choix de ponderation
+ *
+ */
 std::vector<int> choixPoids(size_t tailleP,int ori)
 {
     std::vector<int> poids;
