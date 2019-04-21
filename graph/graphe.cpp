@@ -82,14 +82,16 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
 void graphe::search_sol()
 {
     std::vector<bool > aretes; ///aretes affichés et non affichés
-    for (size_t i = 0 ; i < m_edges.size() ; i++)
+    const size_t tarete= m_edges.size();
+    const size_t tsommet= m_sommets.size();
+    for (size_t i = 0 ; i < tarete; i++)
     {
-        if ( i < (m_edges.size() -(m_sommets.size()-1)) )
+        if ( i < (tarete -(tsommet-1)) )
             aretes.push_back(false);
         else
             aretes.push_back(true);
     }
-    for (size_t i = 0 ; i <= (m_edges.size()-(m_sommets.size()-1)) ; i++ ) /// 0 = edg - som + 1 nombre de 0 ; final = 0 nombre de 0
+    for (size_t i = 0 ; i <= (tarete-(tsommet-1)) ; i++ ) /// 0 = edg - som + 1 nombre de 0 ; final = 0 nombre de 0
     {
         do
         {
@@ -100,9 +102,28 @@ void graphe::search_sol()
         aretes.push_back(true);
     }
     std::cout << m_sol_admissible.size() << std::endl;
-    m_pareto_frontier = m_sol_admissible;
 }
 
+
+void graphe::search_sol2()
+{
+    std::vector<bool > aretes; ///aretes affichés et non affichés
+    const size_t tarete= m_edges.size();
+    const size_t tsommet= m_sommets.size();
+    for (size_t i = 0 ; i < tarete; i++)
+    {
+        if ( i < (tarete -(tsommet-1)) )
+            aretes.push_back(false);
+        else
+            aretes.push_back(true);
+    }
+    do
+    {
+        DFS(aretes);
+    }
+    while(std::next_permutation(aretes.begin(), aretes.end()));
+    std::cout << m_sol_admissible.size() << std::endl;
+}
 //void graphe::DFS(std::vector<bool> &aretes_local)
 //{
 //    std::vector<const Sommet *> marked;
@@ -403,11 +424,13 @@ std::vector<bool> graphe::fairePrim(int poids) const
     std::vector<bool> marque(m_sommets.size(),0);
     marque[0]=1;
     size_t nbAjout=0;
+    const size_t tsommet=m_sommets.size();
     do
     {
         int minPoids=INT_MAX;
         Edge* best = nullptr;
-        for(size_t i=0; i<m_edges.size(); i++)
+        const size_t tarete=m_edges.size();
+        for(size_t i=0;i<tarete;i++)
         {
             const Sommet* st=m_edges[i]->getStart();
             const Sommet* se=m_edges[i]->getSecond();
@@ -431,14 +454,15 @@ std::vector<bool> graphe::fairePrim(int poids) const
         nbAjout++;
         prim[best->getId()]=1;
     }
-    while (nbAjout<m_sommets.size()-1);
+    while (nbAjout<tsommet-1);
     return prim;
 }
 
-float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
+float graphe::faireSomme(std::vector<bool> &sol_admi,int poids)
 {
     float somme=0;
-    for(size_t i=0; i<m_edges.size(); i++)
+    const size_t tarete=m_edges.size();
+    for(size_t i=0;i<tarete;i++)
     {
         if(sol_admi[i]==1)
         {
@@ -448,13 +472,15 @@ float graphe::faireSomme(std::vector<bool> sol_admi,int poids)
     return somme;
 }
 
-float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
+
+float graphe::faireDjikstra(std::vector<bool> &sol_admi,int poids)
 {
     float tot=0;
-    for(size_t i=0; i<m_sommets.size(); i++)
+    const size_t tsommet=m_sommets.size();
+    for(size_t i=0;i<tsommet;i++)
     {
         float sous_tot=0;
-        std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
+        std::vector<float>dist(tsommet,INT_MAX);//distance max
         int temp;
         std::priority_queue<std::pair<float,int>,std::vector<std::pair<float,int>>> pq;//poids et sommet
         pq.push(std::make_pair(0,i));
@@ -465,7 +491,8 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
             pq.pop();
             for(auto v:m_sommets[temp]->getVoisinsList())
             {
-                for(size_t j=0; j<m_edges.size(); j++)
+                const size_t tarete=m_edges.size();
+                for(size_t j=0;j<tarete;j++)
                 {
                     if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                     {
@@ -481,7 +508,8 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
                 }
             }
         }
-        for(size_t j=0; j<dist.size(); j++)
+        const size_t tdist=dist.size();
+        for(size_t j=0;j<tdist;j++)
         {
             if(dist[j]<INT_MAX)
                 sous_tot=sous_tot+dist[j];
@@ -491,7 +519,7 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids)
     return tot;
 }
 
-float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv)
+float graphe::faireDjikstra(std::vector<bool> &sol_admi,int poids,Sommet* dep, Sommet* arriv)
 {
     float tot=0;
     std::vector<float>dist(m_sommets.size(),INT_MAX);//distance max
@@ -505,7 +533,8 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, So
         pq.pop();
         for(auto v:m_sommets[temp]->getVoisinsList())
         {
-            for(size_t j=0; j<m_edges.size(); j++)
+            const size_t tarete=m_edges.size();
+            for(size_t j=0;j<tarete;j++)
             {
                 if(((m_edges[j]->getStart()->getId()==temp)&&(m_edges[j]->getSecond()->getId()==v.first->getId()))||((m_edges[j]->getSecond()->getId()==temp)&&(m_edges[j]->getStart()->getId()==v.first->getId())))
                 {
@@ -522,7 +551,6 @@ float graphe::faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, So
         }
     }
     tot=dist[arriv->getId()];
-    std::cout<<tot<<" ";
     return tot;
 }
 
@@ -532,10 +560,13 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     std::vector<std::vector<float>> tot_object;
     std::vector<std::vector<float>> tot_object_pareto;
     std::vector<std::vector<float>> tot_object_rest;
-    for(size_t i=0; i<m_sol_admissible.size(); i++)
+    const size_t tsoladmi=m_sol_admissible.size();
+    const size_t tchoixpond=choix_pond.size();
+    const size_t tsommet=m_sommets.size();
+    for(size_t i=0;i<tsoladmi;i++)
     {
         std::vector<float> objectif;
-        for(size_t j=0; j<choix_pond.size(); j++)
+        for(size_t j=0;j<tchoixpond;j++)
         {
             switch(choix_pond[j])
             {
@@ -546,7 +577,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
                 if(ori==1)
                     objectif.push_back(faireDjikstra(m_sol_admissible[i],j/*,m_sommets[0],m_sommets[m_sommets.size()-1]*/));
                     else
-                        objectif.push_back(faireDjikstra(m_sol_admissible[i],j,m_sommets[0],m_sommets[m_sommets.size()-1]));
+                        objectif.push_back(faireDjikstra(m_sol_admissible[i],j,m_sommets[0],m_sommets[tsommet-1]));
                 break;
             case 2:
                 objectif.push_back(max_flot(m_sol_admissible[i],j));
@@ -555,35 +586,35 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
         }
         tot_object.push_back(objectif);
     }
-    std::vector<bool> marque(m_sol_admissible.size(),0);
-    for(size_t i=0; i<tot_object.size(); i++)
+    std::vector<bool> marque(tsoladmi,0);
+    for(size_t i=0;i<tsoladmi;i++)
     {
         if(marque[i]==0)
         {
-            for(size_t j=0; j<tot_object.size(); j++)
+            for(size_t j=0;j<tsoladmi;j++)
             {
                 if((marque[j]==0)&&(j!=i))
                 {
                     unsigned int verif=0;
-                    for(size_t k=0; k<choix_pond.size(); k++)
+                    for(size_t k=0;k<tchoixpond;k++)
                     {
                         switch(choix_pond[k])
                         {
-                        case 2:
-                            if(tot_object[i][k]>=tot_object[j][k])
-                            {
-                                verif=verif+1;
-                            }
-                            break;
-                        default:
-                            if(tot_object[i][k]<=tot_object[j][k])
-                            {
-                                verif=verif+1;
-                            }
-                            break;
+                            case 2:
+                                if(tot_object[i][k]>=tot_object[j][k])
+                                {
+                                    verif=verif+1;
+                                }
+                                break;
+                            default:
+                                if(tot_object[i][k]<=tot_object[j][k])
+                                {
+                                    verif=verif+1;
+                                }
+                                break;
                         }
                     }
-                    if(verif==choix_pond.size())
+                    if(verif==tchoixpond)
                     {
                         marque[j]=1;
                     }
@@ -591,7 +622,7 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
             }
         }
     }
-    for(size_t i=0; i<tot_object.size(); i++)
+    for(size_t i=0;i<tsoladmi;i++)
     {
         if(marque[i]==0)
         {

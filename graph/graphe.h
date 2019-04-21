@@ -14,6 +14,7 @@ class graphe
         graphe(std::string, std::string weightFile,int);
 
         void search_sol();
+        void search_sol2();
         void DFS(std::vector<bool> &arete_local);
 
         float max_flot(std::vector<bool> &aretes_local, int posP);
@@ -22,10 +23,10 @@ class graphe
         bool BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP);
         void afficher() const;
         int getNbWeight();
-        float faireDjikstra(std::vector<bool>,int poids);
-        float faireDjikstra(std::vector<bool> sol_admi,int poids,Sommet* dep, Sommet* arriv);
+        float faireDjikstra(std::vector<bool>&,int poids);
+        float faireDjikstra(std::vector<bool> &sol_admi,int poids,Sommet* dep, Sommet* arriv);
         std::vector<bool> fairePrim(int) const;
-        float faireSomme(std::vector<bool>,int);
+        float faireSomme(std::vector<bool>&,int);
         std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> fairePareto(std::vector<int> choix_pond, int ori);
 
         //Svgfile
