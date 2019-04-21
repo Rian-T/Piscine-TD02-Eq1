@@ -89,6 +89,8 @@ graphe::graphe(std::string nomFichier, std::string weightFile, int ori) : m_ori(
     this->setTaille(taille);
 }
 
+/** \brief Recherche toute les solutions admissibles: les graphes partiels couvrants connexes
+ */
 void graphe::search_sol()
 {
     const int k = m_taille;
@@ -109,10 +111,10 @@ void graphe::search_sol()
         aretes.erase(aretes.begin() + 0);
         aretes.push_back(true);
     }
-    //std::cout << m_sol_admissible.size() << std::endl;
 }
 
-
+/** \brief Recherche toutes les solutions admissibles: Les arbres couvrants
+ */
 void graphe::search_sol2()
 {
     std::vector<bool > aretes; ///aretes affichés et non affichés
@@ -130,63 +132,13 @@ void graphe::search_sol2()
         DFS(aretes);
     }
     while(std::next_permutation(aretes.begin(), aretes.end()));
-    //std::cout << m_sol_admissible.size() << std::endl;
 }
 
-
-
-//void graphe::DFS(std::vector<bool> &aretes_local)
-//{
-//    std::vector<const Sommet *> marked;
-//    std::stack<const Sommet *> pile;
-//    std::vector<const Sommet*> voisins;
-//    const Sommet* sommet_actuelle = m_sommets[0];
-//    pile.push(sommet_actuelle);
-//    marked.push_back(sommet_actuelle);
-//
-//    std::vector<int> arete_select;
-//    for (size_t i = 0 ; i <aretes_local.size() ; i++)
-//    {
-//        if (aretes_local[i] == 1)
-//        arete_select.push_back(i);
-//    }
-//
-//    do
-//    {
-//        sommet_actuelle = pile.top();
-//        pile.pop();
-//        voisins = sommet_actuelle->getVoisins();
-//        for (size_t a = 0 ; a < arete_select.size() ; a++)
-//        {
-//            if ((aretes_local[a] == 1)) ///si arête utilisé dans le graphe
-//            {
-//                for (size_t i = 0 ; i < voisins.size() ; i ++)
-//                {
-//                    ///si les sommets appartiennent à l'arête
-//                    if ((m_edges[arete_select[a]]->getStart() == sommet_actuelle || m_edges[a]->getSecond() == sommet_actuelle) && (m_edges[arete_select[a]]->getStart() == voisins[i] || m_edges[arete_select[a]]->getSecond() == voisins[i]))
-//                    {
-//                        bool used = false;
-//                        for (size_t j = 0 ; j < marked.size() ; j ++) ///vérifie si le sommet d'arrivé est déjà marqué ou découvert
-//                        {
-//                            if (marked[j] == voisins[i]) ///le sommet d'arrivé est marqué ou découvert
-//                                used = true;
-//                        }
-//                        if (!used) ///le sommet n'est ni découvert ni marqué
-//                        {
-//                            marked.push_back(voisins[i]);
-//                            pile.push(voisins[i]);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    while (!pile.empty());
-//
-//    if (marked.size() == m_ordre)
-//            m_sol_admissible.push_back(aretes_local);
-//}
-
+/** \brief  Calcul le flot maximal du graphe pondéré, connexe et orienté
+ * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
+ * \param   int posP    Indique quel pondération a utilisé
+ * \return un float qui représente le flot maximal
+ */
 float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
 {
     std::vector<int> chemin (m_ordre, 0);
@@ -229,10 +181,15 @@ float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
             flot_max += flot_min;
         }
     }
-    //std::cout << "max = " << flot_max << std::endl;
     return flot_max;
 }
 
+/** \brief Parcours en largeur du graphe : permet de savoir s'il existe un chemin vers la destination fixée
+ * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
+ * \param   std::vector<int> &chemin            Conteneur contenant les indices des sommets précesseurs des sommets dont leurs indices sont les positions dans le conteneur
+ * \param   int &posP       Indique quel pondération a utilisé
+ * \return un bool qui indique si il existe un chemin permettant d'arriver à la destination fixée
+ */
 bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int &posP)
 {
     std::vector<const Sommet *> marked;
@@ -281,7 +238,9 @@ bool graphe::BFS(std::vector<bool> &aretes_local, std::vector<int> &chemin, int 
         return false;
 }
 
-
+/** \brief Parcours en profondeur du graphe : Permet de savoir si une solution est connexe
+ * \param   std::vector<bool> &aretes_local     Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
+ */
 void graphe::DFS(std::vector<bool> &aretes_local)
 {
     std::vector<bool> marked(m_ordre,false);
@@ -313,103 +272,6 @@ void graphe::DFS(std::vector<bool> &aretes_local)
     if (  std::count(marked.begin(),marked.end(),true) == (int)m_ordre)
         m_sol_admissible.push_back(aretes_local);
 }
-
-/*
-float graphe::max_flot(std::vector<bool> &aretes_local, int posP)
-{
-    std::unordered_map<const Sommet*, const Sommet*> chemin;
-    graphe g = *this; /// graphe résiduel qui copie le graphe complet
-    float flot_max = 0;
-    while (g.BFS(aretes_local,chemin,posP))
-    {
-        float flot_min = INT_MAX;
-        const Sommet * sommet_actuelle;
-        sommet_actuelle = m_sommets.find(std::to_string(m_ordre-1))->second; /// on part du puit
-
-        while (sommet_actuelle != m_sommets.find("0")->second) /// fin quand le chemin inverse arrive à la source
-        {
-            for (auto &elem : g.m_edges)
-            {
-                if ((elem.second->getStart() == sommet_actuelle || elem.second->getSecond() == sommet_actuelle) && (elem.second->getStart() == chemin.find(sommet_actuelle)->second || elem.second->getSecond() == chemin.find(sommet_actuelle)->second))
-                    flot_min = std::min ( flot_min, elem.second->getWeight(posP));
-            }
-            sommet_actuelle = chemin.find(sommet_actuelle)->second;
-        }
-        sommet_actuelle = m_sommets.find(std::to_string(m_ordre-1))->second; /// on part du puit
-        if(flot_min<INT_MAX){
-            while (sommet_actuelle != m_sommets.find("0")->second) /// fin quand le chemin inverse arrive à la source
-            {
-                for (auto &elem : m_edges)
-                {///si directe : (sachant qu'on est en chemin inverse)
-                    if ((elem.second->getSecond() == sommet_actuelle) && (elem.second->getStart() == chemin.find(sommet_actuelle)->second))
-                        elem.second->setNewFlot(posP,elem.second->getWeight(posP) - flot_min);
-                 ///si inverse : (sachant qu'on est en chemin inverse)
-                    if ((elem.second->getStart() == sommet_actuelle) && (elem.second->getSecond() == chemin.find(sommet_actuelle)->second))
-                        elem.second->setNewFlot(posP, elem.second->getWeight(posP) +flot_min);
-                }
-                sommet_actuelle = chemin.find(sommet_actuelle)->second;
-            }
-            flot_max += flot_min;
-        }
-        chemin.clear();
-    }
-    //std::cout << "max = " << flot_max << std::endl;
-    return flot_max;
-}*/
-/*
-bool graphe::BFS(std::vector<bool> &aretes_local, std::unordered_map<const Sommet *,const Sommet *> &chemin, int &posP)
-{
-    std::vector<const Sommet *> marked;
-    std::queue<const Sommet *> file;
-    std::vector<const Sommet*> voisins;
-    const Sommet* sommet_actuelle = m_sommets.find("0")->second;
-    file.push(sommet_actuelle);
-    marked.push_back(sommet_actuelle);
-    do
-    {
-        sommet_actuelle = file.front();
-        file.pop();
-        voisins = sommet_actuelle->getVoisins();
-        for (auto &elem : m_edges)
-        {
-            if ((aretes_local[(m_taille-1) - std::stoi (elem.first)] == 1)) ///si arête utilisé dans le graphe
-            {
-                for (size_t i = 0 ; i < voisins.size() ; i ++)
-                {
-                    ///si les sommets appartiennent à l'arête
-                    if ((elem.second->getStart() == sommet_actuelle || elem.second->getSecond() == sommet_actuelle) && (elem.second->getStart() == voisins[i] || elem.second->getSecond() == voisins[i]))
-                    {
-                        bool used = false;
-                        for (size_t j = 0 ; j < marked.size() ; j ++) ///vérifie si le sommet d'arrivé est déjà marqué ou découvert
-                        {
-                            if (marked[j] == voisins[i]) ///le sommet d'arrivé est marqué ou découvert
-                                used = true;
-                        }
-                        ///vérifier les flots à partir de là (si le flot de l'arete ou voisin ? n'est pas max mettre dans file)
-                        if ((!used) && (elem.second->getWeight(posP) != 0)) ///le sommet n'est ni découvert ni marqué et l'arete est ni saturé
-                        {
-                            chemin.insert({voisins[i],sommet_actuelle});
-                            marked.push_back(voisins[i]);
-                            file.push(voisins[i]);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    while (!file.empty());
-
-    for (auto &elem : chemin)
-    {
-        std::cout << elem.first->getId() << " " << elem.second->getId() << std::endl;
-    }
-
-    if (marked[marked.size()-1]->getId() == m_sommets.find(std::to_string(m_ordre-1))->second->getId())
-        return true;
-    else
-        return false;
-}
- */
 
  /** \brief Affiche les informations du graphe
  *   \details On parcourt tous les sommets et toutes les aretes du graphe et on demande d'afficher leurs informations correspondantes
@@ -636,6 +498,10 @@ void scoring(graphe& g,std::vector<std::vector<float>>& tot_object,std::vector<s
 
 std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graphe::fairePareto(std::vector<int>& choix_pond,int ori)
 {
+
+    /** \brief Methode pour trouver les optimums de pareto, utilise le multithreading selon les capacite de l'ordinateur pour optimiser
+ *
+ */
     std::vector<std::vector<float>> tot_object(m_sol_admissible.size());
     std::vector<std::vector<float>> tot_object_pareto;
     std::vector<std::vector<float>> tot_object_rest;
@@ -729,7 +595,13 @@ std::pair<std::vector<std::vector<float>>,std::vector<std::vector<float>>> graph
     return std::make_pair(tot_object_pareto,tot_object_rest);
 }
 
-///Dessin d'un graphe avec pour orgine origine_x et origine_y et avec un décalage x et y pour les sommets
+/** \brief Dessine un graphe/arbre sur le document .svg
+ * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
+ * \param   std::vector<bool> &arete        Ensemble d'arêtes exprimés en bool d'un graphe partiel ou arbre
+ * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
+ * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
+ * \param   int ori             Indique si le graphe est orienté ou non
+ */
 void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ecart_x, double ecart_y, int ori)
 {
     double origine_x = ecart_x;
@@ -776,8 +648,12 @@ void graphe::dessinerGraphe(Svgfile &svgout, std::vector<bool> &arete, double ec
         }
     }
 }
-///Initialise des valeurs necessaire pour les affichages, les valeurs sont en fonction des données du graphe complets
-void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
+
+/** \brief Calcul la distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x et également pour y
+ * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
+ * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
+ */
+ void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
 {
     double ordre = m_ordre;
     double taille = m_taille;
@@ -796,7 +672,12 @@ void graphe::InitialisationDonneeAffichageSvg(double &ecart_x, double &ecart_y)
     std::cout << ecart_x << std::endl;
     ecart_y = (y_max - y_min); ///distance du graphe complet en y
 }
-///dessine le graphe complet
+
+/** \brief  Affiche le graphe du fichier sur le document .svg
+ * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
+ * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
+ * \param   int ori             Indique si le graphe est orienté ou non
+ */
 void graphe::dessinerGrapheOrg(Svgfile &svgout, double &ecart_x,int ori)
 {
     std::vector<bool> org(m_taille, 1);
@@ -810,7 +691,13 @@ int graphe::getNbWeight()
     return m_edges[0]->getWeight().size();
 }
 
-///affiche et répartie tout les solutions de la frontière sur le svgout
+/** \brief  Affiche chaque solution de la frontière pareto sur le document .svg
+ * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
+ * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
+ * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
+ * \param   std::vector<std::vector<float>> &valtot     Conteneur qui contient pour chaque solution de la frontière pareto : les valeurs des objectifs
+ * \param   int ori             Indique si le graphe est orienté ou non
+ */
 void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecart_y,std::vector<std::vector<float>> &valtot,int ori)
 {
     int qte = m_pareto_frontier.size();
@@ -840,7 +727,6 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
                     msg+= ";";
             }
             msg += ")";
-            ///à vérifier si la position du texte est correcte:
             svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
             dessinerGraphe(svgout,m_pareto_frontier[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
             if (cpt_x == 3)
@@ -854,7 +740,7 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
     else
         qte_rst = qte;
     cpt_x = 1;
-    if (qte_rst== 1) ///pas encore vérifier
+    if (qte_rst== 1)
     {
         if (qte == 1) /// cas il existe qu'un graphe
             qte = 0;
@@ -869,7 +755,6 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
                 msg+= ";";
         }
         msg += ")";
-        ///à vérifier si la position du texte est correcte:
         svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
         dessinerGraphe(svgout,m_pareto_frontier[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
         svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
@@ -893,7 +778,6 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
                     msg+= ";";
             }
             msg += ")";
-            //à vérifier si la position du texte est correcte:
             svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
             dessinerGraphe(svgout,m_pareto_frontier[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y, ori);
             ++cpt_x;
@@ -902,7 +786,15 @@ void graphe::dessinerGraphesPareto(Svgfile &svgout,double &ecart_x, double &ecar
     }
 
 }
-///affiche l'ensemble des Arbres issu de prim
+
+/** \brief  Affiche chaque arbre couvrant de poids minimal de chaque pondération du fichier et du graphe choisi sur le document .svg
+ * \param   Svgfile &svgout     Affiche les graphes sur le fichier .svg
+ * \param   double &ecart_x     Distance entre le sommet aillant la plus petite valeur x et celui avec la plus grande valeur x
+ * \param   double &ecart_y     Distance entre le sommet aillant la plus petite valeur y et celui avec la plus grande valeur y
+ * \param   std::vector<std::vector<bool>> &arbres     Conteneur qui contient pour chaque arbre : tout les arêtes exprimés en bool, qui permet la réalisation d'un arbre
+ * \param   std::vector<std::vector<float>> &couts     Conteneur qui contient pour chaque arbre : la somme des couts pour chaque pondération du fichier de poids
+ * \param   int ori             Indique si le graphe est orienté ou non
+ */
 void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart_y, std::vector<std::vector<bool>> &arbres, std::vector<std::vector<float>> &couts, int ori)
 {
     int qte = arbres.size(); ///nombre d'arbres à afficher
@@ -918,7 +810,6 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
             qte--;
             ++qte_rst;
         }
-        ///affichage
         for (int i = 0 ; i < qte ; ++i)
         {
             std::string msg = "(";
@@ -931,7 +822,6 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
                     msg+= ";";
             }
             msg += ")";
-            ///à vérifier si la position du texte est correcte:
             svgout.addText(((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
             dessinerGraphe(svgout,arbres[i],((svgout.getWidth()/3)*cpt_x)-300 - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
             if (cpt_x == 3)
@@ -945,7 +835,7 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
     else
         qte_rst = qte; ///si 1 : il existe un graphe, si 2 : il existe 2 graphes
     cpt_x = 1;
-    if (qte_rst== 1) ///pas encore vérifier
+    if (qte_rst== 1)
     {
         if (qte == 1) ///dans le cas où il n'existe qu'un graphe
             qte = 0;
@@ -959,7 +849,6 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
                 msg+= ";";
         }
         msg += ")";
-        ///à vérifier si la position du texte est correcte:
         svgout.addText((svgout.getWidth()/2) - ecart_x/2 + m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
         dessinerGraphe(svgout,arbres[qte],(svgout.getWidth()/2) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
         svgout.incremCptY(); ///pour les affichages suivants, s'il y en a
@@ -983,7 +872,6 @@ void graphe::dessinerGraphesPrim(Svgfile &svgout, double &ecart_x, double &ecart
                     msg+= ";";
             }
             msg += ")";
-            //à vérifier si la position du texte est correcte:
             svgout.addText(((svgout.getWidth()/3)*cpt_x) - ecart_x/2 +  m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY() + 70+1.5*ecart_y, msg, "black");
             dessinerGraphe(svgout,arbres[empl+i],((svgout.getWidth()/3)*cpt_x) - ecart_x/2 - m_sommets[0]->getX(), 800+(200+ecart_y)*svgout.getCptY()+1.5*ecart_y,ori);
             ++cpt_x;

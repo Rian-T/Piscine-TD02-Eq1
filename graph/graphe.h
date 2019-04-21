@@ -6,6 +6,11 @@
 #include "edge.h"
 #include "../plot/svgfile.h"
 
+/** \class graphe
+ *  \brief Graphe possedant un ensemble d'aretes et de sommets, ainsi que les methodes d'exploration (Dijkstra,DFS,BFS) et que des methodes pour generer tous les sous-graphes connexes, calculer Max Flow et trouver un arbre couvrant minimum (PRIM)
+ *
+ */
+
 class graphe
 {
     public:
