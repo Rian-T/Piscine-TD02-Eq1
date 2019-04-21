@@ -59,7 +59,7 @@ int main()
 //
     std::string nomFichier,weightFile;
     int orientation;
-        double ecart_x=100,ecart_y=100;
+        double ecart_x=200,ecart_y=300;
     std::string tmp = choixFichier();
     nomFichier="files/"+tmp+".txt";
     weightFile="files/"+tmp+"_weights_"+choixWeight()+".txt";

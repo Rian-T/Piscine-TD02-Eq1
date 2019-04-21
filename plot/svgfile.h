@@ -12,7 +12,7 @@ constexpr char defcol[] = "black";
 class Svgfile
 {
     public:
-        Svgfile(std::string _filename = "output.svg", int _width=1800, int _height=4000);
+        Svgfile(std::string _filename = "output.svg", int _width=1900, int _height=12000);
         ~Svgfile();
 
         void useClipPath(std::string shape, std::string clipId);
